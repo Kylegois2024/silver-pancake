@@ -554,16 +554,59 @@ function Police({ setPage }) {
   </>);
 }
 
+/* ── SUPABASE CONFIG ── */
+const SUPA_URL = 'https://hcwbseetqgowwvdvdpkz.supabase.co';
+const SUPA_KEY = 'sb_publishable_Ufcq-xVZy0peHjwE6ZOHFg_B_JCy_kY';
+const sb = {
+  async insert(table, data) {
+    const r = await fetch(`${SUPA_URL}/rest/v1/${table}`, {
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Prefer':'return=representation'},
+      body: JSON.stringify(data)
+    });
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  },
+  async select(table, query='') {
+    const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
+      headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
+    });
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  },
+  async update(table, match, data) {
+    const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${match}`, {
+      method:'PATCH', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Prefer':'return=representation'},
+      body: JSON.stringify(data)
+    });
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  },
+  async uploadFile(bucket, path, file) {
+    const r = await fetch(`${SUPA_URL}/storage/v1/object/${bucket}/${path}`, {
+      method:'POST', headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Content-Type':file.type},
+      body: file
+    });
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  },
+  fileUrl(bucket, path) {
+    return `${SUPA_URL}/storage/v1/object/authenticated/${bucket}/${path}`;
+  }
+};
+
 /* ── APPLICATION FORM ── */
 function AppForm({ setPage }) {
   const [step,setStep]=useState(0);
   const [done,setDone]=useState(false);
-  const [ref]=useState(genRef);
+  const [submittedRef,setSubmittedRef]=useState('');
+  const [submitting,setSubmitting]=useState(false);
+  const [submitErr,setSubmitErr]=useState('');
   const [files,setFiles]=useState({primary:null,secondary:null});
   const [drag,setDrag]=useState({primary:false,secondary:false});
   const [form,setForm]=useState({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});
   const [errs,setErrs]=useState({});
   const upd=(k,v)=>setForm(f=>({...f,[k]:v}));
+
   const validate=()=>{
     const e={};
     if(step===0){if(!form.firstName.trim())e.firstName='Required';if(!form.lastName.trim())e.lastName='Required';if(!form.dob)e.dob='Required';if(!form.email.includes('@'))e.email='Valid email required';if(!form.phone.trim())e.phone='Required';}
@@ -574,22 +617,72 @@ function AppForm({ setPage }) {
   };
   const next=()=>{if(validate())setStep(s=>s+1);};
   const back=()=>setStep(s=>s-1);
-  const submit=()=>{if(validate())setDone(true);};
   const handleFile=(key,file)=>{if(file)setFiles(f=>({...f,[key]:file}));};
+
+  const submit = async () => {
+    if(!validate()) return;
+    setSubmitting(true);
+    setSubmitErr('');
+    try {
+      const reference = genRef();
+      // Upload ID documents to Supabase Storage
+      const uploadFile = async (file, label) => {
+        const ext = file.name.split('.').pop();
+        const path = `${reference}/${label}.${ext}`;
+        await sb.uploadFile('id-documents', path, file);
+        return path;
+      };
+      const primaryPath = await uploadFile(files.primary, 'primary-id');
+      const secondaryPath = await uploadFile(files.secondary, 'secondary-id');
+
+      // Insert application record into database
+      await sb.insert('applications', {
+        first_name: form.firstName,
+        last_name: form.lastName,
+        dob: form.dob,
+        email: form.email,
+        phone: form.phone,
+        gender: form.gender,
+        address: form.address,
+        suburb: form.suburb,
+        state: form.state,
+        postcode: form.postcode,
+        prev_address: form.prevAddress,
+        site: form.site,
+        start_date: form.startDate,
+        reference,
+        status: 'pending',
+        primary_id_path: primaryPath,
+        secondary_id_path: secondaryPath,
+      });
+
+      setSubmittedRef(reference);
+      setDone(true);
+    } catch(err) {
+      console.error(err);
+      setSubmitErr('Something went wrong submitting your application. Please try again or contact us on 0434 681 471.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const stepLabels=['Personal Details','Address & Work','Upload ID','Consent & Submit'];
+
   if(done) return (
     <div className="success-sc">
       <div className="s-icon">✓</div>
       <h2>Application Submitted!</h2>
-      <p>Your police check is being processed. A confirmation has been sent to <strong>{form.email}</strong>.</p>
-      <div className="ref-b"><span>Your Reference Number</span><strong>{ref}</strong></div>
+      <p>Your police check application has been received and is now being processed.</p>
+      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>kyle@personnelstaffingaus.com</strong>.</p>
+      <div className="ref-b"><span>Your Reference Number</span><strong>{submittedRef}</strong></div>
       <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
-        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);}}>New Application</button>
+        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);setFiles({primary:null,secondary:null});setForm({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});}}>New Application</button>
         <button className="btn-bk" onClick={()=>setPage('home')}>Return Home</button>
       </div>
     </div>
   );
+
   return (
     <div className="form-wrap">
       <div className="form-hdr">
@@ -615,7 +708,7 @@ function AppForm({ setPage }) {
             <div className="fgrp fg-full"><label>Street Address <span className="req">*</span></label><input value={form.address} onChange={e=>upd('address',e.target.value)} className={errs.address?'ferr-i':''} placeholder="Street number and name"/>{errs.address&&<span className="ferr">{errs.address}</span>}</div>
             <div className="fgrp"><label>Suburb <span className="req">*</span></label><input value={form.suburb} onChange={e=>upd('suburb',e.target.value)} className={errs.suburb?'ferr-i':''}/>{errs.suburb&&<span className="ferr">{errs.suburb}</span>}</div>
             <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
-            <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 3000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
+            <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 2000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
             <div className="fgrp fg-full"><label>Previous Address (if moved in last 5 years)</label><input value={form.prevAddress} onChange={e=>upd('prevAddress',e.target.value)} placeholder="Street, suburb, state, postcode"/></div>
             <div className="fgrp"><label>Assigned Warehouse Site</label><select value={form.site} onChange={e=>upd('site',e.target.value)}><option value="">Select site</option>{['Blacktown DC','Wetherill Park','Eastern Creek','Yennora','Erskine Park','Moorebank','Laverton North','Dandenong South','Wacol','Brendale','Wingfield','Bibra Lake'].map(s=><option key={s}>{s}</option>)}</select></div>
             <div className="fgrp"><label>Expected Start Date</label><input type="date" value={form.startDate} onChange={e=>upd('startDate',e.target.value)}/></div>
@@ -627,7 +720,7 @@ function AppForm({ setPage }) {
             <div className="fgrp" key={key} style={{marginBottom:18}}>
               <label style={{marginBottom:7}}>{key==='primary'?'Primary ID':'Secondary ID'} <span className="req">*</span> <span style={{fontWeight:400,color:'var(--gray-mid)',marginLeft:6}}>{key==='primary'?"(Passport or Driver's Licence)":"(Medicare, Birth Certificate, or Utility Bill)"}</span></label>
               {files[key]
-                ? <div className="up-file"><span>✓ {files[key].name}</span><button className="up-rem" onClick={()=>setFiles(f=>({...f,[key]:null}))}>×</button></div>
+                ? <div className="up-file"><span>✓ {files[key].name} ({(files[key].size/1024/1024).toFixed(1)}MB)</span><button className="up-rem" onClick={()=>setFiles(f=>({...f,[key]:null}))}>×</button></div>
                 : <div className={`upload-z${drag[key]?' drag':''}`} onDragOver={e=>{e.preventDefault();setDrag(d=>({...d,[key]:true}));}} onDragLeave={()=>setDrag(d=>({...d,[key]:false}))} onDrop={e=>{e.preventDefault();handleFile(key,e.dataTransfer.files[0]);setDrag(d=>({...d,[key]:false}));}} onClick={()=>document.getElementById(`f-${key}`).click()}>
                   <div style={{fontSize:30}}>📎</div><h4>Drop file here or click to browse</h4><p>PDF, JPG, PNG — max 10MB</p>
                   <input type="file" id={`f-${key}`} accept=".pdf,.jpg,.jpeg,.png" onChange={e=>handleFile(key,e.target.files[0])}/>
@@ -646,6 +739,8 @@ function AppForm({ setPage }) {
               <span style={{color:'var(--gray-mid)'}}>DOB</span><strong>{form.dob}</strong>
               <span style={{color:'var(--gray-mid)'}}>Email</span><strong>{form.email}</strong>
               <span style={{color:'var(--gray-mid)'}}>Site</span><strong>{form.site||'Not specified'}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Primary ID</span><strong>{files.primary?.name||'—'}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Secondary ID</span><strong>{files.secondary?.name||'—'}</strong>
             </div>
           </div>
           <div className="consent-b">
@@ -656,11 +751,17 @@ function AppForm({ setPage }) {
             ))}
             {errs.consent&&<span className="ferr" style={{display:'block',marginTop:8}}>{errs.consent}</span>}
           </div>
+          {submitErr&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius-sm)',padding:14,marginTop:16,color:'var(--error)',fontSize:13}}>{submitErr}</div>}
         </>}
       </div>
       <div className="form-nav">
-        {step>0?<button className="btn-bk" onClick={back}>← Back</button>:<span/>}
-        {step<3?<button className="btn-n" onClick={next}>Continue →</button>:<button className="btn-sub" onClick={submit}>Submit Application ✓</button>}
+        {step>0?<button className="btn-bk" onClick={back} disabled={submitting}>← Back</button>:<span/>}
+        {step<3
+          ?<button className="btn-n" onClick={next}>Continue →</button>
+          :<button className="btn-sub" onClick={submit} disabled={submitting} style={{opacity:submitting?0.7:1}}>
+            {submitting?'Uploading & Submitting…':'Submit Application ✓'}
+          </button>
+        }
       </div>
     </div>
   );
@@ -671,27 +772,44 @@ function Tracker() {
   const [q,setQ]=useState('');
   const [res,setRes]=useState(null);
   const [nf,setNf]=useState(false);
-  const search=()=>{const f=APPS.find(a=>a.id.toLowerCase()===q.trim().toLowerCase());setRes(f||null);setNf(!f);};
+  const [loading,setLoading]=useState(false);
+
+  const search = async () => {
+    if(!q.trim()) return;
+    setLoading(true); setNf(false); setRes(null);
+    try {
+      const data = await sb.select('applications', `reference=eq.${q.trim().toUpperCase()}&select=*`);
+      if(data && data.length>0) { setRes(data[0]); setNf(false); }
+      else setNf(true);
+    } catch(e) { setNf(true); }
+    finally { setLoading(false); }
+  };
+
   const tl=(status)=>[
-    {l:'Application Received',d:'Queued for processing.',s:'done'},
-    {l:'Identity Verified',d:'ID documents checked.',s:status==='pending'?'pend':'done'},
-    {l:'Check in Progress',d:'Being processed with the ACIC database.',s:status==='complete'?'done':status==='processing'?'active':'pend'},
-    {l:'Results Ready',d:'Certificate issued and emailed.',s:status==='complete'?'done':'pend'},
+    {l:'Application Received',d:'Your application and ID documents have been received.',s:'done'},
+    {l:'Identity Verified',d:'Your ID documents are being checked.',s:status==='pending'?'pend':'done'},
+    {l:'Check in Progress',d:'Your check is being processed with the ACIC database.',s:status==='complete'?'done':status==='processing'?'active':'pend'},
+    {l:'Results Ready',d:'Your National Police Certificate has been issued.',s:status==='complete'?'done':'pend'},
   ];
+
+  const fmtDate = d => d ? new Date(d).toLocaleDateString('en-AU') : '—';
+
   return (
     <div style={{maxWidth:620}}>
       <h3 style={{fontSize:20,fontWeight:700,color:'var(--navy)',marginBottom:8}}>Track Your Application</h3>
-      <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your application status.</p>
+      <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your live application status.</p>
       <div className="status-search">
-        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. PSA-2025-0848" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
-        <button className="btn-n" onClick={search}>Search</button>
+        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. PSA-2025-0901" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
+        <button className="btn-n" onClick={search} disabled={loading}>{loading?'Searching…':'Search'}</button>
       </div>
-      <p style={{fontSize:12,color:'var(--gray-mid)',marginTop:8}}>Try: PSA-2025-0847 (complete) · PSA-2025-0848 (processing) · PSA-2025-0850 (pending)</p>
-      {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number.</div>}
+      {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number. Please check and try again.</div>}
       {res&&(
         <div className="status-res">
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:22}}>
-            <div><h3 style={{fontSize:18,fontWeight:700,color:'var(--navy)'}}>{res.name}</h3><p style={{fontSize:13,color:'var(--gray-mid)',marginTop:3}}>Ref: {res.id} · {res.submitted} · {res.site}</p></div>
+            <div>
+              <h3 style={{fontSize:18,fontWeight:700,color:'var(--navy)'}}>{res.first_name} {res.last_name}</h3>
+              <p style={{fontSize:13,color:'var(--gray-mid)',marginTop:3}}>Ref: {res.reference} · Submitted {fmtDate(res.created_at)} · {res.site||'No site'}</p>
+            </div>
             <span className={`sbadge ${res.status}`}>{res.status==='complete'?'Complete':res.status==='processing'?'In Progress':'Pending'}</span>
           </div>
           {tl(res.status).map((t,i)=>(
@@ -700,7 +818,7 @@ function Tracker() {
               <div className="tl-txt"><h4 style={{color:t.s==='pend'?'var(--gray-mid)':'var(--navy)'}}>{t.l}</h4><p>{t.d}</p></div>
             </div>
           ))}
-          {res.status==='complete'&&<div style={{background:'var(--success-bg)',border:'1px solid #B2DFCC',borderRadius:'var(--radius)',padding:14,marginTop:10}}><strong style={{color:'var(--success)',fontSize:13}}>✓ Certificate issued and emailed to {res.email}</strong></div>}
+          {res.status==='complete'&&<div style={{background:'var(--success-bg)',border:'1px solid #B2DFCC',borderRadius:'var(--radius)',padding:14,marginTop:10}}><strong style={{color:'var(--success)',fontSize:13}}>✓ Your National Police Certificate has been issued. Contact Kyle on 0434 681 471 to receive your copy.</strong></div>}
         </div>
       )}
     </div>
@@ -714,48 +832,131 @@ function AdminDash() {
   const [pwe,setPwe]=useState(false);
   const [sq,setSq]=useState('');
   const [sf,setSf]=useState('all');
+  const [apps,setApps]=useState([]);
+  const [loading,setLoading]=useState(false);
+  const [selected,setSelected]=useState(null);
+  const [updating,setUpdating]=useState(false);
+
+  const loadApps = async () => {
+    setLoading(true);
+    try {
+      const data = await sb.select('applications','select=*');
+      setApps(data||[]);
+    } catch(e) { console.error(e); }
+    finally { setLoading(false); }
+  };
+
+  const updateStatus = async (id, status) => {
+    setUpdating(true);
+    try {
+      await sb.update('applications', `id=eq.${id}`, {status});
+      setApps(prev=>prev.map(a=>a.id===id?{...a,status}:a));
+      if(selected?.id===id) setSelected(s=>({...s,status}));
+    } catch(e) { alert('Failed to update status.'); }
+    finally { setUpdating(false); }
+  };
+
+  const getDocUrl = (path) => sb.fileUrl('id-documents', path);
+  const fmtDate = d => d ? new Date(d).toLocaleDateString('en-AU') : '—';
+
   if(!li) return (
     <div style={{maxWidth:360}}>
       <h3 style={{fontSize:19,fontWeight:700,color:'var(--navy)',marginBottom:6}}>Admin Login</h3>
       <p style={{fontSize:14,color:'var(--gray-dark)',marginBottom:22}}>Staff access only.</p>
-      <div className="fgrp" style={{marginBottom:14}}><label>Password</label><input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwe(false);}} className={pwe?'ferr-i':''} placeholder="Admin password" onKeyDown={e=>e.key==='Enter'&&(pw==='admin123'?setLi(true):setPwe(true))}/>{pwe&&<span className="ferr">Incorrect password (hint: admin123)</span>}</div>
-      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='admin123'?setLi(true):setPwe(true)}>Login →</button>
+      <div className="fgrp" style={{marginBottom:14}}>
+        <label>Password</label>
+        <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwe(false);}} className={pwe?'ferr-i':''} placeholder="Admin password"
+          onKeyDown={e=>e.key==='Enter'&&(pw==='PSA-admin-2025'?[setLi(true),loadApps()]:setPwe(true))}/>
+        {pwe&&<span className="ferr">Incorrect password</span>}
+      </div>
+      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='PSA-admin-2025'?[setLi(true),loadApps()]:setPwe(true)}>Login →</button>
     </div>
   );
-  const filtered=APPS.filter(a=>{const mq=a.name.toLowerCase().includes(sq.toLowerCase())||a.id.toLowerCase().includes(sq.toLowerCase());const mf=sf==='all'||a.status===sf;return mq&&mf;});
-  const cnt={complete:APPS.filter(a=>a.status==='complete').length,processing:APPS.filter(a=>a.status==='processing').length,pending:APPS.filter(a=>a.status==='pending').length};
+
+  const filtered=apps.filter(a=>{
+    const mq=(a.first_name+' '+a.last_name).toLowerCase().includes(sq.toLowerCase())||a.reference?.toLowerCase().includes(sq.toLowerCase());
+    const mf=sf==='all'||a.status===sf;
+    return mq&&mf;
+  });
+  const cnt={total:apps.length,complete:apps.filter(a=>a.status==='complete').length,processing:apps.filter(a=>a.status==='processing').length,pending:apps.filter(a=>a.status==='pending').length};
+
   return (
     <div style={{background:'var(--white)',border:'1px solid var(--gray-light)',borderRadius:16,overflow:'hidden'}}>
-      <div className="adm-bar"><div><h2>Admin Dashboard</h2><span>Police Check Management</span></div><button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)'}} onClick={()=>setLi(false)}>Logout</button></div>
+      {selected && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',zIndex:200,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+          <div style={{background:'var(--white)',borderRadius:16,padding:32,maxWidth:560,width:'100%',maxHeight:'80vh',overflowY:'auto',position:'relative'}}>
+            <button onClick={()=>setSelected(null)} style={{position:'absolute',top:16,right:16,background:'none',border:'none',fontSize:22,cursor:'pointer',color:'var(--gray-mid)'}}>×</button>
+            <h3 style={{fontSize:19,fontWeight:700,color:'var(--navy)',marginBottom:4}}>{selected.first_name} {selected.last_name}</h3>
+            <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:20}}>Ref: {selected.reference} · Submitted {fmtDate(selected.created_at)}</p>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px 20px',fontSize:14,marginBottom:20}}>
+              {[['DOB',selected.dob],['Email',selected.email],['Phone',selected.phone],['Gender',selected.gender||'Not specified'],['Address',`${selected.address}, ${selected.suburb} ${selected.state} ${selected.postcode}`],['Site',selected.site||'Not specified'],['Start Date',selected.start_date||'Not specified']].map(([l,v])=>(
+                <React.Fragment key={l}><span style={{color:'var(--gray-mid)',fontWeight:600}}>{l}</span><span>{v}</span></React.Fragment>
+              ))}
+            </div>
+            <div style={{borderTop:'1px solid var(--gray-light)',paddingTop:16,marginBottom:16}}>
+              <h4 style={{fontSize:13,fontWeight:700,color:'var(--navy)',marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em'}}>ID Documents</h4>
+              {[['Primary ID',selected.primary_id_path],['Secondary ID',selected.secondary_id_path]].map(([l,path])=>(
+                path ? <div key={l} style={{marginBottom:8}}><a href={getDocUrl(path)} target="_blank" rel="noopener noreferrer" style={{color:'var(--navy-light)',fontWeight:600,fontSize:14}}>📄 View {l}</a></div>
+                : <div key={l} style={{fontSize:14,color:'var(--gray-mid)',marginBottom:8}}>{l}: Not uploaded</div>
+              ))}
+            </div>
+            <div style={{borderTop:'1px solid var(--gray-light)',paddingTop:16}}>
+              <h4 style={{fontSize:13,fontWeight:700,color:'var(--navy)',marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em'}}>Update Status</h4>
+              <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+                {['pending','processing','complete'].map(s=>(
+                  <button key={s} onClick={()=>updateStatus(selected.id,s)} disabled={updating||selected.status===s}
+                    style={{padding:'9px 18px',borderRadius:8,border:'none',fontFamily:"'DM Sans',sans-serif",fontSize:14,fontWeight:700,cursor:'pointer',
+                      background:selected.status===s?'var(--navy)':'var(--off-white)',
+                      color:selected.status===s?'var(--white)':'var(--gray-dark)',
+                      opacity:updating?0.6:1}}>
+                    {s==='pending'?'Pending':s==='processing'?'In Progress':'Complete'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="adm-bar">
+        <div><h2>Admin Dashboard</h2><span>Police Check Management · {cnt.total} applications</span></div>
+        <div style={{display:'flex',gap:10}}>
+          <button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)',fontSize:13}} onClick={loadApps}>↻ Refresh</button>
+          <button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)',fontSize:13}} onClick={()=>setLi(false)}>Logout</button>
+        </div>
+      </div>
       <div className="adm-stats">
-        <div className="stat-c"><div className="sn">{APPS.length}</div><div className="sl">Total Applications</div><div className="sd">↑ 12 this week</div></div>
+        <div className="stat-c"><div className="sn">{cnt.total}</div><div className="sl">Total Applications</div></div>
         <div className="stat-c"><div className="sn" style={{color:'var(--success)'}}>{cnt.complete}</div><div className="sl">Completed</div></div>
         <div className="stat-c"><div className="sn" style={{color:'#856404'}}>{cnt.processing}</div><div className="sl">In Progress</div></div>
-        <div className="stat-c"><div className="sn" style={{color:'var(--gray-dark)'}}>{cnt.pending}</div><div className="sl">Pending</div></div>
+        <div className="stat-c"><div className="sn" style={{color:'var(--gray-dark)'}}>{cnt.pending}</div><div className="sl">Pending Review</div></div>
       </div>
       <div className="tbl-wrap">
         <div className="tbl-ctrl">
           <input className="ts" placeholder="Search name or reference..." value={sq} onChange={e=>setSq(e.target.value)}/>
           <select className="tf" value={sf} onChange={e=>setSf(e.target.value)}><option value="all">All Statuses</option><option value="complete">Complete</option><option value="processing">In Progress</option><option value="pending">Pending</option></select>
         </div>
-        <div style={{border:'1px solid var(--gray-light)',borderRadius:'var(--radius)',overflow:'auto'}}>
-          <table>
-            <thead><tr><th>Applicant</th><th>Reference</th><th>Site</th><th>Submitted</th><th>Status</th><th></th></tr></thead>
-            <tbody>
-              {filtered.map(a=>(
-                <tr key={a.id}>
-                  <td><div style={{fontWeight:700,color:'var(--navy)'}}>{a.name}</div><div style={{fontSize:12,color:'var(--gray-mid)'}}>{a.email}</div></td>
-                  <td><span style={{fontFamily:'monospace',fontSize:12,color:'var(--gray-mid)'}}>{a.id}</span></td>
-                  <td style={{fontSize:13}}>{a.site}</td>
-                  <td style={{fontSize:13}}>{a.submitted}</td>
-                  <td><span className={`sbadge ${a.status}`}>{a.status==='complete'?'Complete':a.status==='processing'?'In Progress':'Pending'}</span></td>
-                  <td><button className="abtn">View</button></td>
-                </tr>
-              ))}
-              {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',padding:28,color:'var(--gray-mid)'}}>No results found.</td></tr>}
-            </tbody>
-          </table>
-        </div>
+        {loading
+          ? <div style={{textAlign:'center',padding:40,color:'var(--gray-mid)'}}>Loading applications…</div>
+          : <div style={{border:'1px solid var(--gray-light)',borderRadius:'var(--radius)',overflow:'auto'}}>
+              <table>
+                <thead><tr><th>Applicant</th><th>Reference</th><th>Site</th><th>Submitted</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                  {filtered.map(a=>(
+                    <tr key={a.id}>
+                      <td><div style={{fontWeight:700,color:'var(--navy)'}}>{a.first_name} {a.last_name}</div><div style={{fontSize:12,color:'var(--gray-mid)'}}>{a.email}</div></td>
+                      <td><span style={{fontFamily:'monospace',fontSize:12,color:'var(--gray-mid)'}}>{a.reference}</span></td>
+                      <td style={{fontSize:13}}>{a.site||'—'}</td>
+                      <td style={{fontSize:13}}>{fmtDate(a.created_at)}</td>
+                      <td><span className={`sbadge ${a.status}`}>{a.status==='complete'?'Complete':a.status==='processing'?'In Progress':'Pending'}</span></td>
+                      <td><button className="abtn" onClick={()=>setSelected(a)}>View</button></td>
+                    </tr>
+                  ))}
+                  {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',padding:28,color:'var(--gray-mid)'}}>No results found.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+        }
       </div>
     </div>
   );
