@@ -600,7 +600,7 @@ function AppForm({ setPage }) {
   const [submitErr,setSubmitErr]=useState('');
   const [files,setFiles]=useState({selfie:null,licenceFront:null,licenceBack:null,secondaryFront:null,secondaryBack:null});
   const [drag,setDrag]=useState({selfie:false,licenceFront:false,licenceBack:false,secondaryFront:false,secondaryBack:false});
-  const [form,setForm]=useState({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});
+  const [form,setForm]=useState({firstName:'',middleName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',c1:false,c2:false,c3:false});
   const [errs,setErrs]=useState({});
   const upd=(k,v)=>setForm(f=>({...f,[k]:v}));
 
@@ -637,6 +637,7 @@ function AppForm({ setPage }) {
 
       await sb.insert('applications', {
         first_name: form.firstName,
+        middle_name: form.middleName,
         last_name: form.lastName,
         dob: form.dob,
         email: form.email,
@@ -679,7 +680,7 @@ function AppForm({ setPage }) {
       <div className="ref-b"><span>Your Reference Number</span><strong>{submittedRef}</strong></div>
       <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
-        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);setFiles({selfie:null,licenceFront:null,licenceBack:null,secondaryFront:null,secondaryBack:null});setForm({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});}}>New Application</button>
+        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);setFiles({selfie:null,licenceFront:null,licenceBack:null,secondaryFront:null,secondaryBack:null});setForm({firstName:'',middleName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',c1:false,c2:false,c3:false});}}>New Application</button>
         <button className="btn-bk" onClick={()=>setPage('home')}>Return Home</button>
       </div>
     </div>
@@ -695,8 +696,8 @@ function AppForm({ setPage }) {
         {step===0 && <>
           <div className="info-b">ℹ️ Enter details exactly as they appear on your government-issued ID.</div>
           <div className="fg">
-            {[['firstName','First Name'],['lastName','Last Name']].map(([k,l])=>(
-              <div className="fgrp" key={k}><label>{l} <span className="req">*</span></label><input value={form[k]} onChange={e=>upd(k,e.target.value)} className={errs[k]?'ferr-i':''}/>{errs[k]&&<span className="ferr">{errs[k]}</span>}</div>
+            {[['firstName','First Name'],['middleName','Middle Name (if applicable)'],['lastName','Last Name']].map(([k,l])=>(
+              <div className="fgrp" key={k}><label>{l} {k!=='middleName'&&<span className="req">*</span>}</label><input value={form[k]} onChange={e=>upd(k,e.target.value)} className={errs[k]?'ferr-i':''}/>{errs[k]&&<span className="ferr">{errs[k]}</span>}</div>
             ))}
             <div className="fgrp"><label>Date of Birth <span className="req">*</span></label><input type="date" value={form.dob} onChange={e=>upd('dob',e.target.value)} className={errs.dob?'ferr-i':''}/>{errs.dob&&<span className="ferr">{errs.dob}</span>}</div>
             <div className="fgrp"><label>Gender</label><select value={form.gender} onChange={e=>upd('gender',e.target.value)}><option value="">Prefer not to say</option>{['Male','Female','Non-binary','Other'].map(g=><option key={g}>{g}</option>)}</select></div>
@@ -762,7 +763,7 @@ function AppForm({ setPage }) {
           <div style={{background:'var(--off-white)',border:'1px solid var(--gray-light)',borderRadius:'var(--radius)',padding:18,marginBottom:18}}>
             <h4 style={{fontWeight:700,marginBottom:10,fontSize:14}}>Application Summary</h4>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'7px 22px',fontSize:14}}>
-              <span style={{color:'var(--gray-mid)'}}>Name</span><strong>{form.firstName} {form.lastName}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Name</span><strong>{form.firstName} {form.middleName} {form.lastName}</strong>
               <span style={{color:'var(--gray-mid)'}}>DOB</span><strong>{form.dob}</strong>
               <span style={{color:'var(--gray-mid)'}}>Email</span><strong>{form.email}</strong>
               <span style={{color:'var(--gray-mid)'}}>Site</span><strong>{form.site||'Not specified'}</strong>
