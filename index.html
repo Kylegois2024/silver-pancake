@@ -509,8 +509,9 @@ function Services({ setPage }) {
 }
 
 /* ── POLICE CHECK ── */
-function Police({ setPage }) {
-  const [tab, setTab] = useState('apply');
+function Police({ setPage, policeTab, setPoliceTab }) {
+  const tab = policeTab || 'apply';
+  const setTab = setPoliceTab || (() => {});
   return (<>
     <div className="pc-hero">
       <div className="pc-hi">
@@ -1076,12 +1077,68 @@ function Footer({ setPage }) {
   );
 }
 
-/* ── APP ── */
+/* ── ROUTER ── */
+const ROUTES = {
+  '/': 'home',
+  '/about': 'about',
+  '/services': 'services',
+  '/apply': 'police',
+  '/track': 'police',
+  '/admin': 'police',
+  '/contact': 'contact',
+};
+
+const TAB_ROUTES = {
+  '/apply': 'apply',
+  '/track': 'track',
+  '/admin': 'admin',
+};
+
+function getPageFromPath(path) {
+  return ROUTES[path] || 'home';
+}
+
 function App() {
-  const [page,setPage]=useState('home');
-  const pages={home:Home,about:About,services:Services,police:Police,contact:Contact};
-  const Page=pages[page]||Home;
-  return (<><Nav page={page} setPage={setPage}/><Page setPage={setPage}/><Footer setPage={setPage}/></>);
+  const getPath = () => window.location.pathname;
+  const [page, setPage] = React.useState(getPageFromPath(getPath()));
+  const [policeTab, setPoliceTab] = React.useState(TAB_ROUTES[getPath()] || 'apply');
+
+  const navigate = (p) => {
+    const pathMap = { home:'/', about:'/about', services:'/services', police:'/apply', contact:'/contact' };
+    const path = pathMap[p] || '/';
+    window.history.pushState({}, '', path);
+    setPage(p);
+    if(p === 'police') setPoliceTab('apply');
+    window.scrollTo(0, 0);
+  };
+
+  const navigateTab = (tab) => {
+    const tabPaths = { apply:'/apply', track:'/track', admin:'/admin' };
+    window.history.pushState({}, '', tabPaths[tab] || '/apply');
+    setPoliceTab(tab);
+    window.scrollTo(0, 0);
+  };
+
+  React.useEffect(() => {
+    const onPop = () => {
+      const p = getPath();
+      setPage(getPageFromPath(p));
+      if(TAB_ROUTES[p]) setPoliceTab(TAB_ROUTES[p]);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  const pages = { home:Home, about:About, services:Services, police:Police, contact:Contact };
+  const Page = pages[page] || Home;
+
+  return (
+    <>
+      <Nav page={page} setPage={navigate}/>
+      <Page setPage={navigate} policeTab={policeTab} setPoliceTab={navigateTab}/>
+      <Footer setPage={navigate}/>
+    </>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
