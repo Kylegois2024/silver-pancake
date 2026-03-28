@@ -278,7 +278,7 @@ const genRef = () => 'PSA-2025-' + (Math.floor(Math.random()*900)+900);
 
 /* ── NAV ── */
 function Nav({ page, setPage }) {
-  const links = [['home','Home'],['about','About Us'],['services','Services'],['police','Police Checks'],['contact','Contact']];
+  const links = [['home','Home'],['about','About Us'],['services','Services'],['contact','Contact']];
   return (
     <nav>
       <div className="logo" onClick={() => setPage('home')}>
@@ -301,8 +301,8 @@ function Home({ setPage }) {
       <h1>Your Workforce Partner for <em>Warehouse &amp; Logistics</em></h1>
       <p>We connect reliable, background-checked workers with Australia's leading warehouse and distribution operations. Fast, trusted, compliant.</p>
       <div className="hero-btns">
-        <button className="btn-p" onClick={() => setPage('services')}>Our Services →</button>
-        <button className="btn-o" onClick={() => setPage('police')}>Police Check Portal</button>
+        <button className="btn-p" onClick={() => setPage('police')}>Start Application →</button>
+        <button className="btn-o" onClick={() => setPage('services')}>Our Services</button>
       </div>
       <div className="hero-stats">
         {[['500+','Workers Placed'],['60+','Warehouse Partners'],['6','States Covered'],['1–2','Day Check Turnaround']].map(([n,l]) => (
@@ -363,7 +363,7 @@ function Home({ setPage }) {
         <p style={{fontSize:16,color:'rgba(255,255,255,0.6)',maxWidth:500,margin:'0 auto 32px',lineHeight:1.7}}>Whether you're an employer looking for staff or a worker starting a new role, we've got you covered.</p>
         <div style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
           <button className="btn-p" onClick={() => setPage('contact')}>Get in Touch</button>
-          <button className="btn-o" onClick={() => setPage('police')}>Apply for a Police Check</button>
+          <button className="btn-o" onClick={() => setPage('police')}>Start a Police Check Application</button>
         </div>
       </div>
     </div>
@@ -556,7 +556,7 @@ function Police({ setPage }) {
 
 /* ── SUPABASE CONFIG ── */
 const SUPA_URL = 'https://hcwbseetqgowwvdvdpkz.supabase.co';
-const SUPA_KEY = 'sb_publishable_Ufcq-xVZy0peHjwE6ZOHFg_B_JCy_kY';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2JzZWV0cWdvd3d2ZHZkcGt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2OTgwMjIsImV4cCI6MjA5MDI3NDAyMn0.k3ROFEBN85f8tYLQ3JLiZKYHnDwfe6QUC2-yz_EQTQ8';
 const sb = {
   async insert(table, data) {
     const r = await fetch(`${SUPA_URL}/rest/v1/${table}`, {
@@ -601,8 +601,8 @@ function AppForm({ setPage }) {
   const [submittedRef,setSubmittedRef]=useState('');
   const [submitting,setSubmitting]=useState(false);
   const [submitErr,setSubmitErr]=useState('');
-  const [files,setFiles]=useState({primary:null,secondary:null});
-  const [drag,setDrag]=useState({primary:false,secondary:false});
+  const [files,setFiles]=useState({selfie:null,licenceFront:null,licenceBack:null,secondaryFront:null,secondaryBack:null});
+  const [drag,setDrag]=useState({selfie:false,licenceFront:false,licenceBack:false,secondaryFront:false,secondaryBack:false});
   const [form,setForm]=useState({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});
   const [errs,setErrs]=useState({});
   const upd=(k,v)=>setForm(f=>({...f,[k]:v}));
@@ -611,7 +611,7 @@ function AppForm({ setPage }) {
     const e={};
     if(step===0){if(!form.firstName.trim())e.firstName='Required';if(!form.lastName.trim())e.lastName='Required';if(!form.dob)e.dob='Required';if(!form.email.includes('@'))e.email='Valid email required';if(!form.phone.trim())e.phone='Required';}
     if(step===1){if(!form.address.trim())e.address='Required';if(!form.suburb.trim())e.suburb='Required';if(!form.state)e.state='Required';if(!form.postcode.trim())e.postcode='Required';}
-    if(step===2){if(!files.primary)e.primary='Primary ID required';if(!files.secondary)e.secondary='Secondary ID required';}
+    if(step===2){if(!files.selfie)e.selfie='Required';if(!files.licenceFront)e.licenceFront='Required';if(!files.licenceBack)e.licenceBack='Required';if(!files.secondaryFront)e.secondaryFront='Required';}
     if(step===3){if(!form.c1||!form.c2||!form.c3)e.consent='All declarations required';}
     setErrs(e);return Object.keys(e).length===0;
   };
@@ -632,10 +632,12 @@ function AppForm({ setPage }) {
         await sb.uploadFile('id-documents', path, file);
         return path;
       };
-      const primaryPath = await uploadFile(files.primary, 'primary-id');
-      const secondaryPath = await uploadFile(files.secondary, 'secondary-id');
+      const selfiePath = await uploadFile(files.selfie, 'selfie-with-licence');
+      const licenceFrontPath = await uploadFile(files.licenceFront, 'licence-front');
+      const licenceBackPath = await uploadFile(files.licenceBack, 'licence-back');
+      const secondaryFrontPath = await uploadFile(files.secondaryFront, 'secondary-front');
+      const secondaryBackPath = files.secondaryBack ? await uploadFile(files.secondaryBack, 'secondary-back') : null;
 
-      // Insert application record into database
       await sb.insert('applications', {
         first_name: form.firstName,
         last_name: form.lastName,
@@ -652,8 +654,11 @@ function AppForm({ setPage }) {
         start_date: form.startDate,
         reference,
         status: 'pending',
-        primary_id_path: primaryPath,
-        secondary_id_path: secondaryPath,
+        primary_id_path: licenceFrontPath,
+        secondary_id_path: secondaryFrontPath,
+        selfie_path: selfiePath,
+        licence_back_path: licenceBackPath,
+        secondary_back_path: secondaryBackPath,
       });
 
       setSubmittedRef(reference);
@@ -677,7 +682,7 @@ function AppForm({ setPage }) {
       <div className="ref-b"><span>Your Reference Number</span><strong>{submittedRef}</strong></div>
       <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
-        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);setFiles({primary:null,secondary:null});setForm({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});}}>New Application</button>
+        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);setFiles({selfie:null,licenceFront:null,licenceBack:null,secondaryFront:null,secondaryBack:null});setForm({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});}}>New Application</button>
         <button className="btn-bk" onClick={()=>setPage('home')}>Return Home</button>
       </div>
     </div>
@@ -715,20 +720,46 @@ function AppForm({ setPage }) {
           </div>
         </>}
         {step===2 && <>
-          <div className="info-b">ℹ️ You need a primary ID (passport or driver's licence) and a secondary ID (Medicare card, birth certificate, or utility bill).</div>
-          {['primary','secondary'].map(key=>(
-            <div className="fgrp" key={key} style={{marginBottom:18}}>
-              <label style={{marginBottom:7}}>{key==='primary'?'Primary ID':'Secondary ID'} <span className="req">*</span> <span style={{fontWeight:400,color:'var(--gray-mid)',marginLeft:6}}>{key==='primary'?"(Passport or Driver's Licence)":"(Medicare, Birth Certificate, or Utility Bill)"}</span></label>
-              {files[key]
-                ? <div className="up-file"><span>✓ {files[key].name} ({(files[key].size/1024/1024).toFixed(1)}MB)</span><button className="up-rem" onClick={()=>setFiles(f=>({...f,[key]:null}))}>×</button></div>
-                : <div className={`upload-z${drag[key]?' drag':''}`} onDragOver={e=>{e.preventDefault();setDrag(d=>({...d,[key]:true}));}} onDragLeave={()=>setDrag(d=>({...d,[key]:false}))} onDrop={e=>{e.preventDefault();handleFile(key,e.dataTransfer.files[0]);setDrag(d=>({...d,[key]:false}));}} onClick={()=>document.getElementById(`f-${key}`).click()}>
-                  <div style={{fontSize:30}}>📎</div><h4>Drop file here or click to browse</h4><p>PDF, JPG, PNG — max 10MB</p>
-                  <input type="file" id={`f-${key}`} accept=".pdf,.jpg,.jpeg,.png" onChange={e=>handleFile(key,e.target.files[0])}/>
-                </div>
-              }
-              {errs[key]&&<span className="ferr">{errs[key]}</span>}
-            </div>
-          ))}
+          <div className="info-b">ℹ️ Upload all required photos. Files must be clear and legible. PDF, JPG, or PNG — max 10MB each.</div>
+          <div style={{marginBottom:10,paddingBottom:16,borderBottom:'1px solid var(--gray-light)'}}>
+            <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14}}>Primary ID — Driver's Licence</div>
+            {[
+              {key:'selfie',label:'Selfie holding your Driver\'s Licence',hint:'Hold your licence next to your face — both must be clearly visible'},
+              {key:'licenceFront',label:'Front of Driver\'s Licence',hint:'Ensure name, DOB, and licence number are clearly readable'},
+              {key:'licenceBack',label:'Back of Driver\'s Licence',hint:'Ensure the back of the card is flat and in focus'},
+            ].map(({key,label,hint})=>(
+              <div className="fgrp" key={key} style={{marginBottom:14}}>
+                <label style={{marginBottom:5}}>{label} <span className="req">*</span><div style={{fontWeight:400,color:'var(--gray-mid)',fontSize:12,marginTop:2}}>{hint}</div></label>
+                {files[key]
+                  ? <div className="up-file"><span>✓ {files[key].name} ({(files[key].size/1024/1024).toFixed(1)}MB)</span><button className="up-rem" onClick={()=>setFiles(f=>({...f,[key]:null}))}>×</button></div>
+                  : <div className={`upload-z${drag[key]?' drag':''}`} onDragOver={e=>{e.preventDefault();setDrag(d=>({...d,[key]:true}));}} onDragLeave={()=>setDrag(d=>({...d,[key]:false}))} onDrop={e=>{e.preventDefault();handleFile(key,e.dataTransfer.files[0]);setDrag(d=>({...d,[key]:false}));}} onClick={()=>document.getElementById(`f-${key}`).click()}>
+                    <div style={{fontSize:26}}>📎</div><h4>Drop file or click to browse</h4><p>PDF, JPG, PNG — max 10MB</p>
+                    <input type="file" id={`f-${key}`} accept=".pdf,.jpg,.jpeg,.png" onChange={e=>handleFile(key,e.target.files[0])}/>
+                  </div>
+                }
+                {errs[key]&&<span className="ferr">{errs[key]}</span>}
+              </div>
+            ))}
+          </div>
+          <div>
+            <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14}}>Secondary ID — Medicare Card or Passport</div>
+            {[
+              {key:'secondaryFront',label:'Front of Medicare Card or Passport photo page',hint:'Medicare: full card visible. Passport: photo/details page open flat'},
+              {key:'secondaryBack',label:'Back of Medicare Card (if applicable)',hint:'Passport holders can skip this — Medicare cardholders please include'},
+            ].map(({key,label,hint})=>(
+              <div className="fgrp" key={key} style={{marginBottom:14}}>
+                <label style={{marginBottom:5}}>{label} {key==='secondaryFront'&&<span className="req">*</span>}<div style={{fontWeight:400,color:'var(--gray-mid)',fontSize:12,marginTop:2}}>{hint}</div></label>
+                {files[key]
+                  ? <div className="up-file"><span>✓ {files[key].name} ({(files[key].size/1024/1024).toFixed(1)}MB)</span><button className="up-rem" onClick={()=>setFiles(f=>({...f,[key]:null}))}>×</button></div>
+                  : <div className={`upload-z${drag[key]?' drag':''}`} onDragOver={e=>{e.preventDefault();setDrag(d=>({...d,[key]:true}));}} onDragLeave={()=>setDrag(d=>({...d,[key]:false}))} onDrop={e=>{e.preventDefault();handleFile(key,e.dataTransfer.files[0]);setDrag(d=>({...d,[key]:false}));}} onClick={()=>document.getElementById(`f-${key}`).click()}>
+                    <div style={{fontSize:26}}>📎</div><h4>Drop file or click to browse</h4><p>PDF, JPG, PNG — max 10MB</p>
+                    <input type="file" id={`f-${key}`} accept=".pdf,.jpg,.jpeg,.png" onChange={e=>handleFile(key,e.target.files[0])}/>
+                  </div>
+                }
+                {errs[key]&&<span className="ferr">{errs[key]}</span>}
+              </div>
+            ))}
+          </div>
         </>}
         {step===3 && <>
           <div className="info-b">ℹ️ Please review your details and agree to all declarations before submitting.</div>
@@ -739,8 +770,10 @@ function AppForm({ setPage }) {
               <span style={{color:'var(--gray-mid)'}}>DOB</span><strong>{form.dob}</strong>
               <span style={{color:'var(--gray-mid)'}}>Email</span><strong>{form.email}</strong>
               <span style={{color:'var(--gray-mid)'}}>Site</span><strong>{form.site||'Not specified'}</strong>
-              <span style={{color:'var(--gray-mid)'}}>Primary ID</span><strong>{files.primary?.name||'—'}</strong>
-              <span style={{color:'var(--gray-mid)'}}>Secondary ID</span><strong>{files.secondary?.name||'—'}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Selfie w/ Licence</span><strong>{files.selfie?.name||'—'}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Licence Front</span><strong>{files.licenceFront?.name||'—'}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Licence Back</span><strong>{files.licenceBack?.name||'—'}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Secondary ID</span><strong>{files.secondaryFront?.name||'—'}</strong>
             </div>
           </div>
           <div className="consent-b">
@@ -895,9 +928,9 @@ function AdminDash() {
             </div>
             <div style={{borderTop:'1px solid var(--gray-light)',paddingTop:16,marginBottom:16}}>
               <h4 style={{fontSize:13,fontWeight:700,color:'var(--navy)',marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em'}}>ID Documents</h4>
-              {[['Primary ID',selected.primary_id_path],['Secondary ID',selected.secondary_id_path]].map(([l,path])=>(
+              {[['Selfie w/ Licence',selected.selfie_path],['Licence Front',selected.primary_id_path],['Licence Back',selected.licence_back_path],['Secondary ID Front',selected.secondary_id_path],['Secondary ID Back',selected.secondary_back_path]].map(([l,path])=>(
                 path ? <div key={l} style={{marginBottom:8}}><a href={getDocUrl(path)} target="_blank" rel="noopener noreferrer" style={{color:'var(--navy-light)',fontWeight:600,fontSize:14}}>📄 View {l}</a></div>
-                : <div key={l} style={{fontSize:14,color:'var(--gray-mid)',marginBottom:8}}>{l}: Not uploaded</div>
+                : <div key={l} style={{fontSize:13,color:'var(--gray-mid)',marginBottom:6}}>{l}: Not uploaded</div>
               ))}
             </div>
             <div style={{borderTop:'1px solid var(--gray-light)',paddingTop:16}}>
