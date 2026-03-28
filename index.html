@@ -300,10 +300,7 @@ function Home({ setPage }) {
       <div className="hero-badge">🇦🇺 Sydney Founded · Australia-Wide</div>
       <h1>Your Workforce Partner for <em>Warehouse &amp; Logistics</em></h1>
       <p>We connect reliable, background-checked workers with Australia's leading warehouse and distribution operations. Fast, trusted, compliant.</p>
-      <div className="hero-btns">
-        <button className="btn-p" onClick={() => setPage('police')}>Start Application →</button>
-        <button className="btn-o" onClick={() => setPage('services')}>Our Services</button>
-      </div>
+      
       <div className="hero-stats">
         {[['500+','Workers Placed'],['60+','Warehouse Partners'],['6','States Covered'],['1–2','Day Check Turnaround']].map(([n,l]) => (
           <div key={l}><div className="hs-num">{n}</div><div className="hs-lbl">{l}</div></div>
@@ -715,8 +712,7 @@ function AppForm({ setPage }) {
             <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
             <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 2000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
             <div className="fgrp fg-full"><label>Previous Address (if moved in last 5 years)</label><input value={form.prevAddress} onChange={e=>upd('prevAddress',e.target.value)} placeholder="Street, suburb, state, postcode"/></div>
-            <div className="fgrp"><label>Assigned Warehouse Site</label><select value={form.site} onChange={e=>upd('site',e.target.value)}><option value="">Select site</option>{['Blacktown DC','Wetherill Park','Eastern Creek','Yennora','Erskine Park','Moorebank','Laverton North','Dandenong South','Wacol','Brendale','Wingfield','Bibra Lake'].map(s=><option key={s}>{s}</option>)}</select></div>
-            <div className="fgrp"><label>Expected Start Date</label><input type="date" value={form.startDate} onChange={e=>upd('startDate',e.target.value)}/></div>
+          
           </div>
         </>}
         {step===2 && <>
