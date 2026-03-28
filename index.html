@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personnel Staffing Aus – Warehouse & Logistics Staffing</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0B1F3A; --navy-mid: #1A3456; --navy-light: #2A4F7A;
+      --gold: #C8922A; --gold-light: #E8B84B; --gold-pale: #FDF5E6;
+      --white: #FFFFFF; --off-white: #F7F9FC;
+      --gray-light: #E8ECF2; --gray-mid: #9BACC0; --gray-dark: #4A5568; --text: #1A2332;
+      --success: #1A7A4A; --success-bg: #E8F5EE;
+      --error: #C0392B; --error-bg: #FDECEA;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(11,31,58,0.10); --shadow-lg: 0 12px 48px rgba(11,31,58,0.18);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
+
+    /* NAV */
+    nav { background: var(--navy); padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 72px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.2); }
+    .logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .logo-mark { width: 40px; height: 40px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+    .logo-text strong { display: block; font-size: 15px; font-weight: 700; color: var(--white); }
+    .logo-text span { font-size: 11px; color: var(--gray-mid); letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nb { background: none; border: none; color: var(--gray-mid); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 13px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .nb:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .nb.active { color: var(--white); }
+    .nb.cta { background: var(--gold); color: var(--navy); font-weight: 700; margin-left: 8px; }
+    .nb.cta:hover { background: var(--gold-light); color: var(--navy); }
+
+    /* BUTTONS */
+    .btn-p { background: var(--gold); color: var(--navy); border: none; border-radius: var(--radius); padding: 14px 30px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-p:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn-o { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.3); border-radius: var(--radius); padding: 14px 30px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-o:hover { border-color: var(--white); }
+    .btn-n { background: var(--navy); color: var(--white); border: none; border-radius: var(--radius-sm); padding: 12px 26px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-n:hover { background: var(--navy-light); transform: translateY(-1px); }
+    .btn-sub { background: var(--gold); color: var(--navy); border: none; border-radius: var(--radius-sm); padding: 13px 30px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-sub:hover { background: var(--gold-light); }
+    .btn-bk { background: none; border: 1.5px solid var(--gray-light); color: var(--gray-dark); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; padding: 11px 22px; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
+    .btn-bk:hover { border-color: var(--navy); color: var(--navy); }
+
+    /* LAYOUT */
+    .sec { padding: 88px 48px; }
+    .inner { max-width: 1100px; margin: 0 auto; }
+    .lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .lbl-lt { color: var(--gold-light); }
+    .h1 { font-family: 'Playfair Display', serif; font-size: clamp(30px, 4vw, 48px); color: var(--navy); line-height: 1.15; margin-bottom: 16px; }
+    .h1-lt { color: var(--white); }
+    .sub { font-size: 17px; color: var(--gray-dark); line-height: 1.8; max-width: 620px; }
+    .sub-lt { color: rgba(255,255,255,0.6); }
+    .divider { height: 1px; background: var(--gray-light); margin: 0 48px; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1D3F72 100%); padding: 110px 48px 90px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; opacity: 0.03; background-image: repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%); background-size: 20px 20px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(200,146,42,0.15); border: 1px solid rgba(200,146,42,0.4); color: var(--gold-light); padding: 7px 18px; border-radius: 24px; font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 28px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(38px, 6vw, 66px); color: var(--white); line-height: 1.08; margin-bottom: 22px; max-width: 780px; margin-left: auto; margin-right: auto; }
+    .hero h1 em { color: var(--gold-light); font-style: normal; }
+    .hero p { font-size: 19px; color: rgba(255,255,255,0.62); max-width: 540px; margin: 0 auto 42px; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-stats { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin-top: 68px; padding-top: 44px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .hs-num { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: var(--gold-light); line-height: 1; }
+    .hs-lbl { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 6px; }
+
+    /* TRUST */
+    .trust { background: var(--white); border-bottom: 1px solid var(--gray-light); padding: 20px 48px; display: flex; align-items: center; justify-content: center; gap: 44px; flex-wrap: wrap; }
+    .ti { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--gray-dark); }
+    .tdot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    /* CARDS */
+    .cards3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+    .card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 16px; padding: 32px 26px; transition: all 0.25s; cursor: pointer; }
+    .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--gold); }
+    .card-icon { width: 50px; height: 50px; border-radius: 12px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
+    .card h3 { font-size: 19px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .card p { font-size: 14px; color: var(--gray-dark); line-height: 1.7; }
+    .card-link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 700; color: var(--gold); }
+
+    /* GRID 2COL */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+
+    /* ABOUT */
+    .about-vis { background: linear-gradient(135deg,var(--navy),var(--navy-light)); border-radius: 20px; height: 420px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .about-vis::before { content:''; position: absolute; inset:0; opacity:0.05; background-image: repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%); background-size:20px 20px; }
+    .av-inner { text-align: center; position: relative; z-index: 1; }
+    .av-year { font-family: 'Playfair Display', serif; font-size: 88px; font-weight: 800; color: var(--gold); line-height: 1; display: block; }
+    .av-sub { font-size: 15px; color: rgba(255,255,255,0.55); letter-spacing: 0.04em; }
+    .av-badge { position: absolute; bottom: -18px; right: -18px; background: var(--gold); border-radius: 14px; padding: 18px 22px; box-shadow: var(--shadow-lg); }
+    .av-badge strong { display: block; font-size: 26px; font-weight: 800; color: var(--navy); }
+    .av-badge span { font-size: 12px; color: var(--navy); font-weight: 600; opacity: 0.7; }
+    .vals { display: flex; flex-direction: column; gap: 16px; margin-top: 28px; }
+    .val { display: flex; gap: 13px; align-items: flex-start; }
+    .val-check { width: 22px; height: 22px; border-radius: 50%; background: var(--success-bg); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 2px; color: var(--success); }
+    .val strong { font-size: 14px; font-weight: 700; color: var(--navy); display: block; margin-bottom: 2px; }
+    .val span { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
+
+    /* TEAM */
+    .team-card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 16px; overflow: hidden; transition: all 0.2s; }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .team-av { height: 160px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 700; }
+    .team-info { padding: 20px 22px; }
+    .team-info h4 { font-size: 16px; font-weight: 700; color: var(--navy); }
+    .team-info .role { font-size: 13px; color: var(--gold); font-weight: 600; margin: 4px 0 8px; }
+    .team-info p { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
+
+    /* POLICE CHECK */
+    .pc-hero { background: var(--navy); padding: 72px 48px; }
+    .pc-hi { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .pc-hi h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px,4vw,44px); color: var(--white); margin-bottom: 14px; }
+    .pc-hi > div > p { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 26px; }
+    .pc-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pc-pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .pc-card { background: var(--white); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-lg); }
+    .pc-card h3 { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .pc-card > p { font-size: 14px; color: var(--gray-dark); margin-bottom: 22px; }
+    .pc-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .pc-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--gray-dark); }
+    .pc-sn { width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: var(--gold); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* TABS */
+    .tabs { background: var(--white); border-bottom: 1px solid var(--gray-light); padding: 0 48px; display: flex; }
+    .tab-btn { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 17px 22px; cursor: pointer; color: var(--gray-mid); border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--gold); }
+    .tab-btn:hover:not(.active) { color: var(--gray-dark); }
+
+    /* FORM */
+    .form-wrap { background: var(--white); border-radius: 16px; box-shadow: var(--shadow-lg); overflow: hidden; margin-top: 40px; }
+    .form-hdr { background: var(--navy); padding: 26px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .form-hdr h3 { color: var(--white); font-size: 18px; font-weight: 700; }
+    .form-hdr p { color: var(--gray-mid); font-size: 13px; margin-top: 3px; }
+    .prog { display: flex; gap: 6px; }
+    .prog-pip { height: 4px; width: 34px; border-radius: 2px; background: rgba(255,255,255,0.18); transition: background 0.3s; }
+    .prog-pip.done { background: var(--gold); }
+    .prog-pip.active { background: var(--gold-light); }
+    .form-body { padding: 32px; }
+    .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .fg-full { grid-column: 1 / -1; }
+    .fgrp { display: flex; flex-direction: column; gap: 5px; }
+    label { font-size: 13px; font-weight: 600; color: var(--navy); }
+    label .req { color: var(--error); }
+    input, select, textarea { font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 11px 14px; border: 1.5px solid var(--gray-light); border-radius: var(--radius-sm); background: var(--off-white); color: var(--text); transition: all 0.2s; outline: none; width: 100%; }
+    input:focus, select:focus, textarea:focus { border-color: var(--navy-light); background: var(--white); box-shadow: 0 0 0 3px rgba(42,79,122,0.1); }
+    input.ferr-i { border-color: var(--error); }
+    .ferr { font-size: 12px; color: var(--error); }
+    textarea { resize: vertical; min-height: 80px; }
+    .info-b { background: #EBF4FF; border: 1px solid #B8D4F4; border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: #1A5FA3; margin-bottom: 22px; }
+    .upload-z { border: 2px dashed var(--gray-light); border-radius: var(--radius); padding: 32px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--off-white); }
+    .upload-z:hover, .upload-z.drag { border-color: var(--navy-light); background: #EBF4FF; }
+    .upload-z h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 10px 0 5px; }
+    .upload-z p { font-size: 13px; color: var(--gray-mid); }
+    .upload-z input { display: none; }
+    .up-file { display: flex; align-items: center; justify-content: space-between; background: var(--success-bg); border: 1px solid #B2DFCC; border-radius: var(--radius-sm); padding: 11px 14px; margin-top: 10px; }
+    .up-file span { font-size: 13px; color: var(--success); font-weight: 500; }
+    .up-rem { background: none; border: none; color: var(--error); cursor: pointer; font-size: 17px; }
+    .consent-b { background: var(--gold-pale); border: 1px solid rgba(200,146,42,0.3); border-radius: var(--radius); padding: 22px; margin-top: 18px; }
+    .consent-b h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .consent-b > p { font-size: 13px; color: var(--gray-dark); line-height: 1.7; margin-bottom: 14px; }
+    .chk-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+    .chk-row input[type=checkbox] { width: 16px; height: 16px; margin-top: 2px; accent-color: var(--navy); flex-shrink: 0; }
+    .chk-row label { font-size: 13px; font-weight: 400; color: var(--gray-dark); cursor: pointer; }
+    .form-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-top: 1px solid var(--gray-light); background: var(--off-white); }
+
+    /* STATUS */
+    .status-search { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 26px; display: flex; gap: 12px; align-items: flex-end; margin-top: 32px; }
+    .status-res { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 26px; margin-top: 18px; }
+    .tl-item { display: flex; gap: 14px; margin-bottom: 22px; }
+    .tl-dot { width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; position: relative; }
+    .tl-dot::after { content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); width: 2px; height: 26px; background: var(--gray-light); }
+    .tl-item:last-child .tl-dot::after { display: none; }
+    .tl-dot.done { background: var(--success); }
+    .tl-dot.active { background: var(--gold); box-shadow: 0 0 0 4px rgba(200,146,42,0.2); }
+    .tl-dot.pend { background: var(--gray-light); }
+    .tl-txt h4 { font-size: 14px; font-weight: 700; }
+    .tl-txt p { font-size: 13px; color: var(--gray-mid); margin-top: 2px; }
+    .sbadge { display: inline-block; padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sbadge.complete { background: var(--success-bg); color: var(--success); }
+    .sbadge.processing { background: #FFF3CD; color: #856404; }
+    .sbadge.pending { background: var(--gray-light); color: var(--gray-dark); }
+
+    /* ADMIN */
+    .adm-bar { background: var(--navy); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .adm-bar h2 { color: var(--white); font-size: 18px; font-weight: 700; }
+    .adm-bar span { color: var(--gray-mid); font-size: 13px; }
+    .adm-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; padding: 24px 32px; }
+    .stat-c { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 20px; }
+    .stat-c .sn { font-size: 28px; font-weight: 700; color: var(--navy); }
+    .stat-c .sl { font-size: 13px; color: var(--gray-mid); margin-top: 3px; }
+    .stat-c .sd { font-size: 12px; font-weight: 600; margin-top: 5px; color: var(--success); }
+    .tbl-wrap { padding: 0 32px 32px; }
+    .tbl-ctrl { display: flex; gap: 10px; margin-bottom: 12px; }
+    .ts { flex: 1; max-width: 280px; padding: 9px 13px; border: 1.5px solid var(--gray-light); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; }
+    .tf { padding: 9px 13px; border: 1.5px solid var(--gray-light); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--white); cursor: pointer; outline: none; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 13px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-mid); border-bottom: 2px solid var(--gray-light); background: var(--off-white); }
+    td { padding: 12px 13px; border-bottom: 1px solid var(--gray-light); vertical-align: middle; }
+    tr:hover td { background: #F0F4FA; }
+    .abtn { background: none; border: 1px solid var(--gray-light); border-radius: 6px; padding: 5px 11px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--navy); transition: all 0.2s; }
+    .abtn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 48px; }
+    .ci { display: flex; gap: 14px; align-items: flex-start; }
+    .ci-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .ci strong { display: block; font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .ci p { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
+    .cf { background: var(--white); border: 1px solid var(--gray-light); border-radius: 16px; padding: 32px; }
+    .cf h3 { font-size: 19px; font-weight: 700; color: var(--navy); margin-bottom: 22px; }
+
+    /* SUCCESS */
+    .success-sc { text-align: center; padding: 72px 40px; max-width: 500px; margin: 0 auto; }
+    .s-icon { width: 76px; height: 76px; border-radius: 50%; background: var(--success-bg); border: 3px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 22px; }
+    .success-sc h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--navy); margin-bottom: 12px; }
+    .success-sc p { color: var(--gray-dark); font-size: 15px; line-height: 1.7; margin-bottom: 8px; }
+    .ref-b { background: var(--gold-pale); border: 1px solid rgba(200,146,42,0.3); border-radius: var(--radius); padding: 18px; margin: 22px 0; }
+    .ref-b span { font-size: 11px; color: var(--gray-mid); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .ref-b strong { font-size: 21px; color: var(--navy); font-family: monospace; letter-spacing: 0.1em; }
+
+    /* FOOTER */
+    footer { background: var(--navy); padding: 60px 48px 26px; }
+    .ft-inner { max-width: 1100px; margin: 0 auto; }
+    .ft-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 44px; }
+    .ft-brand p { font-size: 13px; color: var(--gray-mid); line-height: 1.7; margin-top: 10px; max-width: 240px; }
+    .ft-col h4 { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 14px; }
+    .ft-col a { display: block; font-size: 13px; color: var(--gray-mid); text-decoration: none; margin-bottom: 9px; cursor: pointer; transition: color 0.2s; }
+    .ft-col a:hover { color: var(--gold-light); }
+    .ft-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .ft-bottom p { font-size: 12px; color: var(--gray-mid); }
+    .ft-badges { display: flex; gap: 8px; }
+    .ft-badge { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px; border: 1px solid rgba(200,146,42,0.4); color: var(--gold-light); }
+
+    /* STATS MINI GRID */
+    .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .mini-stat { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 22px 18px; }
+    .mini-stat .mn { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+    .mini-stat .ml { font-size: 13px; color: var(--gray-dark); line-height: 1.5; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links .nb:not(.cta) { display: none; }
+      .hero, .sec { padding: 64px 24px; }
+      .pc-hero { padding: 60px 24px; }
+      .trust { padding: 16px 24px; gap: 20px; }
+      .divider { margin: 0 24px; }
+      .cards3, .ft-grid { grid-template-columns: 1fr; }
+      .g2, .pc-hi, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-vis { height: 260px; }
+      .av-badge { bottom: -14px; right: 14px; }
+      .adm-stats, .mini-stats { grid-template-columns: 1fr 1fr; }
+      .fg { grid-template-columns: 1fr; }
+      .form-body { padding: 22px 18px; }
+      .form-nav { padding: 14px 18px; }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const APPS = [
+  { id:'PSA-2025-0847', name:'James Whitfield', submitted:'2025-10-14', status:'complete', site:'Blacktown DC', email:'j.whitfield@email.com' },
+  { id:'PSA-2025-0848', name:'Priya Sharma', submitted:'2025-10-15', status:'processing', site:'Wetherill Park', email:'p.sharma@email.com' },
+  { id:'PSA-2025-0849', name:'Marcus Webb', submitted:'2025-10-15', status:'processing', site:'Eastern Creek', email:'m.webb@email.com' },
+  { id:'PSA-2025-0850', name:"Sarah O'Brien", submitted:'2025-10-16', status:'pending', site:'Yennora', email:'s.obrien@email.com' },
+  { id:'PSA-2025-0851', name:'Tom Nguyen', submitted:'2025-10-16', status:'pending', site:'Erskine Park', email:'t.nguyen@email.com' },
+  { id:'PSA-2025-0852', name:'Angela Russo', submitted:'2025-10-17', status:'pending', site:'Moorebank', email:'a.russo@email.com' },
+];
+const genRef = () => 'PSA-2025-' + (Math.floor(Math.random()*900)+900);
+
+/* ── NAV ── */
+function Nav({ page, setPage }) {
+  const links = [['home','Home'],['about','About Us'],['services','Services'],['police','Police Checks'],['contact','Contact']];
+  return (
+    <nav>
+      <div className="logo" onClick={() => setPage('home')}>
+        <div className="logo-mark">SS</div>
+        <div className="logo-text"><strong>Personnel Staffing Aus</strong><span>Warehouse &amp; Logistics</span></div>
+      </div>
+      <div className="nav-links">
+        {links.map(([id,lbl]) => <button key={id} className={`nb${page===id?' active':''}`} onClick={() => setPage(id)}>{lbl}</button>)}
+        <button className="nb cta" onClick={() => setPage('police')}>Apply for Check</button>
+      </div>
+    </nav>
+  );
+}
+
+/* ── HOME ── */
+function Home({ setPage }) {
+  return (<>
+    <div className="hero">
+      <div className="hero-badge">🇦🇺 Sydney Founded · Australia-Wide</div>
+      <h1>Your Workforce Partner for <em>Warehouse &amp; Logistics</em></h1>
+      <p>We connect reliable, background-checked workers with Australia's leading warehouse and distribution operations. Fast, trusted, compliant.</p>
+      <div className="hero-btns">
+        <button className="btn-p" onClick={() => setPage('services')}>Our Services →</button>
+        <button className="btn-o" onClick={() => setPage('police')}>Police Check Portal</button>
+      </div>
+      <div className="hero-stats">
+        {[['500+','Workers Placed'],['60+','Warehouse Partners'],['6','States Covered'],['1–2','Day Check Turnaround']].map(([n,l]) => (
+          <div key={l}><div className="hs-num">{n}</div><div className="hs-lbl">{l}</div></div>
+        ))}
+      </div>
+    </div>
+
+    <div className="trust">
+      {['ACIC Accredited Provider','Australian Privacy Act Compliant','WorkSafe Certified','Fair Work Compliant'].map(t => (
+        <div className="ti" key={t}><div className="tdot"/>{t}</div>
+      ))}
+    </div>
+
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner">
+        <div className="lbl">What We Do</div>
+        <div className="h1">Staffing Built for Warehouses</div>
+        <p className="sub">From pick-and-pack to forklift operations, we specialise exclusively in warehouse and logistics staffing — so we understand your environment better than anyone.</p>
+        <div className="cards3" style={{marginTop:44}}>
+          {[
+            {icon:'👷',title:'Labour Hire',desc:'Casual, temp, and permanent warehouse workers. Pre-screened, trained, and ready to start. Available across all major metro areas.', page:'services'},
+            {icon:'🔒',title:'Police Checks',desc:'ACIC-accredited National Police Checks processed entirely online. Results in 1–2 business days, delivered to you and your employer.', page:'police'},
+            {icon:'📋',title:'Compliance',desc:"We handle right-to-work verification, onboarding documentation, WHS inductions, and ongoing compliance monitoring so you don't have to.", page:'services'},
+          ].map(s => (
+            <div className="card" key={s.title} onClick={() => setPage(s.page)}>
+              <div className="card-icon">{s.icon}</div>
+              <h3>{s.title}</h3><p>{s.desc}</p>
+              <span className="card-link">Learn more →</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="divider"/>
+
+    <div className="sec">
+      <div className="inner g2">
+        <div>
+          <div className="lbl">Why Choose Us</div>
+          <div className="h1">We Only Do Warehouses. That's Our Edge.</div>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:28}}>Founded in Sydney in 2024, Personnel Staffing Aus was built by people who've worked on warehouse floors. We know the difference between a picker-packer and a reach truck operator — and we staff accordingly.</p>
+          <button className="btn-n" onClick={() => setPage('about')}>Our Story →</button>
+        </div>
+        <div className="mini-stats">
+          {[['< 24h','Average fill time for urgent shifts'],['98%','Worker show-up rate across all sites'],['4.9★','Average employer satisfaction rating'],['100%','Police-checked workforce, every time']].map(([n,l]) => (
+            <div className="mini-stat" key={l}><div className="mn">{n}</div><div className="ml">{l}</div></div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="sec" style={{background:'var(--navy)',textAlign:'center'}}>
+      <div className="inner">
+        <div className="lbl lbl-lt">Ready to Get Started?</div>
+        <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(26px,4vw,42px)',color:'var(--white)',marginBottom:14}}>Need Workers? Need a Police Check?</h2>
+        <p style={{fontSize:16,color:'rgba(255,255,255,0.6)',maxWidth:500,margin:'0 auto 32px',lineHeight:1.7}}>Whether you're an employer looking for staff or a worker starting a new role, we've got you covered.</p>
+        <div style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
+          <button className="btn-p" onClick={() => setPage('contact')}>Get in Touch</button>
+          <button className="btn-o" onClick={() => setPage('police')}>Apply for a Police Check</button>
+        </div>
+      </div>
+    </div>
+  </>);
+}
+
+/* ── ABOUT ── */
+function About({ setPage }) {
+  return (<>
+    <div className="sec" style={{background:'var(--navy)',paddingBottom:64}}>
+      <div className="inner">
+        <div className="lbl lbl-lt">About Us</div>
+        <div className="h1 h1-lt">Born in Sydney. Built for Warehouses.</div>
+        <p className="sub sub-lt">We started Personnel Staffing Aus because the warehouse industry deserved a staffing partner that actually understood it.</p>
+      </div>
+    </div>
+
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner g2">
+        <div style={{position:'relative'}}>
+          <div className="about-vis">
+            <div className="av-inner">
+              <span className="av-year">2024</span>
+              <span className="av-sub">Founded in Sydney</span>
+            </div>
+          </div>
+          <div className="av-badge">
+            <strong>500+</strong><span>Workers Placed</span>
+          </div>
+        </div>
+        <div>
+          <div className="lbl">Our Story</div>
+          <div className="h1" style={{fontSize:'clamp(24px,3vw,36px)'}}>We Started Because the Industry Needed Better</div>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>Personnel Staffing Aus was founded in Sydney in early 2024 by a small team with decades of combined experience in warehouse operations, logistics management, and workforce compliance.</p>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>We saw firsthand how generic recruitment agencies struggled to understand warehouse environments — sending under-qualified workers, skipping background checks, and leaving employers to deal with the fallout. So we built something different.</p>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:24}}>From day one, we focused exclusively on warehouse and logistics staffing. That specialisation means we speak your language, understand your risks, and staff your floors with people who are ready to work.</p>
+          <div className="vals">
+            {[
+              {t:'Specialisation',d:'We only do warehouse and logistics. No offices, no retail, no compromise.'},
+              {t:'Compliance first',d:'Every worker is police-checked, right-to-work verified, and WHS inducted before placement.'},
+              {t:'Speed without shortcuts',d:'We fill shifts fast — but never at the expense of quality or safety.'},
+            ].map(v => (
+              <div className="val" key={v.t}>
+                <div className="val-check">✓</div>
+                <div><strong>{v.t}</strong><span>{v.d}</span></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="divider"/>
+
+    <div className="sec">
+      <div className="inner">
+        <div className="lbl">Our Team</div>
+        <div className="h1">The People Behind SSA</div>
+        <p className="sub" style={{marginBottom:44}}>A small, experienced team with real warehouse and logistics backgrounds — not just recruitment.</p>
+        <div className="cards3">
+          {[
+            {init:'MJ',name:'Michael Jensen',role:'Founder & CEO',bg:'linear-gradient(135deg,#0B1F3A,#1A3456)',tc:'#C8922A',bio:'Former warehouse operations manager with 15 years across Toll, DHL, and Linfox. Michael founded SSA after seeing how poorly specialist warehouses were served by generalist agencies.'},
+            {init:'LT',name:'Lauren Tran',role:'Head of Compliance',bg:'linear-gradient(135deg,#1A3456,#2A4F7A)',tc:'#C8922A',bio:'HR and compliance specialist with a background in Fair Work and privacy legislation. Lauren oversees all police check processing, right-to-work verification, and WHS documentation.'},
+            {init:'RC',name:'Ryan Callahan',role:'National Ops Manager',bg:'linear-gradient(135deg,#C8922A,#E8B84B)',tc:'#0B1F3A',bio:'Logistics coordinator turned staffing specialist. Ryan manages relationships with our warehouse partners across NSW, VIC, QLD, WA, SA, and ACT.'},
+          ].map(t => (
+            <div className="team-card" key={t.name}>
+              <div className="team-av" style={{background:t.bg,color:t.tc}}>{t.init}</div>
+              <div className="team-info"><h4>{t.name}</h4><div className="role">{t.role}</div><p>{t.bio}</p></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="divider"/>
+
+    <div className="sec" style={{background:'var(--white)',textAlign:'center'}}>
+      <div className="inner">
+        <div className="lbl">Where We Operate</div>
+        <div className="h1">Australia-Wide Coverage</div>
+        <p className="sub" style={{margin:'0 auto 36px'}}>Headquartered in Sydney with active placements in all major warehousing hubs.</p>
+        <div style={{display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center',marginBottom:36}}>
+          {['Sydney (HQ)','Melbourne','Brisbane','Perth','Adelaide','Canberra','Gold Coast','Newcastle'].map(c => (
+            <div key={c} style={{background:c.includes('HQ')?'var(--navy)':'var(--off-white)',color:c.includes('HQ')?'var(--gold-light)':'var(--text)',border:'1px solid var(--gray-light)',borderRadius:8,padding:'9px 18px',fontSize:14,fontWeight:600}}>{c}</div>
+          ))}
+        </div>
+        <button className="btn-n" onClick={() => setPage('contact')}>Get in Touch →</button>
+      </div>
+    </div>
+  </>);
+}
+
+/* ── SERVICES ── */
+function Services({ setPage }) {
+  const services = [
+    {icon:'👷',title:'Labour Hire',tag:'Most Popular',desc:"Flexible, on-demand warehouse workers for casual, temp-to-perm, and permanent roles. All workers are pre-screened, police-checked, and WHS inducted before placement.",points:['Pick & pack operators','Forklift operators (LF, LO, LC licenced)','Reach truck drivers','RF scanning & order selection','Dispatchers & storepersons','Inventory & cycle count staff']},
+    {icon:'🔒',title:'Police Check Processing',tag:'ACIC Accredited',desc:"Fast, fully online National Police Checks for all your new starters. We're an accredited body with the ACIC and comply fully with the Privacy Act 1988.",points:['Results in 1–2 business days','Secure online application portal','Certificate issued directly to employer','Privacy Act 1988 compliant','Covers all Australian states & territories','Suitable for warehouse, transport & logistics roles']},
+    {icon:'📋',title:'Workforce Compliance',tag:'End-to-End',desc:"Let us handle the paperwork. We manage all onboarding compliance so you can focus on running your warehouse, not chasing documentation.",points:['Right-to-work verification (visa checks)','Fair Work Act compliance','WHS site inductions','TFN and super fund documentation','Ongoing licence verification (forklift, etc.)','Incident reporting support']},
+  ];
+  return (<>
+    <div className="sec" style={{background:'var(--navy)',paddingBottom:64}}>
+      <div className="inner">
+        <div className="lbl lbl-lt">What We Offer</div>
+        <div className="h1 h1-lt">Staffing Services for Every Warehouse Need</div>
+        <p className="sub sub-lt">From single-day casual shifts to permanent placements, we have a solution that fits.</p>
+      </div>
+    </div>
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner">
+        {services.map((s,i) => (
+          <div key={s.title} style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:56,alignItems:'center',marginBottom:i<2?72:0}}>
+            {i%2===0 ? <>
+              <div>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+                  <div className="card-icon" style={{margin:0}}>{s.icon}</div>
+                  <span style={{background:'var(--gold-pale)',color:'var(--gold)',border:'1px solid rgba(200,146,42,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
+                </div>
+                <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:28,color:'var(--navy)',marginBottom:12}}>{s.title}</h3>
+                <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:22}}>{s.desc}</p>
+                <button className="btn-n" onClick={() => s.title.includes('Police')?setPage('police'):setPage('contact')}>{s.title.includes('Police')?'Apply for a Check →':'Get a Quote →'}</button>
+              </div>
+              <div style={{background:'var(--off-white)',border:'1px solid var(--gray-light)',borderRadius:16,padding:28}}>
+                <h4 style={{fontSize:13,fontWeight:700,color:'var(--navy)',marginBottom:14,textTransform:'uppercase',letterSpacing:'0.05em'}}>Includes</h4>
+                {s.points.map(p=><div key={p} style={{display:'flex',gap:9,marginBottom:10,fontSize:14,color:'var(--gray-dark)'}}><span style={{color:'var(--success)',fontWeight:700}}>✓</span>{p}</div>)}
+              </div>
+            </> : <>
+              <div style={{background:'var(--off-white)',border:'1px solid var(--gray-light)',borderRadius:16,padding:28}}>
+                <h4 style={{fontSize:13,fontWeight:700,color:'var(--navy)',marginBottom:14,textTransform:'uppercase',letterSpacing:'0.05em'}}>Includes</h4>
+                {s.points.map(p=><div key={p} style={{display:'flex',gap:9,marginBottom:10,fontSize:14,color:'var(--gray-dark)'}}><span style={{color:'var(--success)',fontWeight:700}}>✓</span>{p}</div>)}
+              </div>
+              <div>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+                  <div className="card-icon" style={{margin:0}}>{s.icon}</div>
+                  <span style={{background:'var(--gold-pale)',color:'var(--gold)',border:'1px solid rgba(200,146,42,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
+                </div>
+                <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:28,color:'var(--navy)',marginBottom:12}}>{s.title}</h3>
+                <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:22}}>{s.desc}</p>
+                <button className="btn-n" onClick={() => s.title.includes('Police')?setPage('police'):setPage('contact')}>{s.title.includes('Police')?'Apply for a Check →':'Get a Quote →'}</button>
+              </div>
+            </>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </>);
+}
+
+/* ── POLICE CHECK ── */
+function Police({ setPage }) {
+  const [tab, setTab] = useState('apply');
+  return (<>
+    <div className="pc-hero">
+      <div className="pc-hi">
+        <div>
+          <div className="lbl lbl-lt">ACIC Accredited</div>
+          <h2>National Police Check Portal</h2>
+          <p>Apply online for your National Police Check. Required for all Personnel Staffing Aus placements. Fast, secure, and compliant with Australian privacy law.</p>
+          <div className="pc-pills">
+            {['Results in 1–2 days','Privacy Act Compliant','100% Online','ACIC Accredited'].map(p=><span className="pc-pill" key={p}>{p}</span>)}
+          </div>
+        </div>
+        <div className="pc-card">
+          <h3>Ready to apply?</h3>
+          <p>Takes under 10 minutes. Have your ID documents ready before you start.</p>
+          <div className="pc-steps">
+            {['Fill in your personal details','Upload two forms of ID','Review and give consent','Receive certificate via email'].map((s,i)=>(
+              <div className="pc-step" key={s}><div className="pc-sn">{i+1}</div>{s}</div>
+            ))}
+          </div>
+          <button className="btn-p" style={{width:'100%',justifyContent:'center'}} onClick={()=>setTab('apply')}>Start Application →</button>
+        </div>
+      </div>
+    </div>
+
+    <div className="tabs">
+      {[['apply','Apply'],['track','Track Application'],['admin','Admin Dashboard']].map(([id,lbl])=>(
+        <button key={id} className={`tab-btn${tab===id?' active':''}`} onClick={()=>setTab(id)}>{lbl}</button>
+      ))}
+    </div>
+
+    <div className="sec">
+      <div className="inner" style={{maxWidth:820}}>
+        {tab==='apply' && <AppForm setPage={setPage}/>}
+        {tab==='track' && <Tracker/>}
+        {tab==='admin' && <AdminDash/>}
+      </div>
+    </div>
+  </>);
+}
+
+/* ── APPLICATION FORM ── */
+function AppForm({ setPage }) {
+  const [step,setStep]=useState(0);
+  const [done,setDone]=useState(false);
+  const [ref]=useState(genRef);
+  const [files,setFiles]=useState({primary:null,secondary:null});
+  const [drag,setDrag]=useState({primary:false,secondary:false});
+  const [form,setForm]=useState({firstName:'',lastName:'',dob:'',email:'',phone:'',gender:'',address:'',suburb:'',state:'',postcode:'',prevAddress:'',site:'',startDate:'',c1:false,c2:false,c3:false});
+  const [errs,setErrs]=useState({});
+  const upd=(k,v)=>setForm(f=>({...f,[k]:v}));
+  const validate=()=>{
+    const e={};
+    if(step===0){if(!form.firstName.trim())e.firstName='Required';if(!form.lastName.trim())e.lastName='Required';if(!form.dob)e.dob='Required';if(!form.email.includes('@'))e.email='Valid email required';if(!form.phone.trim())e.phone='Required';}
+    if(step===1){if(!form.address.trim())e.address='Required';if(!form.suburb.trim())e.suburb='Required';if(!form.state)e.state='Required';if(!form.postcode.trim())e.postcode='Required';}
+    if(step===2){if(!files.primary)e.primary='Primary ID required';if(!files.secondary)e.secondary='Secondary ID required';}
+    if(step===3){if(!form.c1||!form.c2||!form.c3)e.consent='All declarations required';}
+    setErrs(e);return Object.keys(e).length===0;
+  };
+  const next=()=>{if(validate())setStep(s=>s+1);};
+  const back=()=>setStep(s=>s-1);
+  const submit=()=>{if(validate())setDone(true);};
+  const handleFile=(key,file)=>{if(file)setFiles(f=>({...f,[key]:file}));};
+  const stepLabels=['Personal Details','Address & Work','Upload ID','Consent & Submit'];
+  if(done) return (
+    <div className="success-sc">
+      <div className="s-icon">✓</div>
+      <h2>Application Submitted!</h2>
+      <p>Your police check is being processed. A confirmation has been sent to <strong>{form.email}</strong>.</p>
+      <div className="ref-b"><span>Your Reference Number</span><strong>{ref}</strong></div>
+      <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
+      <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
+        <button className="btn-n" onClick={()=>{setDone(false);setStep(0);}}>New Application</button>
+        <button className="btn-bk" onClick={()=>setPage('home')}>Return Home</button>
+      </div>
+    </div>
+  );
+  return (
+    <div className="form-wrap">
+      <div className="form-hdr">
+        <div><h3>Step {step+1} of {stepLabels.length}: {stepLabels[step]}</h3><p>Secured and encrypted. Compliant with the Australian Privacy Act 1988.</p></div>
+        <div className="prog">{stepLabels.map((_,i)=><div key={i} className={`prog-pip${i<step?' done':i===step?' active':''}`}/>)}</div>
+      </div>
+      <div className="form-body">
+        {step===0 && <>
+          <div className="info-b">ℹ️ Enter details exactly as they appear on your government-issued ID.</div>
+          <div className="fg">
+            {[['firstName','First Name'],['lastName','Last Name']].map(([k,l])=>(
+              <div className="fgrp" key={k}><label>{l} <span className="req">*</span></label><input value={form[k]} onChange={e=>upd(k,e.target.value)} className={errs[k]?'ferr-i':''}/>{errs[k]&&<span className="ferr">{errs[k]}</span>}</div>
+            ))}
+            <div className="fgrp"><label>Date of Birth <span className="req">*</span></label><input type="date" value={form.dob} onChange={e=>upd('dob',e.target.value)} className={errs.dob?'ferr-i':''}/>{errs.dob&&<span className="ferr">{errs.dob}</span>}</div>
+            <div className="fgrp"><label>Gender</label><select value={form.gender} onChange={e=>upd('gender',e.target.value)}><option value="">Prefer not to say</option>{['Male','Female','Non-binary','Other'].map(g=><option key={g}>{g}</option>)}</select></div>
+            <div className="fgrp"><label>Email <span className="req">*</span></label><input type="email" value={form.email} onChange={e=>upd('email',e.target.value)} className={errs.email?'ferr-i':''} placeholder="your@email.com"/>{errs.email&&<span className="ferr">{errs.email}</span>}</div>
+            <div className="fgrp"><label>Mobile <span className="req">*</span></label><input type="tel" value={form.phone} onChange={e=>upd('phone',e.target.value)} className={errs.phone?'ferr-i':''} placeholder="04XX XXX XXX"/>{errs.phone&&<span className="ferr">{errs.phone}</span>}</div>
+          </div>
+        </>}
+        {step===1 && <>
+          <div className="info-b">ℹ️ Provide your current address. Include any previous address if you've moved in the last 5 years.</div>
+          <div className="fg">
+            <div className="fgrp fg-full"><label>Street Address <span className="req">*</span></label><input value={form.address} onChange={e=>upd('address',e.target.value)} className={errs.address?'ferr-i':''} placeholder="Street number and name"/>{errs.address&&<span className="ferr">{errs.address}</span>}</div>
+            <div className="fgrp"><label>Suburb <span className="req">*</span></label><input value={form.suburb} onChange={e=>upd('suburb',e.target.value)} className={errs.suburb?'ferr-i':''}/>{errs.suburb&&<span className="ferr">{errs.suburb}</span>}</div>
+            <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
+            <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 3000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
+            <div className="fgrp fg-full"><label>Previous Address (if moved in last 5 years)</label><input value={form.prevAddress} onChange={e=>upd('prevAddress',e.target.value)} placeholder="Street, suburb, state, postcode"/></div>
+            <div className="fgrp"><label>Assigned Warehouse Site</label><select value={form.site} onChange={e=>upd('site',e.target.value)}><option value="">Select site</option>{['Blacktown DC','Wetherill Park','Eastern Creek','Yennora','Erskine Park','Moorebank','Laverton North','Dandenong South','Wacol','Brendale','Wingfield','Bibra Lake'].map(s=><option key={s}>{s}</option>)}</select></div>
+            <div className="fgrp"><label>Expected Start Date</label><input type="date" value={form.startDate} onChange={e=>upd('startDate',e.target.value)}/></div>
+          </div>
+        </>}
+        {step===2 && <>
+          <div className="info-b">ℹ️ You need a primary ID (passport or driver's licence) and a secondary ID (Medicare card, birth certificate, or utility bill).</div>
+          {['primary','secondary'].map(key=>(
+            <div className="fgrp" key={key} style={{marginBottom:18}}>
+              <label style={{marginBottom:7}}>{key==='primary'?'Primary ID':'Secondary ID'} <span className="req">*</span> <span style={{fontWeight:400,color:'var(--gray-mid)',marginLeft:6}}>{key==='primary'?"(Passport or Driver's Licence)":"(Medicare, Birth Certificate, or Utility Bill)"}</span></label>
+              {files[key]
+                ? <div className="up-file"><span>✓ {files[key].name}</span><button className="up-rem" onClick={()=>setFiles(f=>({...f,[key]:null}))}>×</button></div>
+                : <div className={`upload-z${drag[key]?' drag':''}`} onDragOver={e=>{e.preventDefault();setDrag(d=>({...d,[key]:true}));}} onDragLeave={()=>setDrag(d=>({...d,[key]:false}))} onDrop={e=>{e.preventDefault();handleFile(key,e.dataTransfer.files[0]);setDrag(d=>({...d,[key]:false}));}} onClick={()=>document.getElementById(`f-${key}`).click()}>
+                  <div style={{fontSize:30}}>📎</div><h4>Drop file here or click to browse</h4><p>PDF, JPG, PNG — max 10MB</p>
+                  <input type="file" id={`f-${key}`} accept=".pdf,.jpg,.jpeg,.png" onChange={e=>handleFile(key,e.target.files[0])}/>
+                </div>
+              }
+              {errs[key]&&<span className="ferr">{errs[key]}</span>}
+            </div>
+          ))}
+        </>}
+        {step===3 && <>
+          <div className="info-b">ℹ️ Please review your details and agree to all declarations before submitting.</div>
+          <div style={{background:'var(--off-white)',border:'1px solid var(--gray-light)',borderRadius:'var(--radius)',padding:18,marginBottom:18}}>
+            <h4 style={{fontWeight:700,marginBottom:10,fontSize:14}}>Application Summary</h4>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'7px 22px',fontSize:14}}>
+              <span style={{color:'var(--gray-mid)'}}>Name</span><strong>{form.firstName} {form.lastName}</strong>
+              <span style={{color:'var(--gray-mid)'}}>DOB</span><strong>{form.dob}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Email</span><strong>{form.email}</strong>
+              <span style={{color:'var(--gray-mid)'}}>Site</span><strong>{form.site||'Not specified'}</strong>
+            </div>
+          </div>
+          <div className="consent-b">
+            <h4>Consent &amp; Declaration</h4>
+            <p>By submitting, you consent to Personnel Staffing Aus conducting a National Police Check in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
+            {[['c1','I confirm all information provided is true and correct to the best of my knowledge.'],['c2','I consent to Personnel Staffing Aus collecting, using, and disclosing my personal information for the purpose of conducting a National Police Check as outlined in the Privacy Policy.'],['c3','I understand results may be shared with my prospective employer as authorised under the Privacy Act 1988.']].map(([k,t])=>(
+              <div className="chk-row" key={k}><input type="checkbox" id={k} checked={form[k]} onChange={e=>upd(k,e.target.checked)}/><label htmlFor={k}>{t}</label></div>
+            ))}
+            {errs.consent&&<span className="ferr" style={{display:'block',marginTop:8}}>{errs.consent}</span>}
+          </div>
+        </>}
+      </div>
+      <div className="form-nav">
+        {step>0?<button className="btn-bk" onClick={back}>← Back</button>:<span/>}
+        {step<3?<button className="btn-n" onClick={next}>Continue →</button>:<button className="btn-sub" onClick={submit}>Submit Application ✓</button>}
+      </div>
+    </div>
+  );
+}
+
+/* ── TRACKER ── */
+function Tracker() {
+  const [q,setQ]=useState('');
+  const [res,setRes]=useState(null);
+  const [nf,setNf]=useState(false);
+  const search=()=>{const f=APPS.find(a=>a.id.toLowerCase()===q.trim().toLowerCase());setRes(f||null);setNf(!f);};
+  const tl=(status)=>[
+    {l:'Application Received',d:'Queued for processing.',s:'done'},
+    {l:'Identity Verified',d:'ID documents checked.',s:status==='pending'?'pend':'done'},
+    {l:'Check in Progress',d:'Being processed with the ACIC database.',s:status==='complete'?'done':status==='processing'?'active':'pend'},
+    {l:'Results Ready',d:'Certificate issued and emailed.',s:status==='complete'?'done':'pend'},
+  ];
+  return (
+    <div style={{maxWidth:620}}>
+      <h3 style={{fontSize:20,fontWeight:700,color:'var(--navy)',marginBottom:8}}>Track Your Application</h3>
+      <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your application status.</p>
+      <div className="status-search">
+        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. PSA-2025-0848" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
+        <button className="btn-n" onClick={search}>Search</button>
+      </div>
+      <p style={{fontSize:12,color:'var(--gray-mid)',marginTop:8}}>Try: PSA-2025-0847 (complete) · PSA-2025-0848 (processing) · PSA-2025-0850 (pending)</p>
+      {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number.</div>}
+      {res&&(
+        <div className="status-res">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:22}}>
+            <div><h3 style={{fontSize:18,fontWeight:700,color:'var(--navy)'}}>{res.name}</h3><p style={{fontSize:13,color:'var(--gray-mid)',marginTop:3}}>Ref: {res.id} · {res.submitted} · {res.site}</p></div>
+            <span className={`sbadge ${res.status}`}>{res.status==='complete'?'Complete':res.status==='processing'?'In Progress':'Pending'}</span>
+          </div>
+          {tl(res.status).map((t,i)=>(
+            <div className="tl-item" key={i}>
+              <div className={`tl-dot ${t.s}`}/>
+              <div className="tl-txt"><h4 style={{color:t.s==='pend'?'var(--gray-mid)':'var(--navy)'}}>{t.l}</h4><p>{t.d}</p></div>
+            </div>
+          ))}
+          {res.status==='complete'&&<div style={{background:'var(--success-bg)',border:'1px solid #B2DFCC',borderRadius:'var(--radius)',padding:14,marginTop:10}}><strong style={{color:'var(--success)',fontSize:13}}>✓ Certificate issued and emailed to {res.email}</strong></div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── ADMIN ── */
+function AdminDash() {
+  const [li,setLi]=useState(false);
+  const [pw,setPw]=useState('');
+  const [pwe,setPwe]=useState(false);
+  const [sq,setSq]=useState('');
+  const [sf,setSf]=useState('all');
+  if(!li) return (
+    <div style={{maxWidth:360}}>
+      <h3 style={{fontSize:19,fontWeight:700,color:'var(--navy)',marginBottom:6}}>Admin Login</h3>
+      <p style={{fontSize:14,color:'var(--gray-dark)',marginBottom:22}}>Staff access only.</p>
+      <div className="fgrp" style={{marginBottom:14}}><label>Password</label><input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwe(false);}} className={pwe?'ferr-i':''} placeholder="Admin password" onKeyDown={e=>e.key==='Enter'&&(pw==='admin123'?setLi(true):setPwe(true))}/>{pwe&&<span className="ferr">Incorrect password (hint: admin123)</span>}</div>
+      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='admin123'?setLi(true):setPwe(true)}>Login →</button>
+    </div>
+  );
+  const filtered=APPS.filter(a=>{const mq=a.name.toLowerCase().includes(sq.toLowerCase())||a.id.toLowerCase().includes(sq.toLowerCase());const mf=sf==='all'||a.status===sf;return mq&&mf;});
+  const cnt={complete:APPS.filter(a=>a.status==='complete').length,processing:APPS.filter(a=>a.status==='processing').length,pending:APPS.filter(a=>a.status==='pending').length};
+  return (
+    <div style={{background:'var(--white)',border:'1px solid var(--gray-light)',borderRadius:16,overflow:'hidden'}}>
+      <div className="adm-bar"><div><h2>Admin Dashboard</h2><span>Police Check Management</span></div><button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)'}} onClick={()=>setLi(false)}>Logout</button></div>
+      <div className="adm-stats">
+        <div className="stat-c"><div className="sn">{APPS.length}</div><div className="sl">Total Applications</div><div className="sd">↑ 12 this week</div></div>
+        <div className="stat-c"><div className="sn" style={{color:'var(--success)'}}>{cnt.complete}</div><div className="sl">Completed</div></div>
+        <div className="stat-c"><div className="sn" style={{color:'#856404'}}>{cnt.processing}</div><div className="sl">In Progress</div></div>
+        <div className="stat-c"><div className="sn" style={{color:'var(--gray-dark)'}}>{cnt.pending}</div><div className="sl">Pending</div></div>
+      </div>
+      <div className="tbl-wrap">
+        <div className="tbl-ctrl">
+          <input className="ts" placeholder="Search name or reference..." value={sq} onChange={e=>setSq(e.target.value)}/>
+          <select className="tf" value={sf} onChange={e=>setSf(e.target.value)}><option value="all">All Statuses</option><option value="complete">Complete</option><option value="processing">In Progress</option><option value="pending">Pending</option></select>
+        </div>
+        <div style={{border:'1px solid var(--gray-light)',borderRadius:'var(--radius)',overflow:'auto'}}>
+          <table>
+            <thead><tr><th>Applicant</th><th>Reference</th><th>Site</th><th>Submitted</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              {filtered.map(a=>(
+                <tr key={a.id}>
+                  <td><div style={{fontWeight:700,color:'var(--navy)'}}>{a.name}</div><div style={{fontSize:12,color:'var(--gray-mid)'}}>{a.email}</div></td>
+                  <td><span style={{fontFamily:'monospace',fontSize:12,color:'var(--gray-mid)'}}>{a.id}</span></td>
+                  <td style={{fontSize:13}}>{a.site}</td>
+                  <td style={{fontSize:13}}>{a.submitted}</td>
+                  <td><span className={`sbadge ${a.status}`}>{a.status==='complete'?'Complete':a.status==='processing'?'In Progress':'Pending'}</span></td>
+                  <td><button className="abtn">View</button></td>
+                </tr>
+              ))}
+              {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',padding:28,color:'var(--gray-mid)'}}>No results found.</td></tr>}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── CONTACT ── */
+function Contact() {
+  const [sent,setSent]=useState(false);
+  const [form,setForm]=useState({name:'',email:'',company:'',message:'',type:''});
+  const upd=(k,v)=>setForm(f=>({...f,[k]:v}));
+  if(sent) return (
+    <div className="success-sc" style={{paddingTop:40}}>
+      <div className="s-icon">✓</div>
+      <h2>Message Sent!</h2>
+      <p>Thanks for reaching out. Our team will be in touch within one business day.</p>
+      <button className="btn-n" style={{marginTop:22}} onClick={()=>setSent(false)}>Send Another Message</button>
+    </div>
+  );
+  return (<>
+    <div className="sec" style={{background:'var(--navy)',paddingBottom:64}}>
+      <div className="inner">
+        <div className="lbl lbl-lt">Get in Touch</div>
+        <div className="h1 h1-lt">Let's Talk Staffing</div>
+        <p className="sub sub-lt">Whether you need warehouse workers or a police check, we're here to help.</p>
+      </div>
+    </div>
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner">
+        <div className="contact-grid">
+          <div style={{display:'flex',flexDirection:'column',gap:26}}>
+            {[
+              {icon:'📍',t:'Headquarters',d:'161 Castlereagh St\nSydney NSW 2000'},
+              {icon:'📞',t:'Phone',d:'0434 681 471\nMon–Fri, 8am–5pm AEST'},
+              {icon:'✉️',t:'Email',d:'kyle@personnelstaffingaus.com'},
+            ].map(c=>(
+              <div className="ci" key={c.t}><div className="ci-icon">{c.icon}</div><div><strong>{c.t}</strong><p style={{whiteSpace:'pre-line'}}>{c.d}</p></div></div>
+            ))}
+            <div style={{background:'var(--gold-pale)',border:'1px solid rgba(200,146,42,0.3)',borderRadius:'var(--radius)',padding:20}}>
+              <strong style={{color:'var(--navy)',display:'block',marginBottom:7,fontSize:14}}>Employers — Request Workers</strong>
+              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0434 681 471 or email kyle@personnelstaffingaus.com for same-day response.</p>
+            </div>
+          </div>
+          <div className="cf">
+            <h3>Send Us a Message</h3>
+            <div style={{display:'flex',flexDirection:'column',gap:14}}>
+              <div className="fgrp"><label>Full Name</label><input value={form.name} onChange={e=>upd('name',e.target.value)} placeholder="Your name"/></div>
+              <div className="fgrp"><label>Email</label><input type="email" value={form.email} onChange={e=>upd('email',e.target.value)} placeholder="your@email.com"/></div>
+              <div className="fgrp"><label>Company (optional)</label><input value={form.company} onChange={e=>upd('company',e.target.value)} placeholder="Your company name"/></div>
+              <div className="fgrp"><label>Enquiry Type</label><select value={form.type} onChange={e=>upd('type',e.target.value)}><option value="">Select type</option><option>Labour Hire — I need warehouse workers</option><option>Police Check — I need more information</option><option>Compliance — workforce compliance help</option><option>General Enquiry</option></select></div>
+              <div className="fgrp"><label>Message</label><textarea value={form.message} onChange={e=>upd('message',e.target.value)} placeholder="How can we help?" rows={4}/></div>
+              <button className="btn-n" style={{width:'100%'}} onClick={()=>setSent(true)}>Send Message →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>);
+}
+
+/* ── FOOTER ── */
+function Footer({ setPage }) {
+  return (
+    <footer>
+      <div className="ft-inner">
+        <div className="ft-grid">
+          <div className="ft-brand">
+            <div className="logo" style={{marginBottom:10}}>
+              <div className="logo-mark" style={{width:36,height:36,fontSize:13}}>SS</div>
+              <div className="logo-text"><strong>Personnel Staffing Aus</strong></div>
+            </div>
+            <p>Australia's specialist warehouse and logistics staffing partner. Founded in Sydney in 2024. Serving businesses across all major Australian cities.</p>
+          </div>
+          <div className="ft-col"><h4>Company</h4><a onClick={()=>setPage('about')}>About Us</a><a onClick={()=>setPage('services')}>Our Services</a><a onClick={()=>setPage('contact')}>Contact</a></div>
+          <div className="ft-col"><h4>Police Checks</h4><a onClick={()=>setPage('police')}>Apply Online</a><a onClick={()=>setPage('police')}>Track Application</a><a>Privacy Policy</a><a>Terms of Service</a></div>
+          <div className="ft-col"><h4>Contact</h4><a>kyle@personnelstaffingaus.com</a><a>0434 681 471</a><a>161 Castlereagh St, Sydney NSW 2000</a><a>Mon–Fri 8am–5pm AEST</a></div>
+        </div>
+        <div className="ft-bottom">
+          <p>© 2025 Personnel Staffing Aus Pty Ltd · ABN XX XXX XXX XXX · Founded Sydney 2024</p>
+          <div className="ft-badges">
+            <span className="ft-badge">ACIC Accredited</span>
+            <span className="ft-badge">Privacy Act Compliant</span>
+            <span className="ft-badge">Fair Work Compliant</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ── APP ── */
+function App() {
+  const [page,setPage]=useState('home');
+  const pages={home:Home,about:About,services:Services,police:Police,contact:Contact};
+  const Page=pages[page]||Home;
+  return (<><Nav page={page} setPage={setPage}/><Page setPage={setPage}/><Footer setPage={setPage}/></>);
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
