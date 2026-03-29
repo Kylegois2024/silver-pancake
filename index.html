@@ -7,7 +7,8 @@
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('gyLSmTELTy9TaAXfx');</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -559,10 +560,18 @@ function Jobs({ setPage }) {
         work_type: form.workType,
         status: 'new',
       });
+      // Send email notification
+      try {
+        await emailjs.send('personnelstaffingaus', 'template_w3e2d1k', {
+          name: `${form.firstName} ${form.middleName} ${form.lastName}`.trim(),
+          email: form.email,
+          phone: form.phone,
+          city: form.preferredCity,
+          work_type: form.workType,
+        });
+      } catch(emailErr) { console.warn('Email notification failed:', emailErr); }
+
       setDone(true);
-    } catch(err) {
-      console.error(err);
-      setSubmitErr('Something went wrong. Please try again or call us on 0434 681 471.');
     } finally {
       setSubmitting(false);
     }
@@ -808,6 +817,18 @@ function AppForm({ setPage }) {
       });
 
       setSubmittedRef(reference);
+
+      // Send email notification
+      try {
+        await emailjs.send('personnelstaffingaus', 'template_s7758nl', {
+          name: `${form.firstName} ${form.middleName} ${form.lastName}`.trim(),
+          email: form.email,
+          phone: form.phone,
+          reference: reference,
+          site: form.site || 'Not specified',
+        });
+      } catch(emailErr) { console.warn('Email notification failed:', emailErr); }
+
       setDone(true);
     } catch(err) {
       console.error(err);
