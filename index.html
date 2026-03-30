@@ -1245,12 +1245,169 @@ function Footer({ setPage }) {
   );
 }
 
+/* ── APPLY NOW (standalone job application page) ── */
+function ApplyNow({ setPage }) {
+  const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitErr, setSubmitErr] = useState('');
+  const [form, setForm] = useState({
+    firstName:'', middleName:'', lastName:'', dob:'', gender:'',
+    email:'', phone:'', address:'', suburb:'', state:'', postcode:'',
+    preferredCity:'', workType:'',
+  });
+  const [errs, setErrs] = useState({});
+  const upd = (k,v) => setForm(f=>({...f,[k]:v}));
+
+  const validate = () => {
+    const e = {};
+    if(!form.firstName.trim()) e.firstName = 'Required';
+    if(!form.lastName.trim()) e.lastName = 'Required';
+    if(!form.dob) e.dob = 'Required';
+    if(!form.email.includes('@')) e.email = 'Valid email required';
+    if(!form.phone.trim()) e.phone = 'Required';
+    if(!form.address.trim()) e.address = 'Required';
+    if(!form.suburb.trim()) e.suburb = 'Required';
+    if(!form.state) e.state = 'Required';
+    if(!form.postcode.trim()) e.postcode = 'Required';
+    if(!form.preferredCity) e.preferredCity = 'Required';
+    if(!form.workType) e.workType = 'Required';
+    setErrs(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const submit = async () => {
+    if(!validate()) return;
+    setSubmitting(true);
+    setSubmitErr('');
+    try {
+      await sb.insert('job_applications', {
+        first_name: form.firstName,
+        middle_name: form.middleName,
+        last_name: form.lastName,
+        dob: form.dob,
+        gender: form.gender,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        suburb: form.suburb,
+        state: form.state,
+        postcode: form.postcode,
+        preferred_city: form.preferredCity,
+        work_type: form.workType,
+        status: 'new',
+      });
+      try {
+        await emailjs.send('personnelstaffingaus', 'template_w3e2d1k', {
+          name: `${form.firstName} ${form.middleName} ${form.lastName}`.trim(),
+          email: form.email,
+          phone: form.phone,
+          city: form.preferredCity,
+          work_type: form.workType,
+        });
+      } catch(emailErr) { console.warn('Email notification failed:', emailErr); }
+      setDone(true);
+    } catch(err) {
+      console.error(err);
+      setSubmitErr('Something went wrong. Please try again or call us on 0434 681 471.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if(done) return (
+    <div className="success-sc" style={{paddingTop:80}}>
+      <div className="s-icon">✓</div>
+      <h2>Application Received!</h2>
+      <p>Thanks for applying! Our team will review your details and be in touch as soon as a suitable role becomes available.</p>
+      <p style={{marginTop:8}}>Questions? Call us on <strong>0434 681 471</strong>.</p>
+      <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',marginTop:28}}>
+        <button className="btn-n" onClick={()=>{setDone(false);setForm({firstName:'',middleName:'',lastName:'',dob:'',gender:'',email:'',phone:'',address:'',suburb:'',state:'',postcode:'',preferredCity:'',workType:''});}}>Submit Another</button>
+        <button className="btn-bk" onClick={()=>setPage('home')}>Return Home</button>
+      </div>
+    </div>
+  );
+
+  return (<>
+    <div className="sec" style={{background:'var(--navy)',paddingBottom:64}}>
+      <div className="inner">
+        <div className="lbl lbl-lt">Now Hiring</div>
+        <div className="h1 h1-lt">Apply for a Position</div>
+        <p className="sub sub-lt">Fill in your details below and we'll match you with available warehouse and logistics roles across Australia.</p>
+      </div>
+    </div>
+
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner" style={{maxWidth:780}}>
+        <div className="form-wrap">
+          <div className="form-hdr">
+            <div>
+              <h3>Job Application Form</h3>
+              <p>All fields marked * are required. Your details are kept private and secure.</p>
+            </div>
+          </div>
+          <div className="form-body">
+            <div className="info-b">ℹ️ Enter your details exactly as they appear on your ID.</div>
+
+            <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14}}>Personal Details</div>
+            <div className="fg" style={{marginBottom:20}}>
+              <div className="fgrp"><label>First Name <span className="req">*</span></label><input value={form.firstName} onChange={e=>upd('firstName',e.target.value)} className={errs.firstName?'ferr-i':''}/>{errs.firstName&&<span className="ferr">{errs.firstName}</span>}</div>
+              <div className="fgrp"><label>Middle Name</label><input value={form.middleName} onChange={e=>upd('middleName',e.target.value)} placeholder="If applicable"/></div>
+              <div className="fgrp"><label>Last Name <span className="req">*</span></label><input value={form.lastName} onChange={e=>upd('lastName',e.target.value)} className={errs.lastName?'ferr-i':''}/>{errs.lastName&&<span className="ferr">{errs.lastName}</span>}</div>
+              <div className="fgrp"><label>Date of Birth <span className="req">*</span></label><input type="date" value={form.dob} onChange={e=>upd('dob',e.target.value)} className={errs.dob?'ferr-i':''}/>{errs.dob&&<span className="ferr">{errs.dob}</span>}</div>
+              <div className="fgrp"><label>Gender</label><select value={form.gender} onChange={e=>upd('gender',e.target.value)}><option value="">Prefer not to say</option>{['Male','Female','Non-binary','Other'].map(g=><option key={g}>{g}</option>)}</select></div>
+              <div className="fgrp"><label>Email <span className="req">*</span></label><input type="email" value={form.email} onChange={e=>upd('email',e.target.value)} className={errs.email?'ferr-i':''} placeholder="your@email.com"/>{errs.email&&<span className="ferr">{errs.email}</span>}</div>
+              <div className="fgrp"><label>Mobile <span className="req">*</span></label><input type="tel" value={form.phone} onChange={e=>upd('phone',e.target.value)} className={errs.phone?'ferr-i':''} placeholder="04XX XXX XXX"/>{errs.phone&&<span className="ferr">{errs.phone}</span>}</div>
+            </div>
+
+            <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14,paddingTop:16,borderTop:'1px solid var(--gray-light)'}}>Home Address</div>
+            <div className="fg" style={{marginBottom:20}}>
+              <div className="fgrp fg-full"><label>Street Address <span className="req">*</span></label><input value={form.address} onChange={e=>upd('address',e.target.value)} className={errs.address?'ferr-i':''} placeholder="Street number and name"/>{errs.address&&<span className="ferr">{errs.address}</span>}</div>
+              <div className="fgrp"><label>Suburb <span className="req">*</span></label><input value={form.suburb} onChange={e=>upd('suburb',e.target.value)} className={errs.suburb?'ferr-i':''}/>{errs.suburb&&<span className="ferr">{errs.suburb}</span>}</div>
+              <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
+              <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 2000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
+            </div>
+
+            <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14,paddingTop:16,borderTop:'1px solid var(--gray-light)'}}>Work Preferences</div>
+            <div className="fg">
+              <div className="fgrp">
+                <label>Preferred City to Work <span className="req">*</span></label>
+                <select value={form.preferredCity} onChange={e=>upd('preferredCity',e.target.value)} className={errs.preferredCity?'ferr-i':''}>
+                  <option value="">Select city</option>
+                  {['Sydney','Melbourne','Brisbane','Perth','Adelaide','Canberra','Gold Coast','Newcastle','Wollongong','Geelong'].map(c=><option key={c}>{c}</option>)}
+                </select>
+                {errs.preferredCity&&<span className="ferr">{errs.preferredCity}</span>}
+              </div>
+              <div className="fgrp">
+                <label>Preferred Work Type <span className="req">*</span></label>
+                <select value={form.workType} onChange={e=>upd('workType',e.target.value)} className={errs.workType?'ferr-i':''}>
+                  <option value="">Select type</option>
+                  {['Casual','Part-time','Full-time','Any'].map(t=><option key={t}>{t}</option>)}
+                </select>
+                {errs.workType&&<span className="ferr">{errs.workType}</span>}
+              </div>
+            </div>
+
+            {submitErr&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius-sm)',padding:14,marginTop:16,color:'var(--error)',fontSize:13}}>{submitErr}</div>}
+          </div>
+          <div className="form-nav">
+            <span/>
+            <button className="btn-sub" onClick={submit} disabled={submitting} style={{opacity:submitting?0.7:1}}>
+              {submitting?'Submitting…':'Submit Application →'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>);
+}
+
 /* ── ROUTER ── */
 const ROUTES = {
   '/': 'home',
   '/about': 'about',
   '/services': 'services',
   '/jobs': 'jobs',
+  '/apply-now': 'applynow',
   '/apply': 'police',
   '/track': 'police',
   '/admin': 'police',
@@ -1273,7 +1430,7 @@ function App() {
   const [policeTab, setPoliceTab] = React.useState(TAB_ROUTES[getPath()] || 'apply');
 
   const navigate = (p) => {
-    const pathMap = { home:'/', about:'/about', services:'/services', jobs:'/jobs', police:'/apply', contact:'/contact' };
+    const pathMap = { home:'/', about:'/about', services:'/services', jobs:'/jobs', applynow:'/apply-now', police:'/apply', contact:'/contact' };
     const path = pathMap[p] || '/';
     window.history.pushState({}, '', path);
     setPage(p);
@@ -1298,7 +1455,7 @@ function App() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  const pages = { home:Home, about:About, services:Services, jobs:Jobs, police:Police, contact:Contact };
+  const pages = { home:Home, about:About, services:Services, jobs:Jobs, applynow:ApplyNow, police:Police, contact:Contact };
   const Page = pages[page] || Home;
 
   return (
