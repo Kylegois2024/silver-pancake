@@ -1245,6 +1245,164 @@ function Footer({ setPage }) {
   );
 }
 
+/* ── INTERVIEW PAGE (hidden from nav) ── */
+function Interview({ setPage }) {
+  const QUESTIONS = [
+    {
+      id: 'q1',
+      num: '01',
+      question: 'Can you describe your previous experience in a warehouse or similar environment?',
+      hint: 'e.g. picking, packing, inventory management, operating equipment',
+    },
+    {
+      id: 'q2',
+      num: '02',
+      question: 'How do you ensure accuracy when handling inventory or orders?',
+      hint: 'Tell us about your process for staying precise and avoiding errors',
+    },
+    {
+      id: 'q3',
+      num: '03',
+      question: 'Tell me about a time you had to meet tight deadlines or handle a high workload.',
+      hint: 'Describe the situation, what you did, and the outcome',
+    },
+    {
+      id: 'q4',
+      num: '04',
+      question: 'Are you comfortable with physical work, such as lifting, standing for long periods, or repetitive tasks?',
+      hint: 'Be honest — this helps us match you to the right role',
+    },
+    {
+      id: 'q5',
+      num: '05',
+      question: 'How do you handle safety procedures and workplace guidelines?',
+      hint: 'e.g. how you approach WHS, PPE, hazard reporting',
+    },
+  ];
+
+  const [answers, setAnswers] = useState({ q1:'', q2:'', q3:'', q4:'', q5:'' });
+  const [errs, setErrs] = useState({});
+  const [current, setCurrent] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+
+  const updAns = (id, val) => setAnswers(a => ({...a, [id]: val}));
+
+  const validateCurrent = () => {
+    const q = QUESTIONS[current];
+    if(!answers[q.id].trim()) {
+      setErrs(e => ({...e, [q.id]: 'Please provide an answer before continuing'}));
+      return false;
+    }
+    setErrs(e => ({...e, [q.id]: ''}));
+    return true;
+  };
+
+  const next = () => { if(validateCurrent()) setCurrent(c => c + 1); };
+  const back = () => setCurrent(c => c - 1);
+
+  const submit = async () => {
+    if(!validateCurrent()) return;
+    setSubmitting(true);
+    // Small delay for UX feel then redirect to police check
+    await new Promise(r => setTimeout(r, 1200));
+    setPage('police');
+  };
+
+  const progress = ((current) / QUESTIONS.length) * 100;
+
+  return (<>
+    <div style={{background:'var(--navy)', padding:'72px 48px 56px'}}>
+      <div style={{maxWidth:740, margin:'0 auto'}}>
+        <div className="lbl lbl-lt">Pre-Employment</div>
+        <div className="h1 h1-lt">Interview Questions</div>
+        <p className="sub sub-lt">Please answer each question honestly and in your own words. There are no right or wrong answers — we just want to get to know you better.</p>
+      </div>
+    </div>
+
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner" style={{maxWidth:740}}>
+
+        {/* Progress */}
+        <div style={{marginBottom:40}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+            <span style={{fontSize:13,fontWeight:600,color:'var(--gray-mid)'}}>Question {current+1} of {QUESTIONS.length}</span>
+            <span style={{fontSize:13,fontWeight:700,color:'var(--navy)'}}>{Math.round(((current)/QUESTIONS.length)*100)}% complete</span>
+          </div>
+          <div style={{height:6,background:'var(--gray-light)',borderRadius:3,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${progress}%`,background:'var(--gold)',borderRadius:3,transition:'width 0.4s ease'}}/>
+          </div>
+          <div style={{display:'flex',gap:8,marginTop:12}}>
+            {QUESTIONS.map((q,i) => (
+              <div key={q.id} style={{flex:1,height:4,borderRadius:2,background:i<current?'var(--gold)':i===current?'var(--gold-light)':'var(--gray-light)',transition:'background 0.3s'}}/>
+            ))}
+          </div>
+        </div>
+
+        {/* Question Card */}
+        <div style={{background:'var(--white)',border:'1px solid var(--gray-light)',borderRadius:20,overflow:'hidden',boxShadow:'var(--shadow-lg)'}}>
+          <div style={{background:'var(--navy)',padding:'28px 36px',display:'flex',alignItems:'flex-start',gap:20}}>
+            <div style={{width:48,height:48,borderRadius:12,background:'rgba(200,146,42,0.15)',border:'1px solid rgba(200,146,42,0.3)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <span style={{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,color:'var(--gold-light)'}}>{QUESTIONS[current].num}</span>
+            </div>
+            <div>
+              <h3 style={{color:'var(--white)',fontSize:18,fontWeight:700,lineHeight:1.4,marginBottom:8}}>{QUESTIONS[current].question}</h3>
+              <p style={{color:'var(--gray-mid)',fontSize:13}}>{QUESTIONS[current].hint}</p>
+            </div>
+          </div>
+
+          <div style={{padding:'32px 36px'}}>
+            <div className="fgrp">
+              <label style={{marginBottom:8,fontSize:13,color:'var(--gray-dark)',fontWeight:500}}>Your answer</label>
+              <textarea
+                value={answers[QUESTIONS[current].id]}
+                onChange={e => updAns(QUESTIONS[current].id, e.target.value)}
+                placeholder="Type your answer here..."
+                rows={6}
+                style={{fontSize:15,lineHeight:1.7,resize:'vertical',minHeight:140}}
+                className={errs[QUESTIONS[current].id] ? 'ferr-i' : ''}
+              />
+              {errs[QUESTIONS[current].id] && <span className="ferr">{errs[QUESTIONS[current].id]}</span>}
+            </div>
+
+            {/* Word count */}
+            <div style={{textAlign:'right',fontSize:12,color:'var(--gray-mid)',marginTop:6}}>
+              {answers[QUESTIONS[current].id].trim().split(/\s+/).filter(Boolean).length} words
+            </div>
+          </div>
+
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'20px 36px',borderTop:'1px solid var(--gray-light)',background:'var(--off-white)'}}>
+            {current > 0
+              ? <button className="btn-bk" onClick={back}>← Back</button>
+              : <span/>
+            }
+            {current < QUESTIONS.length - 1
+              ? <button className="btn-n" onClick={next}>Next Question →</button>
+              : <button className="btn-sub" onClick={submit} disabled={submitting} style={{opacity:submitting?0.7:1}}>
+                  {submitting ? 'Submitting… ⏳' : 'Submit & Continue to Police Check →'}
+                </button>
+            }
+          </div>
+        </div>
+
+        {/* Question dots nav */}
+        <div style={{display:'flex',gap:10,justifyContent:'center',marginTop:28}}>
+          {QUESTIONS.map((q,i) => (
+            <div key={q.id} style={{
+              width: i===current?28:10, height:10, borderRadius:5,
+              background: i<current?'var(--gold)':i===current?'var(--navy)':'var(--gray-light)',
+              transition:'all 0.3s', cursor: i<current?'pointer':'default'
+            }} onClick={() => i<current && setCurrent(i)}/>
+          ))}
+        </div>
+
+        <p style={{textAlign:'center',fontSize:13,color:'var(--gray-mid)',marginTop:20}}>
+          After submitting you'll be directed to complete your National Police Check — this is required for all roles.
+        </p>
+      </div>
+    </div>
+  </>);
+}
+
 /* ── APPLY NOW (standalone job application page) ── */
 function ApplyNow({ setPage }) {
   const [done, setDone] = useState(false);
@@ -1408,6 +1566,7 @@ const ROUTES = {
   '/services': 'services',
   '/jobs': 'jobs',
   '/apply-now': 'applynow',
+  '/interview': 'interview',
   '/apply': 'police',
   '/track': 'police',
   '/admin': 'police',
@@ -1430,7 +1589,7 @@ function App() {
   const [policeTab, setPoliceTab] = React.useState(TAB_ROUTES[getPath()] || 'apply');
 
   const navigate = (p) => {
-    const pathMap = { home:'/', about:'/about', services:'/services', jobs:'/jobs', applynow:'/apply-now', police:'/apply', contact:'/contact' };
+    const pathMap = { home:'/', about:'/about', services:'/services', jobs:'/jobs', applynow:'/apply-now', interview:'/interview', police:'/apply', contact:'/contact' };
     const path = pathMap[p] || '/';
     window.history.pushState({}, '', path);
     setPage(p);
@@ -1455,7 +1614,7 @@ function App() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  const pages = { home:Home, about:About, services:Services, jobs:Jobs, applynow:ApplyNow, police:Police, contact:Contact };
+  const pages = { home:Home, about:About, services:Services, jobs:Jobs, applynow:ApplyNow, interview:Interview, police:Police, contact:Contact };
   const Page = pages[page] || Home;
 
   return (
