@@ -845,7 +845,7 @@ function AppForm({ setPage }) {
       <div className="s-icon">✓</div>
       <h2>Application Submitted!</h2>
       <p>Your police check application has been received and is now being processed.</p>
-      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>chris@personnelstaffingaus.com</strong>.</p>
+      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>richard@personnelstaffingaus.com</strong>.</p>
       <div className="ref-b"><span>Your Reference Number</span><strong>{submittedRef}</strong></div>
       <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
@@ -1189,13 +1189,13 @@ function Contact() {
             {[
               {icon:'📍',t:'Headquarters',d:'161 Castlereagh St\nSydney NSW 2000'},
               {icon:'📞',t:'Phone',d:'0434 681 471\nMon–Fri, 8am–5pm AEST'},
-              {icon:'✉️',t:'Email',d:'chris@personnelstaffingaus.com'},
+              {icon:'✉️',t:'Email',d:'richard@personnelstaffingaus.com'},
             ].map(c=>(
               <div className="ci" key={c.t}><div className="ci-icon">{c.icon}</div><div><strong>{c.t}</strong><p style={{whiteSpace:'pre-line'}}>{c.d}</p></div></div>
             ))}
             <div style={{background:'var(--gold-pale)',border:'1px solid rgba(200,146,42,0.3)',borderRadius:'var(--radius)',padding:20}}>
               <strong style={{color:'var(--navy)',display:'block',marginBottom:7,fontSize:14}}>Employers — Request Workers</strong>
-              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0434 681 471 or email chris@personnelstaffingaus.com for same-day response.</p>
+              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0434 681 471 or email richard@personnelstaffingaus.com for same-day response.</p>
             </div>
           </div>
           <div className="cf">
@@ -1230,7 +1230,7 @@ function Footer({ setPage }) {
           </div>
           <div className="ft-col"><h4>Company</h4><a onClick={()=>setPage('about')}>About Us</a><a onClick={()=>setPage('services')}>Our Services</a><a onClick={()=>setPage('jobs')}>Work With Us</a><a onClick={()=>setPage('contact')}>Contact</a></div>
           <div className="ft-col"><h4>Police Checks</h4><a onClick={()=>setPage('police')}>Apply Online</a><a onClick={()=>setPage('police')}>Track Application</a><a>Privacy Policy</a><a>Terms of Service</a></div>
-          <div className="ft-col"><h4>Contact</h4><a>chris@personnelstaffingaus.com</a><a>0434 681 471</a><a>161 Castlereagh St, Sydney NSW 2000</a><a>Mon–Fri 8am–5pm AEST</a></div>
+          <div className="ft-col"><h4>Contact</h4><a>richard@personnelstaffingaus.com</a><a>0434 681 471</a><a>161 Castlereagh St, Sydney NSW 2000</a><a>Mon–Fri 8am–5pm AEST</a></div>
         </div>
         <div className="ft-bottom">
           <p>© 2025 Personnel Staffing Aus Pty Ltd · ABN 39 167 597 953 · Founded Sydney 2024</p>
