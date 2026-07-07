@@ -268,14 +268,14 @@
 const { useState } = React;
 
 const APPS = [
-  { id:'PSA-2025-0847', name:'James Whitfield', submitted:'2025-10-14', status:'complete', site:'Blacktown DC', email:'j.whitfield@email.com' },
-  { id:'PSA-2025-0848', name:'Priya Sharma', submitted:'2025-10-15', status:'processing', site:'Wetherill Park', email:'p.sharma@email.com' },
-  { id:'PSA-2025-0849', name:'Marcus Webb', submitted:'2025-10-15', status:'processing', site:'Eastern Creek', email:'m.webb@email.com' },
-  { id:'PSA-2025-0850', name:"Sarah O'Brien", submitted:'2025-10-16', status:'pending', site:'Yennora', email:'s.obrien@email.com' },
-  { id:'PSA-2025-0851', name:'Tom Nguyen', submitted:'2025-10-16', status:'pending', site:'Erskine Park', email:'t.nguyen@email.com' },
-  { id:'PSA-2025-0852', name:'Angela Russo', submitted:'2025-10-17', status:'pending', site:'Moorebank', email:'a.russo@email.com' },
+  { id:'AT-2025-0847', name:'James Whitfield', submitted:'2025-10-14', status:'complete', site:'Blacktown DC', email:'j.whitfield@email.com' },
+  { id:'AT-2025-0848', name:'Priya Sharma', submitted:'2025-10-15', status:'processing', site:'Wetherill Park', email:'p.sharma@email.com' },
+  { id:'AT-2025-0849', name:'Marcus Webb', submitted:'2025-10-15', status:'processing', site:'Eastern Creek', email:'m.webb@email.com' },
+  { id:'AT-2025-0850', name:"Sarah O'Brien", submitted:'2025-10-16', status:'pending', site:'Yennora', email:'s.obrien@email.com' },
+  { id:'AT-2025-0851', name:'Tom Nguyen', submitted:'2025-10-16', status:'pending', site:'Erskine Park', email:'t.nguyen@email.com' },
+  { id:'AT-2025-0852', name:'Angela Russo', submitted:'2025-10-17', status:'pending', site:'Moorebank', email:'a.russo@email.com' },
 ];
-const genRef = () => 'PSA-2025-' + (Math.floor(Math.random()*900)+900);
+const genRef = () => 'AT-2025-' + (Math.floor(Math.random()*900)+900);
 
 /* ── NAV ── */
 function Nav({ page, setPage }) {
@@ -998,7 +998,7 @@ function Tracker() {
       <h3 style={{fontSize:20,fontWeight:700,color:'var(--navy)',marginBottom:8}}>Track Your Application</h3>
       <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your live application status.</p>
       <div className="status-search">
-        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. PSA-2025-0901" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
+        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. AT-2025-0901" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
         <button className="btn-n" onClick={search} disabled={loading}>{loading?'Searching…':'Search'}</button>
       </div>
       {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number. Please check and try again.</div>}
@@ -1065,10 +1065,10 @@ function AdminDash() {
       <div className="fgrp" style={{marginBottom:14}}>
         <label>Password</label>
         <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwe(false);}} className={pwe?'ferr-i':''} placeholder="Admin password"
-          onKeyDown={e=>e.key==='Enter'&&(pw==='PSA-admin-2025'?[setLi(true),loadApps()]:setPwe(true))}/>
+          onKeyDown={e=>e.key==='Enter'&&(pw==='AT-admin-2025'?[setLi(true),loadApps()]:setPwe(true))}/>
         {pwe&&<span className="ferr">Incorrect password</span>}
       </div>
-      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='PSA-admin-2025'?[setLi(true),loadApps()]:setPwe(true)}>Login →</button>
+      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='AT-admin-2025'?[setLi(true),loadApps()]:setPwe(true)}>Login →</button>
     </div>
   );
 
