@@ -421,11 +421,10 @@ function About({ setPage }) {
         <div className="lbl">Our Team</div>
         <div className="h1">The People Behind Go Go Staffing</div>
         <p className="sub" style={{marginBottom:44}}>A small, experienced team with real warehouse and logistics backgrounds — not just recruitment.</p>
-        <div className="cards3">
+        <div className="cards3" style={{gridTemplateColumns:'repeat(2,1fr)',maxWidth:760,marginLeft:'auto',marginRight:'auto'}}>
           {[
-            {init:'MJ',name:'Michael Jensen',role:'Founder & CEO',bg:'linear-gradient(135deg,#12352A,#1B4A38)',tc:'#E8A317',bio:'Former warehouse operations manager with 15 years across Toll, DHL, and Linfox. Michael founded Go Go Staffing after seeing how poorly specialist warehouses were served by generalist agencies.'},
-            {init:'LT',name:'Lauren Tran',role:'Head of Compliance',bg:'linear-gradient(135deg,#1B4A38,#2E8B5C)',tc:'#E8A317',bio:'HR and compliance specialist with a background in Fair Work and privacy legislation. Lauren oversees all police check processing, right-to-work verification, and WHS documentation.'},
-            {init:'RC',name:'Ryan Callahan',role:'National Ops Manager',bg:'linear-gradient(135deg,#2E8B5C,#FFCA4D)',tc:'#12352A',bio:'Logistics coordinator turned staffing specialist. Ryan manages relationships with our warehouse partners across NSW, VIC, QLD, WA, SA, and ACT.'},
+            {init:'HG',name:'Harrison Graham',role:'Founder & Owner',bg:'linear-gradient(135deg,#12352A,#1B4A38)',tc:'#E8A317',bio:'Former warehouse operations manager with 15 years across Toll, DHL, and Linfox. Harrison founded Go Go Staffing after seeing how poorly specialist warehouses were served by generalist agencies.'},
+            {init:'LH',name:'Leeson Hunt',role:'Operations Manager',bg:'linear-gradient(135deg,#2E8B5C,#FFCA4D)',tc:'#12352A',bio:'Logistics coordinator turned staffing specialist. Leeson manages relationships with our warehouse partners across NSW, VIC, QLD, WA, SA, and ACT.'},
           ].map(t => (
             <div className="team-card" key={t.name}>
               <div className="team-av" style={{background:t.bg,color:t.tc}}>{t.init}</div>
