@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Virex Talent – Warehouse & Logistics Staffing</title>
+  <title>Go Go Staffing – Warehouse & Logistics Staffing</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
@@ -12,8 +12,8 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #0A1930; --navy-mid: #10294A; --navy-light: #1A5FA3;
-      --gold: #F2791A; --gold-light: #FF9E4D; --gold-pale: #FEF1E6;
+      --navy: #12352A; --navy-mid: #1B4A38; --navy-light: #2E8B5C;
+      --gold: #E8A317; --gold-light: #FFCA4D; --gold-pale: #FFF7E3;
       --white: #FFFFFF; --off-white: #F7F9FC;
       --gray-light: #E8ECF2; --gray-mid: #9BACC0; --gray-dark: #4A5568; --text: #1A2332;
       --success: #1A7A4A; --success-bg: #E8F5EE;
@@ -62,7 +62,7 @@
     /* HERO */
     .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1A5FA3 100%); padding: 110px 48px 90px; text-align: center; position: relative; overflow: hidden; }
     .hero::before { content: ''; position: absolute; inset: 0; opacity: 0.03; background-image: repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%); background-size: 20px 20px; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(242,121,26,0.15); border: 1px solid rgba(242,121,26,0.4); color: var(--gold-light); padding: 7px 18px; border-radius: 24px; font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 28px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(232,163,23,0.15); border: 1px solid rgba(232,163,23,0.4); color: var(--gold-light); padding: 7px 18px; border-radius: 24px; font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 28px; }
     .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(38px, 6vw, 66px); color: var(--white); line-height: 1.08; margin-bottom: 22px; max-width: 780px; margin-left: auto; margin-right: auto; }
     .hero h1 em { color: var(--gold-light); font-style: normal; }
     .hero p { font-size: 19px; color: rgba(255,255,255,0.62); max-width: 540px; margin: 0 auto 42px; line-height: 1.7; }
@@ -161,7 +161,7 @@
     .up-file { display: flex; align-items: center; justify-content: space-between; background: var(--success-bg); border: 1px solid #B2DFCC; border-radius: var(--radius-sm); padding: 11px 14px; margin-top: 10px; }
     .up-file span { font-size: 13px; color: var(--success); font-weight: 500; }
     .up-rem { background: none; border: none; color: var(--error); cursor: pointer; font-size: 17px; }
-    .consent-b { background: var(--gold-pale); border: 1px solid rgba(242,121,26,0.3); border-radius: var(--radius); padding: 22px; margin-top: 18px; }
+    .consent-b { background: var(--gold-pale); border: 1px solid rgba(232,163,23,0.3); border-radius: var(--radius); padding: 22px; margin-top: 18px; }
     .consent-b h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
     .consent-b > p { font-size: 13px; color: var(--gray-dark); line-height: 1.7; margin-bottom: 14px; }
     .chk-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
@@ -177,7 +177,7 @@
     .tl-dot::after { content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); width: 2px; height: 26px; background: var(--gray-light); }
     .tl-item:last-child .tl-dot::after { display: none; }
     .tl-dot.done { background: var(--success); }
-    .tl-dot.active { background: var(--gold); box-shadow: 0 0 0 4px rgba(242,121,26,0.2); }
+    .tl-dot.active { background: var(--gold); box-shadow: 0 0 0 4px rgba(232,163,23,0.2); }
     .tl-dot.pend { background: var(--gray-light); }
     .tl-txt h4 { font-size: 14px; font-weight: 700; }
     .tl-txt p { font-size: 13px; color: var(--gray-mid); margin-top: 2px; }
@@ -220,7 +220,7 @@
     .s-icon { width: 76px; height: 76px; border-radius: 50%; background: var(--success-bg); border: 3px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 22px; }
     .success-sc h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--navy); margin-bottom: 12px; }
     .success-sc p { color: var(--gray-dark); font-size: 15px; line-height: 1.7; margin-bottom: 8px; }
-    .ref-b { background: var(--gold-pale); border: 1px solid rgba(242,121,26,0.3); border-radius: var(--radius); padding: 18px; margin: 22px 0; }
+    .ref-b { background: var(--gold-pale); border: 1px solid rgba(232,163,23,0.3); border-radius: var(--radius); padding: 18px; margin: 22px 0; }
     .ref-b span { font-size: 11px; color: var(--gray-mid); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
     .ref-b strong { font-size: 21px; color: var(--navy); font-family: monospace; letter-spacing: 0.1em; }
 
@@ -235,7 +235,7 @@
     .ft-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     .ft-bottom p { font-size: 12px; color: var(--gray-mid); }
     .ft-badges { display: flex; gap: 8px; }
-    .ft-badge { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px; border: 1px solid rgba(242,121,26,0.4); color: var(--gold-light); }
+    .ft-badge { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px; border: 1px solid rgba(232,163,23,0.4); color: var(--gold-light); }
 
     /* STATS MINI GRID */
     .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -268,14 +268,14 @@
 const { useState } = React;
 
 const APPS = [
-  { id:'VT-2025-0847', name:'James Whitfield', submitted:'2025-10-14', status:'complete', site:'Blacktown DC', email:'j.whitfield@email.com' },
-  { id:'VT-2025-0848', name:'Priya Sharma', submitted:'2025-10-15', status:'processing', site:'Wetherill Park', email:'p.sharma@email.com' },
-  { id:'VT-2025-0849', name:'Marcus Webb', submitted:'2025-10-15', status:'processing', site:'Eastern Creek', email:'m.webb@email.com' },
-  { id:'VT-2025-0850', name:"Sarah O'Brien", submitted:'2025-10-16', status:'pending', site:'Yennora', email:'s.obrien@email.com' },
-  { id:'VT-2025-0851', name:'Tom Nguyen', submitted:'2025-10-16', status:'pending', site:'Erskine Park', email:'t.nguyen@email.com' },
-  { id:'VT-2025-0852', name:'Angela Russo', submitted:'2025-10-17', status:'pending', site:'Moorebank', email:'a.russo@email.com' },
+  { id:'GG-2025-0847', name:'James Whitfield', submitted:'2025-10-14', status:'complete', site:'Kewdale DC', email:'j.whitfield@email.com' },
+  { id:'GG-2025-0848', name:'Priya Sharma', submitted:'2025-10-15', status:'processing', site:'Welshpool', email:'p.sharma@email.com' },
+  { id:'GG-2025-0849', name:'Marcus Webb', submitted:'2025-10-15', status:'processing', site:'Canning Vale', email:'m.webb@email.com' },
+  { id:'GG-2025-0850', name:"Sarah O'Brien", submitted:'2025-10-16', status:'pending', site:'Bibra Lake', email:'s.obrien@email.com' },
+  { id:'GG-2025-0851', name:'Tom Nguyen', submitted:'2025-10-16', status:'pending', site:'Malaga', email:'t.nguyen@email.com' },
+  { id:'GG-2025-0852', name:'Angela Russo', submitted:'2025-10-17', status:'pending', site:'Forrestfield', email:'a.russo@email.com' },
 ];
-const genRef = () => 'VT-2025-' + (Math.floor(Math.random()*900)+900);
+const genRef = () => 'GG-2025-' + (Math.floor(Math.random()*900)+900);
 
 /* ── NAV ── */
 function Nav({ page, setPage }) {
@@ -283,8 +283,8 @@ function Nav({ page, setPage }) {
   return (
     <nav>
       <div className="logo" onClick={() => setPage('home')}>
-        <div className="logo-mark">VT</div>
-        <div className="logo-text"><strong>Virex Talent</strong><span>Warehouse &amp; Logistics</span></div>
+        <div className="logo-mark">GG</div>
+        <div className="logo-text"><strong>Go Go Staffing</strong><span>Warehouse &amp; Logistics</span></div>
       </div>
       <div className="nav-links">
         {links.map(([id,lbl]) => <button key={id} className={`nb${page===id?' active':''}`} onClick={() => setPage(id)}>{lbl}</button>)}
@@ -298,7 +298,7 @@ function Nav({ page, setPage }) {
 function Home({ setPage }) {
   return (<>
     <div className="hero">
-      <div className="hero-badge">🇦🇺 Sydney Founded · Australia-Wide</div>
+      <div className="hero-badge">🇦🇺 Perth Founded · Australia-Wide</div>
       <h1>Your Workforce Partner for <em>Warehouse &amp; Logistics</em></h1>
       <p>We connect reliable, background-checked workers with Australia's leading warehouse and distribution operations. Fast, trusted, compliant.</p>
       
@@ -343,7 +343,7 @@ function Home({ setPage }) {
         <div>
           <div className="lbl">Why Choose Us</div>
           <div className="h1">We Only Do Warehouses. That's Our Edge.</div>
-          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:28}}>Founded in Sydney in 2024, Virex Talent was built by people who've worked on warehouse floors. We know the difference between a picker-packer and a reach truck operator — and we staff accordingly.</p>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:28}}>Founded in Perth in 2024, Go Go Staffing was built by people who've worked on warehouse floors. We know the difference between a picker-packer and a reach truck operator — and we staff accordingly.</p>
           <button className="btn-n" onClick={() => setPage('about')}>Our Story →</button>
         </div>
         <div className="mini-stats">
@@ -374,8 +374,8 @@ function About({ setPage }) {
     <div className="sec" style={{background:'var(--navy)',paddingBottom:64}}>
       <div className="inner">
         <div className="lbl lbl-lt">About Us</div>
-        <div className="h1 h1-lt">Born in Sydney. Built for Warehouses.</div>
-        <p className="sub sub-lt">We started Virex Talent because the warehouse industry deserved a staffing partner that actually understood it.</p>
+        <div className="h1 h1-lt">Born in Perth. Built for Warehouses.</div>
+        <p className="sub sub-lt">We started Go Go Staffing because the warehouse industry deserved a staffing partner that actually understood it.</p>
       </div>
     </div>
 
@@ -385,7 +385,7 @@ function About({ setPage }) {
           <div className="about-vis">
             <div className="av-inner">
               <span className="av-year">2024</span>
-              <span className="av-sub">Founded in Sydney</span>
+              <span className="av-sub">Founded in Perth</span>
             </div>
           </div>
           <div className="av-badge">
@@ -395,7 +395,7 @@ function About({ setPage }) {
         <div>
           <div className="lbl">Our Story</div>
           <div className="h1" style={{fontSize:'clamp(24px,3vw,36px)'}}>We Started Because the Industry Needed Better</div>
-          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>Virex Talent was founded in Sydney in early 2024 by a small team with decades of combined experience in warehouse operations, logistics management, and workforce compliance.</p>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>Go Go Staffing was founded in Perth in early 2024 by a small team with decades of combined experience in warehouse operations, logistics management, and workforce compliance.</p>
           <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>We saw firsthand how generic recruitment agencies struggled to understand warehouse environments — sending under-qualified workers, skipping background checks, and leaving employers to deal with the fallout. So we built something different.</p>
           <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:24}}>From day one, we focused exclusively on warehouse and logistics staffing. That specialisation means we speak your language, understand your risks, and staff your floors with people who are ready to work.</p>
           <div className="vals">
@@ -419,13 +419,13 @@ function About({ setPage }) {
     <div className="sec">
       <div className="inner">
         <div className="lbl">Our Team</div>
-        <div className="h1">The People Behind SSA</div>
+        <div className="h1">The People Behind Go Go Staffing</div>
         <p className="sub" style={{marginBottom:44}}>A small, experienced team with real warehouse and logistics backgrounds — not just recruitment.</p>
         <div className="cards3">
           {[
-            {init:'MJ',name:'Michael Jensen',role:'Founder & CEO',bg:'linear-gradient(135deg,#0A1930,#10294A)',tc:'#14B8D9',bio:'Former warehouse operations manager with 15 years across Toll, DHL, and Linfox. Michael founded SSA after seeing how poorly specialist warehouses were served by generalist agencies.'},
-            {init:'LT',name:'Lauren Tran',role:'Head of Compliance',bg:'linear-gradient(135deg,#10294A,#1A5FA3)',tc:'#14B8D9',bio:'HR and compliance specialist with a background in Fair Work and privacy legislation. Lauren oversees all police check processing, right-to-work verification, and WHS documentation.'},
-            {init:'RC',name:'Ryan Callahan',role:'National Ops Manager',bg:'linear-gradient(135deg,#1A5FA3,#3DD6E8)',tc:'#0A1930',bio:'Logistics coordinator turned staffing specialist. Ryan manages relationships with our warehouse partners across NSW, VIC, QLD, WA, SA, and ACT.'},
+            {init:'MJ',name:'Michael Jensen',role:'Founder & CEO',bg:'linear-gradient(135deg,#12352A,#1B4A38)',tc:'#E8A317',bio:'Former warehouse operations manager with 15 years across Toll, DHL, and Linfox. Michael founded Go Go Staffing after seeing how poorly specialist warehouses were served by generalist agencies.'},
+            {init:'LT',name:'Lauren Tran',role:'Head of Compliance',bg:'linear-gradient(135deg,#1B4A38,#2E8B5C)',tc:'#E8A317',bio:'HR and compliance specialist with a background in Fair Work and privacy legislation. Lauren oversees all police check processing, right-to-work verification, and WHS documentation.'},
+            {init:'RC',name:'Ryan Callahan',role:'National Ops Manager',bg:'linear-gradient(135deg,#2E8B5C,#FFCA4D)',tc:'#12352A',bio:'Logistics coordinator turned staffing specialist. Ryan manages relationships with our warehouse partners across NSW, VIC, QLD, WA, SA, and ACT.'},
           ].map(t => (
             <div className="team-card" key={t.name}>
               <div className="team-av" style={{background:t.bg,color:t.tc}}>{t.init}</div>
@@ -442,9 +442,9 @@ function About({ setPage }) {
       <div className="inner">
         <div className="lbl">Where We Operate</div>
         <div className="h1">Australia-Wide Coverage</div>
-        <p className="sub" style={{margin:'0 auto 36px'}}>Headquartered in Sydney with active placements in all major warehousing hubs.</p>
+        <p className="sub" style={{margin:'0 auto 36px'}}>Headquartered in Perth with active placements in all major warehousing hubs.</p>
         <div style={{display:'flex',flexWrap:'wrap',gap:10,justifyContent:'center',marginBottom:36}}>
-          {['Sydney (HQ)','Melbourne','Brisbane','Perth','Adelaide','Canberra','Gold Coast','Newcastle'].map(c => (
+          {['Perth (HQ)','Sydney','Melbourne','Brisbane','Adelaide','Canberra','Gold Coast','Newcastle'].map(c => (
             <div key={c} style={{background:c.includes('HQ')?'var(--navy)':'var(--off-white)',color:c.includes('HQ')?'var(--gold-light)':'var(--text)',border:'1px solid var(--gray-light)',borderRadius:8,padding:'9px 18px',fontSize:14,fontWeight:600}}>{c}</div>
           ))}
         </div>
@@ -477,7 +477,7 @@ function Services({ setPage }) {
               <div>
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
                   <div className="card-icon" style={{margin:0}}>{s.icon}</div>
-                  <span style={{background:'var(--gold-pale)',color:'var(--gold)',border:'1px solid rgba(242,121,26,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
+                  <span style={{background:'var(--gold-pale)',color:'var(--gold)',border:'1px solid rgba(232,163,23,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
                 </div>
                 <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:28,color:'var(--navy)',marginBottom:12}}>{s.title}</h3>
                 <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:22}}>{s.desc}</p>
@@ -495,7 +495,7 @@ function Services({ setPage }) {
               <div>
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
                   <div className="card-icon" style={{margin:0}}>{s.icon}</div>
-                  <span style={{background:'var(--gold-pale)',color:'var(--gold)',border:'1px solid rgba(242,121,26,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
+                  <span style={{background:'var(--gold-pale)',color:'var(--gold)',border:'1px solid rgba(232,163,23,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
                 </div>
                 <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:28,color:'var(--navy)',marginBottom:12}}>{s.title}</h3>
                 <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:22}}>{s.desc}</p>
@@ -581,7 +581,7 @@ function Jobs({ setPage }) {
     <div className="success-sc" style={{paddingTop:80}}>
       <div className="s-icon">✓</div>
       <h2>Application Received!</h2>
-      <p>Thanks for your interest in working with Virex Talent. We'll be in touch as soon as a suitable role becomes available.</p>
+      <p>Thanks for your interest in working with Go Go Staffing. We'll be in touch as soon as a suitable role becomes available.</p>
       <p style={{marginTop:8}}>In the meantime, if you have any questions call us on <strong>0468 407 082</strong>.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',marginTop:28}}>
         <button className="btn-n" onClick={()=>{setDone(false);setForm({firstName:'',middleName:'',lastName:'',dob:'',gender:'',email:'',phone:'',address:'',suburb:'',state:'',postcode:'',preferredCity:'',workType:''});}}>Submit Another</button>
@@ -627,7 +627,7 @@ function Jobs({ setPage }) {
               <div className="fgrp fg-full"><label>Street Address <span className="req">*</span></label><input value={form.address} onChange={e=>upd('address',e.target.value)} className={errs.address?'ferr-i':''} placeholder="Street number and name"/>{errs.address&&<span className="ferr">{errs.address}</span>}</div>
               <div className="fgrp"><label>Suburb <span className="req">*</span></label><input value={form.suburb} onChange={e=>upd('suburb',e.target.value)} className={errs.suburb?'ferr-i':''}/>{errs.suburb&&<span className="ferr">{errs.suburb}</span>}</div>
               <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
-              <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 2000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
+              <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 6000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
             </div>
 
             <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14,paddingTop:16,borderTop:'1px solid var(--gray-light)'}}>Work Preferences</div>
@@ -636,7 +636,7 @@ function Jobs({ setPage }) {
                 <label>Preferred City to Work <span className="req">*</span></label>
                 <select value={form.preferredCity} onChange={e=>upd('preferredCity',e.target.value)} className={errs.preferredCity?'ferr-i':''}>
                   <option value="">Select city</option>
-                  {['Sydney','Melbourne','Brisbane','Perth','Adelaide','Canberra','Gold Coast','Newcastle','Wollongong','Geelong'].map(c=><option key={c}>{c}</option>)}
+                  {['Perth','Sydney','Melbourne','Brisbane','Adelaide','Canberra','Gold Coast','Newcastle','Fremantle','Geelong'].map(c=><option key={c}>{c}</option>)}
                 </select>
                 {errs.preferredCity&&<span className="ferr">{errs.preferredCity}</span>}
               </div>
@@ -674,7 +674,7 @@ function Police({ setPage, policeTab, setPoliceTab }) {
         <div>
           <div className="lbl lbl-lt">ACIC Accredited</div>
           <h2>National Police Check Portal</h2>
-          <p>Apply online for your National Police Check. Required for all Virex Talent placements. Fast, secure, and compliant with Australian privacy law.</p>
+          <p>Apply online for your National Police Check. Required for all Go Go Staffing placements. Fast, secure, and compliant with Australian privacy law.</p>
           <div className="pc-pills">
             {['Results in 1–2 days','Privacy Act Compliant','100% Online','ACIC Accredited'].map(p=><span className="pc-pill" key={p}>{p}</span>)}
           </div>
@@ -845,7 +845,7 @@ function AppForm({ setPage }) {
       <div className="s-icon">✓</div>
       <h2>Application Submitted!</h2>
       <p>Your police check application has been received and is now being processed.</p>
-      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>mikhael@virextalent.com</strong>.</p>
+      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>harrison@gogostaffing.com</strong>.</p>
       <div className="ref-b"><span>Your Reference Number</span><strong>{submittedRef}</strong></div>
       <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
@@ -880,7 +880,7 @@ function AppForm({ setPage }) {
             <div className="fgrp fg-full"><label>Street Address <span className="req">*</span></label><input value={form.address} onChange={e=>upd('address',e.target.value)} className={errs.address?'ferr-i':''} placeholder="Street number and name"/>{errs.address&&<span className="ferr">{errs.address}</span>}</div>
             <div className="fgrp"><label>Suburb <span className="req">*</span></label><input value={form.suburb} onChange={e=>upd('suburb',e.target.value)} className={errs.suburb?'ferr-i':''}/>{errs.suburb&&<span className="ferr">{errs.suburb}</span>}</div>
             <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
-            <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 2000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
+            <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 6000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
             <div className="fgrp fg-full"><label>Previous Address (if moved in last 5 years)</label><input value={form.prevAddress} onChange={e=>upd('prevAddress',e.target.value)} placeholder="Street, suburb, state, postcode"/></div>
           
           </div>
@@ -944,8 +944,8 @@ function AppForm({ setPage }) {
           </div>
           <div className="consent-b">
             <h4>Consent &amp; Declaration</h4>
-            <p>By submitting, you consent to Virex Talent conducting a National Police Check in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
-            {[['c1','I confirm all information provided is true and correct to the best of my knowledge.'],['c2','I consent to Virex Talent collecting, using, and disclosing my personal information for the purpose of conducting a National Police Check as outlined in the Privacy Policy.'],['c3','I understand results may be shared with my prospective employer as authorised under the Privacy Act 1988.']].map(([k,t])=>(
+            <p>By submitting, you consent to Go Go Staffing conducting a National Police Check in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
+            {[['c1','I confirm all information provided is true and correct to the best of my knowledge.'],['c2','I consent to Go Go Staffing collecting, using, and disclosing my personal information for the purpose of conducting a National Police Check as outlined in the Privacy Policy.'],['c3','I understand results may be shared with my prospective employer as authorised under the Privacy Act 1988.']].map(([k,t])=>(
               <div className="chk-row" key={k}><input type="checkbox" id={k} checked={form[k]} onChange={e=>upd(k,e.target.checked)}/><label htmlFor={k}>{t}</label></div>
             ))}
             {errs.consent&&<span className="ferr" style={{display:'block',marginTop:8}}>{errs.consent}</span>}
@@ -998,7 +998,7 @@ function Tracker() {
       <h3 style={{fontSize:20,fontWeight:700,color:'var(--navy)',marginBottom:8}}>Track Your Application</h3>
       <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your live application status.</p>
       <div className="status-search">
-        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. VT-2025-0901" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
+        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. GG-2025-0901" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
         <button className="btn-n" onClick={search} disabled={loading}>{loading?'Searching…':'Search'}</button>
       </div>
       {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number. Please check and try again.</div>}
@@ -1065,10 +1065,10 @@ function AdminDash() {
       <div className="fgrp" style={{marginBottom:14}}>
         <label>Password</label>
         <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwe(false);}} className={pwe?'ferr-i':''} placeholder="Admin password"
-          onKeyDown={e=>e.key==='Enter'&&(pw==='VT-admin-2025'?[setLi(true),loadApps()]:setPwe(true))}/>
+          onKeyDown={e=>e.key==='Enter'&&(pw==='GG-admin-2025'?[setLi(true),loadApps()]:setPwe(true))}/>
         {pwe&&<span className="ferr">Incorrect password</span>}
       </div>
-      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='VT-admin-2025'?[setLi(true),loadApps()]:setPwe(true)}>Login →</button>
+      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='GG-admin-2025'?[setLi(true),loadApps()]:setPwe(true)}>Login →</button>
     </div>
   );
 
@@ -1187,15 +1187,15 @@ function Contact() {
         <div className="contact-grid">
           <div style={{display:'flex',flexDirection:'column',gap:26}}>
             {[
-              {icon:'📍',t:'Headquarters',d:'161 Castlereagh St\nSydney NSW 2000'},
-              {icon:'📞',t:'Phone',d:'0468 407 082\nMon–Fri, 8am–5pm AEST'},
-              {icon:'✉️',t:'Email',d:'mikhael@virextalent.com'},
+              {icon:'📍',t:'Headquarters',d:'152 St Georges Terrace\nPerth WA 6000'},
+              {icon:'📞',t:'Phone',d:'0468 407 082\nMon–Fri, 8am–5pm AWST'},
+              {icon:'✉️',t:'Email',d:'harrison@gogostaffing.com'},
             ].map(c=>(
               <div className="ci" key={c.t}><div className="ci-icon">{c.icon}</div><div><strong>{c.t}</strong><p style={{whiteSpace:'pre-line'}}>{c.d}</p></div></div>
             ))}
-            <div style={{background:'var(--gold-pale)',border:'1px solid rgba(242,121,26,0.3)',borderRadius:'var(--radius)',padding:20}}>
+            <div style={{background:'var(--gold-pale)',border:'1px solid rgba(232,163,23,0.3)',borderRadius:'var(--radius)',padding:20}}>
               <strong style={{color:'var(--navy)',display:'block',marginBottom:7,fontSize:14}}>Employers — Request Workers</strong>
-              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0468 407 082 or email mikhael@virextalent.com for same-day response.</p>
+              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0468 407 082 or email harrison@gogostaffing.com for same-day response.</p>
             </div>
           </div>
           <div className="cf">
@@ -1224,16 +1224,16 @@ function Footer({ setPage }) {
           <div className="ft-brand">
             <div className="logo" style={{marginBottom:10}}>
               <div className="logo-mark" style={{width:36,height:36,fontSize:13}}>VT</div>
-              <div className="logo-text"><strong>Virex Talent</strong></div>
+              <div className="logo-text"><strong>Go Go Staffing</strong></div>
             </div>
-            <p>Australia's specialist warehouse and logistics staffing partner. Founded in Sydney in 2024. Serving businesses across all major Australian cities.</p>
+            <p>Australia's specialist warehouse and logistics staffing partner. Founded in Perth in 2024. Serving businesses across all major Australian cities.</p>
           </div>
           <div className="ft-col"><h4>Company</h4><a onClick={()=>setPage('about')}>About Us</a><a onClick={()=>setPage('services')}>Our Services</a><a onClick={()=>setPage('jobs')}>Work With Us</a><a onClick={()=>setPage('contact')}>Contact</a></div>
           <div className="ft-col"><h4>Police Checks</h4><a onClick={()=>setPage('police')}>Apply Online</a><a onClick={()=>setPage('police')}>Track Application</a><a>Privacy Policy</a><a>Terms of Service</a></div>
-          <div className="ft-col"><h4>Contact</h4><a>mikhael@virextalent.com</a><a>0468 407 082</a><a>161 Castlereagh St, Sydney NSW 2000</a><a>Mon–Fri 8am–5pm AEST</a></div>
+          <div className="ft-col"><h4>Contact</h4><a>harrison@gogostaffing.com</a><a>0468 407 082</a><a>152 St Georges Terrace, Perth WA 6000</a><a>Mon–Fri 8am–5pm AWST</a></div>
         </div>
         <div className="ft-bottom">
-          <p>© 2025 Virex Talent Pty Ltd · ABN 61 689 553 526 · Founded Sydney 2024</p>
+          <p>© 2025 Go Go Staffing Pty Ltd · ABN 52 060 430 837 · Founded Perth 2024</p>
           <div className="ft-badges">
             <span className="ft-badge">ACIC Accredited</span>
             <span className="ft-badge">Privacy Act Compliant</span>
@@ -1341,7 +1341,7 @@ function Interview({ setPage }) {
         {/* Question Card */}
         <div style={{background:'var(--white)',border:'1px solid var(--gray-light)',borderRadius:20,overflow:'hidden',boxShadow:'var(--shadow-lg)'}}>
           <div style={{background:'var(--navy)',padding:'28px 36px',display:'flex',alignItems:'flex-start',gap:20}}>
-            <div style={{width:48,height:48,borderRadius:12,background:'rgba(242,121,26,0.15)',border:'1px solid rgba(242,121,26,0.3)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            <div style={{width:48,height:48,borderRadius:12,background:'rgba(232,163,23,0.15)',border:'1px solid rgba(232,163,23,0.3)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
               <span style={{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,color:'var(--gold-light)'}}>{QUESTIONS[current].num}</span>
             </div>
             <div>
@@ -1522,7 +1522,7 @@ function ApplyNow({ setPage }) {
               <div className="fgrp fg-full"><label>Street Address <span className="req">*</span></label><input value={form.address} onChange={e=>upd('address',e.target.value)} className={errs.address?'ferr-i':''} placeholder="Street number and name"/>{errs.address&&<span className="ferr">{errs.address}</span>}</div>
               <div className="fgrp"><label>Suburb <span className="req">*</span></label><input value={form.suburb} onChange={e=>upd('suburb',e.target.value)} className={errs.suburb?'ferr-i':''}/>{errs.suburb&&<span className="ferr">{errs.suburb}</span>}</div>
               <div className="fgrp"><label>State <span className="req">*</span></label><select value={form.state} onChange={e=>upd('state',e.target.value)} className={errs.state?'ferr-i':''}><option value="">Select</option>{['NSW','VIC','QLD','WA','SA','TAS','ACT','NT'].map(s=><option key={s}>{s}</option>)}</select>{errs.state&&<span className="ferr">{errs.state}</span>}</div>
-              <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 2000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
+              <div className="fgrp"><label>Postcode <span className="req">*</span></label><input value={form.postcode} onChange={e=>upd('postcode',e.target.value)} className={errs.postcode?'ferr-i':''} maxLength={4} placeholder="e.g. 6000"/>{errs.postcode&&<span className="ferr">{errs.postcode}</span>}</div>
             </div>
 
             <div style={{fontSize:13,fontWeight:700,color:'var(--navy)',textTransform:'uppercase',letterSpacing:'0.06em',marginBottom:14,paddingTop:16,borderTop:'1px solid var(--gray-light)'}}>Work Preferences</div>
@@ -1531,7 +1531,7 @@ function ApplyNow({ setPage }) {
                 <label>Preferred City to Work <span className="req">*</span></label>
                 <select value={form.preferredCity} onChange={e=>upd('preferredCity',e.target.value)} className={errs.preferredCity?'ferr-i':''}>
                   <option value="">Select city</option>
-                  {['Sydney','Melbourne','Brisbane','Perth','Adelaide','Canberra','Gold Coast','Newcastle','Wollongong','Geelong'].map(c=><option key={c}>{c}</option>)}
+                  {['Perth','Sydney','Melbourne','Brisbane','Adelaide','Canberra','Gold Coast','Newcastle','Fremantle','Geelong'].map(c=><option key={c}>{c}</option>)}
                 </select>
                 {errs.preferredCity&&<span className="ferr">{errs.preferredCity}</span>}
               </div>
