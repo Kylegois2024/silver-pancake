@@ -267,15 +267,21 @@
 <script type="text/babel">
 const { useState } = React;
 
-const APPS = [
-  { id:'GG-2025-0847', name:'James Whitfield', submitted:'2025-10-14', status:'complete', site:'Kewdale DC', email:'j.whitfield@email.com' },
-  { id:'GG-2025-0848', name:'Priya Sharma', submitted:'2025-10-15', status:'processing', site:'Welshpool', email:'p.sharma@email.com' },
-  { id:'GG-2025-0849', name:'Marcus Webb', submitted:'2025-10-15', status:'processing', site:'Canning Vale', email:'m.webb@email.com' },
-  { id:'GG-2025-0850', name:"Sarah O'Brien", submitted:'2025-10-16', status:'pending', site:'Bibra Lake', email:'s.obrien@email.com' },
-  { id:'GG-2025-0851', name:'Tom Nguyen', submitted:'2025-10-16', status:'pending', site:'Malaga', email:'t.nguyen@email.com' },
-  { id:'GG-2025-0852', name:'Angela Russo', submitted:'2025-10-17', status:'pending', site:'Forrestfield', email:'a.russo@email.com' },
-];
-const genRef = () => 'GG-2025-' + (Math.floor(Math.random()*900)+900);
+/*
+ * SECURITY NOTE
+ * -------------
+ * Reference numbers double as upload-folder names and tracker lookup keys,
+ * so they must be unguessable. This uses crypto.getRandomValues (~40 bits
+ * of entropy) instead of a small sequential/random number.
+ */
+const genRef = () => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const buf = new Uint32Array(8);
+  crypto.getRandomValues(buf);
+  let s = '';
+  for (let i = 0; i < 8; i++) s += chars[buf[i] % chars.length];
+  return `GG-${new Date().getFullYear()}-${s}`;
+};
 
 /* ── NAV ── */
 function Nav({ page, setPage }) {
@@ -571,6 +577,9 @@ function Jobs({ setPage }) {
       } catch(emailErr) { console.warn('Email notification failed:', emailErr); }
 
       setDone(true);
+    } catch(err) {
+      console.error(err);
+      setSubmitErr('Something went wrong. Please try again or call us on 0468 407 082.');
     } finally {
       setSubmitting(false);
     }
@@ -707,43 +716,87 @@ function Police({ setPage, policeTab, setPoliceTab }) {
   </>);
 }
 
-/* ── SUPABASE CONFIG ── */
+/* ── SUPABASE CONFIG ──
+ * The anon (publishable) key below is DESIGNED to be public — but it is only
+ * safe because Row Level Security is locked down. Run supabase-security.sql
+ * in the Supabase SQL Editor BEFORE deploying this file. With those policies:
+ *   - anon may only INSERT into applications / job_applications and only
+ *     UPLOAD to the id-documents bucket (never read, list, or modify)
+ *   - reads and status updates require a signed-in Supabase Auth staff user
+ *   - the public tracker uses the track_application() RPC, which returns
+ *     only reference, name, status, site, and submission date
+ */
 const SUPA_URL = 'https://hcwbseetqgowwvdvdpkz.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd2JzZWV0cWdvd3d2ZHZkcGt6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2OTgwMjIsImV4cCI6MjA5MDI3NDAyMn0.k3ROFEBN85f8tYLQ3JLiZKYHnDwfe6QUC2-yz_EQTQ8';
+
+const sbError = async (r) => {
+  const e = new Error(await r.text().catch(()=>String(r.status)));
+  e.status = r.status;
+  return e;
+};
+
 const sb = {
+  // Anonymous insert. return=minimal is required: anon has no SELECT
+  // privilege, so asking PostgREST to return the inserted row would fail.
   async insert(table, data) {
     const r = await fetch(`${SUPA_URL}/rest/v1/${table}`, {
-      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Prefer':'return=representation'},
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Prefer':'return=minimal'},
       body: JSON.stringify(data)
     });
-    if(!r.ok) throw new Error(await r.text());
-    return r.json();
+    if(!r.ok) throw await sbError(r);
   },
-  async select(table, query='') {
+  // Staff-only read: pass the Supabase Auth access token.
+  async select(table, query='', token) {
     const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
-      headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
+      headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${token||SUPA_KEY}`}
     });
-    if(!r.ok) throw new Error(await r.text());
+    if(!r.ok) throw await sbError(r);
     return r.json();
   },
-  async update(table, match, data) {
+  // Staff-only update: pass the Supabase Auth access token.
+  async update(table, match, data, token) {
     const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${match}`, {
-      method:'PATCH', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Prefer':'return=representation'},
+      method:'PATCH', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${token||SUPA_KEY}`,'Prefer':'return=minimal'},
       body: JSON.stringify(data)
     });
-    if(!r.ok) throw new Error(await r.text());
+    if(!r.ok) throw await sbError(r);
+  },
+  // Public RPC (SECURITY DEFINER function exposing only safe columns).
+  async rpc(fn, args) {
+    const r = await fetch(`${SUPA_URL}/rest/v1/rpc/${fn}`, {
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`},
+      body: JSON.stringify(args)
+    });
+    if(!r.ok) throw await sbError(r);
     return r.json();
   },
+  // Supabase Auth email/password sign-in (staff accounts managed in the
+  // Supabase Dashboard → Authentication). Returns { access_token, ... }.
+  async signIn(email, password) {
+    const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`, {
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_KEY},
+      body: JSON.stringify({email, password})
+    });
+    if(!r.ok) throw await sbError(r);
+    return r.json();
+  },
+  // Anonymous upload to the private id-documents bucket (insert-only policy).
   async uploadFile(bucket, path, file) {
     const r = await fetch(`${SUPA_URL}/storage/v1/object/${bucket}/${path}`, {
       method:'POST', headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Content-Type':file.type},
       body: file
     });
-    if(!r.ok) throw new Error(await r.text());
-    return r.json();
+    if(!r.ok) throw await sbError(r);
   },
-  fileUrl(bucket, path) {
-    return `${SUPA_URL}/storage/v1/object/authenticated/${bucket}/${path}`;
+  // Staff-only: create a short-lived signed URL for a private object.
+  async signUrl(bucket, path, token, expiresIn=600) {
+    const r = await fetch(`${SUPA_URL}/storage/v1/object/sign/${bucket}/${path}`, {
+      method:'POST', headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${token}`},
+      body: JSON.stringify({expiresIn})
+    });
+    if(!r.ok) throw await sbError(r);
+    const j = await r.json();
+    return `${SUPA_URL}/storage/v1${j.signedURL}`;
   }
 };
 
@@ -778,7 +831,8 @@ function AppForm({ setPage }) {
     setSubmitErr('');
     try {
       const reference = genRef();
-      // Upload ID documents to Supabase Storage
+      // Upload ID documents to Supabase Storage (private bucket; the
+      // random reference makes the folder path unguessable)
       const uploadFile = async (file, label) => {
         const ext = file.name.split('.').pop();
         const path = `${reference}/${label}.${ext}`;
@@ -965,7 +1019,11 @@ function AppForm({ setPage }) {
   );
 }
 
-/* ── TRACKER ── */
+/* ── TRACKER ──
+ * Uses the track_application() RPC instead of a table SELECT. The anon key
+ * can no longer read the applications table; the RPC returns only safe
+ * fields (reference, name, status, site, created_at).
+ */
 function Tracker() {
   const [q,setQ]=useState('');
   const [res,setRes]=useState(null);
@@ -976,7 +1034,7 @@ function Tracker() {
     if(!q.trim()) return;
     setLoading(true); setNf(false); setRes(null);
     try {
-      const data = await sb.select('applications', `reference=eq.${q.trim().toUpperCase()}&select=*`);
+      const data = await sb.rpc('track_application', { ref: q.trim().toUpperCase() });
       if(data && data.length>0) { setRes(data[0]); setNf(false); }
       else setNf(true);
     } catch(e) { setNf(true); }
@@ -997,7 +1055,7 @@ function Tracker() {
       <h3 style={{fontSize:20,fontWeight:700,color:'var(--navy)',marginBottom:8}}>Track Your Application</h3>
       <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your live application status.</p>
       <div className="status-search">
-        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. GG-2025-0901" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
+        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. GG-2026-K7PMQ2XA" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
         <button className="btn-n" onClick={search} disabled={loading}>{loading?'Searching…':'Search'}</button>
       </div>
       {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number. Please check and try again.</div>}
@@ -1023,51 +1081,115 @@ function Tracker() {
   );
 }
 
-/* ── ADMIN ── */
+/* ── ADMIN ──
+ * Real authentication via Supabase Auth. No password lives in this file.
+ * Staff accounts are created in Supabase Dashboard → Authentication → Users.
+ * The session access token (kept in memory only, never persisted) is what
+ * unlocks SELECT / UPDATE via RLS and signed URLs for ID documents.
+ */
 function AdminDash() {
-  const [li,setLi]=useState(false);
+  const [token,setToken]=useState(null);
+  const [staffEmail,setStaffEmail]=useState('');
+  const [email,setEmail]=useState('');
   const [pw,setPw]=useState('');
-  const [pwe,setPwe]=useState(false);
+  const [authErr,setAuthErr]=useState('');
+  const [authing,setAuthing]=useState(false);
   const [sq,setSq]=useState('');
   const [sf,setSf]=useState('all');
   const [apps,setApps]=useState([]);
   const [loading,setLoading]=useState(false);
   const [selected,setSelected]=useState(null);
+  const [docUrls,setDocUrls]=useState({});
+  const [docsLoading,setDocsLoading]=useState(false);
   const [updating,setUpdating]=useState(false);
 
-  const loadApps = async () => {
+  const sessionExpired = () => {
+    setToken(null); setApps([]); setSelected(null);
+    setAuthErr('Your session has expired. Please log in again.');
+  };
+
+  const login = async () => {
+    if(!email.trim() || !pw) { setAuthErr('Enter your email and password.'); return; }
+    setAuthing(true); setAuthErr('');
+    try {
+      const session = await sb.signIn(email.trim(), pw);
+      setToken(session.access_token);
+      setStaffEmail(email.trim());
+      setPw('');
+      await loadApps(session.access_token);
+    } catch(e) {
+      setAuthErr('Login failed. Check your email and password.');
+    } finally {
+      setAuthing(false);
+    }
+  };
+
+  const logout = () => {
+    setToken(null); setStaffEmail(''); setApps([]); setSelected(null); setAuthErr('');
+  };
+
+  const loadApps = async (t) => {
     setLoading(true);
     try {
-      const data = await sb.select('applications','select=*');
+      const data = await sb.select('applications','select=*', t||token);
       setApps(data||[]);
-    } catch(e) { console.error(e); }
-    finally { setLoading(false); }
+    } catch(e) {
+      console.error(e);
+      if(e.status===401) sessionExpired();
+    } finally { setLoading(false); }
   };
 
   const updateStatus = async (id, status) => {
     setUpdating(true);
     try {
-      await sb.update('applications', `id=eq.${id}`, {status});
+      await sb.update('applications', `id=eq.${id}`, {status}, token);
       setApps(prev=>prev.map(a=>a.id===id?{...a,status}:a));
-      if(selected?.id===id) setSelected(s=>({...s,status}));
-    } catch(e) { alert('Failed to update status.'); }
-    finally { setUpdating(false); }
+      setSelected(s=>s && s.id===id ? {...s,status} : s);
+    } catch(e) {
+      if(e.status===401) sessionExpired();
+      else alert('Failed to update status.');
+    } finally { setUpdating(false); }
   };
 
-  const getDocUrl = (path) => sb.fileUrl('id-documents', path);
+  // Open an application and fetch short-lived signed URLs for its documents.
+  const openDetails = async (a) => {
+    setSelected(a); setDocUrls({}); setDocsLoading(true);
+    const docs = [
+      ['Selfie w/ Licence', a.selfie_path],
+      ['Licence Front', a.primary_id_path],
+      ['Licence Back', a.licence_back_path],
+      ['Secondary ID Front', a.secondary_id_path],
+      ['Secondary ID Back', a.secondary_back_path],
+    ];
+    const urls = {};
+    for(const [label, path] of docs) {
+      if(path) {
+        try { urls[label] = await sb.signUrl('id-documents', path, token); }
+        catch(e) { console.error('Signed URL failed for', label, e); if(e.status===401){ sessionExpired(); setDocsLoading(false); return; } }
+      }
+    }
+    setDocUrls(urls);
+    setDocsLoading(false);
+  };
+
   const fmtDate = d => d ? new Date(d).toLocaleDateString('en-AU') : '—';
 
-  if(!li) return (
+  if(!token) return (
     <div style={{maxWidth:360}}>
       <h3 style={{fontSize:19,fontWeight:700,color:'var(--navy)',marginBottom:6}}>Admin Login</h3>
-      <p style={{fontSize:14,color:'var(--gray-dark)',marginBottom:22}}>Staff access only.</p>
+      <p style={{fontSize:14,color:'var(--gray-dark)',marginBottom:22}}>Staff access only. Sign in with your Go Go Staffing staff account.</p>
+      <div className="fgrp" style={{marginBottom:14}}>
+        <label>Email</label>
+        <input type="email" value={email} onChange={e=>{setEmail(e.target.value);setAuthErr('');}} placeholder="you@gogostaffing.com" autoComplete="username"/>
+      </div>
       <div className="fgrp" style={{marginBottom:14}}>
         <label>Password</label>
-        <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwe(false);}} className={pwe?'ferr-i':''} placeholder="Admin password"
-          onKeyDown={e=>e.key==='Enter'&&(pw==='GG-admin-2025'?[setLi(true),loadApps()]:setPwe(true))}/>
-        {pwe&&<span className="ferr">Incorrect password</span>}
+        <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setAuthErr('');}} placeholder="Password" autoComplete="current-password"
+          onKeyDown={e=>e.key==='Enter'&&!authing&&login()}/>
+        {authErr&&<span className="ferr">{authErr}</span>}
       </div>
-      <button className="btn-n" style={{width:'100%'}} onClick={()=>pw==='GG-admin-2025'?[setLi(true),loadApps()]:setPwe(true)}>Login →</button>
+      <button className="btn-n" style={{width:'100%',opacity:authing?0.7:1}} onClick={login} disabled={authing}>{authing?'Signing in…':'Login →'}</button>
+      <p style={{fontSize:12,color:'var(--gray-mid)',marginTop:14,lineHeight:1.6}}>Forgotten your password or need an account? Contact your administrator — staff accounts are managed centrally.</p>
     </div>
   );
 
@@ -1093,9 +1215,13 @@ function AdminDash() {
             </div>
             <div style={{borderTop:'1px solid var(--gray-light)',paddingTop:16,marginBottom:16}}>
               <h4 style={{fontSize:13,fontWeight:700,color:'var(--navy)',marginBottom:12,textTransform:'uppercase',letterSpacing:'0.05em'}}>ID Documents</h4>
-              {[['Selfie w/ Licence',selected.selfie_path],['Licence Front',selected.primary_id_path],['Licence Back',selected.licence_back_path],['Secondary ID Front',selected.secondary_id_path],['Secondary ID Back',selected.secondary_back_path]].map(([l,path])=>(
-                path ? <div key={l} style={{marginBottom:8}}><a href={getDocUrl(path)} target="_blank" rel="noopener noreferrer" style={{color:'var(--navy-light)',fontWeight:600,fontSize:14}}>📄 View {l}</a></div>
-                : <div key={l} style={{fontSize:13,color:'var(--gray-mid)',marginBottom:6}}>{l}: Not uploaded</div>
+              {docsLoading && <div style={{fontSize:13,color:'var(--gray-mid)',marginBottom:8}}>Generating secure links…</div>}
+              {!docsLoading && [['Selfie w/ Licence',selected.selfie_path],['Licence Front',selected.primary_id_path],['Licence Back',selected.licence_back_path],['Secondary ID Front',selected.secondary_id_path],['Secondary ID Back',selected.secondary_back_path]].map(([l,path])=>(
+                path
+                  ? (docUrls[l]
+                      ? <div key={l} style={{marginBottom:8}}><a href={docUrls[l]} target="_blank" rel="noopener noreferrer" style={{color:'var(--navy-light)',fontWeight:600,fontSize:14}}>📄 View {l}</a> <span style={{fontSize:11,color:'var(--gray-mid)'}}>(secure link, expires in 10 min)</span></div>
+                      : <div key={l} style={{fontSize:13,color:'var(--gray-mid)',marginBottom:6}}>{l}: link unavailable</div>)
+                  : <div key={l} style={{fontSize:13,color:'var(--gray-mid)',marginBottom:6}}>{l}: Not uploaded</div>
               ))}
             </div>
             <div style={{borderTop:'1px solid var(--gray-light)',paddingTop:16}}>
@@ -1117,10 +1243,10 @@ function AdminDash() {
       )}
 
       <div className="adm-bar">
-        <div><h2>Admin Dashboard</h2><span>Police Check Management · {cnt.total} applications</span></div>
+        <div><h2>Admin Dashboard</h2><span>Police Check Management · {cnt.total} applications · {staffEmail}</span></div>
         <div style={{display:'flex',gap:10}}>
-          <button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)',fontSize:13}} onClick={loadApps}>↻ Refresh</button>
-          <button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)',fontSize:13}} onClick={()=>setLi(false)}>Logout</button>
+          <button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)',fontSize:13}} onClick={()=>loadApps()}>↻ Refresh</button>
+          <button className="btn-bk" style={{borderColor:'rgba(255,255,255,0.2)',color:'var(--gray-mid)',fontSize:13}} onClick={logout}>Logout</button>
         </div>
       </div>
       <div className="adm-stats">
@@ -1147,7 +1273,7 @@ function AdminDash() {
                       <td style={{fontSize:13}}>{a.site||'—'}</td>
                       <td style={{fontSize:13}}>{fmtDate(a.created_at)}</td>
                       <td><span className={`sbadge ${a.status}`}>{a.status==='complete'?'Complete':a.status==='processing'?'In Progress':'Pending'}</span></td>
-                      <td><button className="abtn" onClick={()=>setSelected(a)}>View</button></td>
+                      <td><button className="abtn" onClick={()=>openDetails(a)}>View</button></td>
                     </tr>
                   ))}
                   {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',padding:28,color:'var(--gray-mid)'}}>No results found.</td></tr>}
@@ -1222,7 +1348,7 @@ function Footer({ setPage }) {
         <div className="ft-grid">
           <div className="ft-brand">
             <div className="logo" style={{marginBottom:10}}>
-              <div className="logo-mark" style={{width:36,height:36,fontSize:13}}>VT</div>
+              <div className="logo-mark" style={{width:36,height:36,fontSize:13}}>GG</div>
               <div className="logo-text"><strong>Go Go Staffing</strong></div>
             </div>
             <p>Australia's specialist warehouse and logistics staffing partner. Founded in Perth in 2024. Serving businesses across all major Australian cities.</p>
