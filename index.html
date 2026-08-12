@@ -3,144 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loadstone Staffing – Warehouse & Logistics Staffing</title>
+  <title>SWC Staffing Solutions – Warehouse & Logistics Staffing</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init({ publicKey: 'gyLSmTELTy9TaAXfx' });</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --ink: #1C2128; --ink-mid: #262D38; --ink-light: #3D5AFE;
-      --signal: #3D5AFE; --signal-light: #7B93FF; --signal-pale: #EBEFFF;
-      --white: #FFFFFF; --off-white: #F5F6F8;
-      --gray-light: #E4E6EB; --gray-mid: #98A0AE; --gray-dark: #4E5561; --text: #1C2128;
-      --success: #1A7A4A; --success-bg: #E8F5EE;
-      --error: #C0392B; --error-bg: #FDECEA;
-      --radius: 4px; --radius-sm: 3px;
-      --shadow: 0 4px 24px rgba(28,33,40,0.10); --shadow-lg: 0 16px 48px rgba(28,33,40,0.20);
+      --ink: #261C11; --ink-mid: #382A1B; --ink-light: #6B5638;
+      --signal: #C05621; --signal-light: #E08A54; --signal-pale: #F7E8DB;
+      --white: #FFFDF8; --off-white: #F7F1E5;
+      --gray-light: #E5DCCB; --gray-mid: #A2957F; --gray-dark: #5C5140; --text: #2B2216;
+      --success: #3D6B35; --success-bg: #EAF1E4;
+      --error: #A93226; --error-bg: #F9E9E6;
+      --radius: 2px; --radius-sm: 2px;
+      --shadow: 5px 5px 0 rgba(38,28,17,0.12); --shadow-lg: 8px 8px 0 rgba(38,28,17,0.16);
     }
-    body { font-family: 'Inter', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
+    body { font-family: 'Work Sans', sans-serif; background: var(--off-white); color: var(--text); min-height: 100vh; }
 
     /* NAV */
-    nav { background: var(--ink); padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 72px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.2); }
+    nav { background: var(--off-white); padding: 0 48px; display: flex; align-items: center; justify-content: space-between; height: 76px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--ink); }
     .logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .logo-mark { width: 40px; height: 40px; background: var(--signal); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; }
-    .logo-text strong { display: block; font-size: 15px; font-weight: 700; color: var(--white); }
-    .logo-text span { font-size: 11px; color: var(--gray-mid); letter-spacing: 0.06em; text-transform: uppercase; }
-    .nav-links { display: flex; align-items: center; gap: 2px; }
-    .nb { background: none; border: none; color: var(--gray-mid); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 13px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-    .nb:hover { color: var(--white); background: rgba(255,255,255,0.08); }
-    .nb.active { color: var(--white); }
-    .nb.cta { background: var(--signal); color: var(--ink); font-weight: 700; margin-left: 8px; }
-    .nb.cta:hover { background: var(--signal-light); color: var(--ink); }
+    .logo-mark { width: 44px; height: 44px; background: var(--ink); border-radius: 0; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-size: 13px; font-weight: 600; color: var(--off-white); letter-spacing: 0.02em; }
+    .logo-text strong { display: block; font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--ink); }
+    .logo-text span { font-size: 10px; color: var(--gray-dark); letter-spacing: 0.14em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nb { background: none; border: none; color: var(--gray-dark); font-family: 'Work Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 0; cursor: pointer; transition: all 0.15s; border-bottom: 2px solid transparent; }
+    .nb:hover { color: var(--ink); border-bottom-color: var(--signal-light); }
+    .nb.active { color: var(--ink); border-bottom-color: var(--signal); font-weight: 600; }
+    .nb.cta { background: var(--signal); color: var(--white); font-weight: 600; margin-left: 12px; padding: 10px 20px; border-bottom: none; }
+    .nb.cta:hover { background: var(--ink); color: var(--off-white); }
 
     /* BUTTONS */
-    .btn-p { background: var(--signal); color: var(--ink); border: none; border-radius: var(--radius); padding: 14px 30px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-    .btn-p:hover { background: var(--signal-light); transform: translateY(-2px); box-shadow: var(--shadow); }
-    .btn-o { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.3); border-radius: var(--radius); padding: 14px 30px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .btn-o:hover { border-color: var(--white); }
-    .btn-n { background: var(--ink); color: var(--white); border: none; border-radius: var(--radius-sm); padding: 12px 26px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .btn-n:hover { background: var(--ink-light); transform: translateY(-1px); }
-    .btn-sub { background: var(--signal); color: var(--ink); border: none; border-radius: var(--radius-sm); padding: 13px 30px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .btn-sub:hover { background: var(--signal-light); }
-    .btn-bk { background: none; border: 1.5px solid var(--gray-light); color: var(--gray-dark); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 11px 22px; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
+    .btn-p { background: var(--signal); color: var(--white); border: none; border-radius: 0; padding: 15px 32px; font-family: 'Work Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-p:hover { background: var(--signal-light); color: var(--ink); transform: translate(-2px,-2px); box-shadow: 4px 4px 0 rgba(38,28,17,0.35); }
+    .btn-o { background: transparent; color: var(--off-white); border: 2px solid rgba(247,241,229,0.6); border-radius: 0; padding: 15px 32px; font-family: 'Work Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-o:hover { background: var(--off-white); color: var(--ink); border-color: var(--off-white); }
+    .hero .btn-o { color: var(--ink); border-color: var(--ink); }
+    .hero .btn-o:hover { background: var(--ink); color: var(--off-white); }
+    .btn-n { background: var(--ink); color: var(--off-white); border: none; border-radius: 0; padding: 13px 28px; font-family: 'Work Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-n:hover { background: var(--signal); }
+    .btn-sub { background: var(--signal); color: var(--white); border: none; border-radius: 0; padding: 14px 32px; font-family: 'Work Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-sub:hover { background: var(--ink); }
+    .btn-bk { background: none; border: 2px solid var(--gray-light); color: var(--gray-dark); font-family: 'Work Sans', sans-serif; font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 0; cursor: pointer; transition: all 0.15s; }
     .btn-bk:hover { border-color: var(--ink); color: var(--ink); }
 
     /* LAYOUT */
-    .sec { padding: 88px 48px; }
+    .sec { padding: 96px 48px; }
     .inner { max-width: 1100px; margin: 0 auto; }
-    .lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); margin-bottom: 12px; }
+    .lbl { font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--signal); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+    .lbl::before { content: ''; width: 28px; height: 2px; background: var(--signal); }
     .lbl-lt { color: var(--signal-light); }
-    .h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px, 4vw, 48px); color: var(--ink); line-height: 1.15; margin-bottom: 16px; }
-    .h1-lt { color: var(--white); }
+    .lbl-lt::before { background: var(--signal-light); }
+    .h1 { font-family: 'Fraunces', serif; font-size: clamp(32px, 4.2vw, 52px); font-weight: 600; color: var(--ink); line-height: 1.12; margin-bottom: 18px; letter-spacing: -0.01em; }
+    .h1-lt { color: var(--off-white); }
     .sub { font-size: 17px; color: var(--gray-dark); line-height: 1.8; max-width: 620px; }
-    .sub-lt { color: rgba(255,255,255,0.6); }
-    .divider { height: 1px; background: var(--gray-light); margin: 0 48px; }
+    .sub-lt { color: rgba(247,241,229,0.65); }
+    .divider { height: 2px; background: var(--ink); margin: 0 48px; opacity: 0.08; }
 
     /* HERO */
-    .hero { background: linear-gradient(135deg, var(--ink) 0%, var(--ink-mid) 60%, #3D5AFE 100%); padding: 110px 48px 90px; text-align: center; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle,#fff 1px,transparent 1px); background-size: 22px 22px; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(61,90,254,0.15); border: 1px solid rgba(61,90,254,0.4); color: var(--signal-light); padding: 7px 18px; border-radius: 24px; font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 28px; }
-    .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(38px, 6vw, 66px); color: var(--white); line-height: 1.08; margin-bottom: 22px; max-width: 780px; margin-left: auto; margin-right: auto; }
-    .hero h1 em { color: var(--signal-light); font-style: normal; }
-    .hero p { font-size: 19px; color: rgba(255,255,255,0.62); max-width: 540px; margin: 0 auto 42px; line-height: 1.7; }
-    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .hero-stats { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin-top: 68px; padding-top: 44px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .hs-num { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700; color: var(--signal-light); line-height: 1; }
-    .hs-lbl { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 6px; }
+    .hero { background: var(--off-white); padding: 96px 48px 88px; position: relative; overflow: hidden; border-bottom: 2px solid var(--ink); }
+    .hero::before { content: ''; position: absolute; inset: 0; opacity: 0.4; background-image: radial-gradient(var(--gray-light) 1px, transparent 1px); background-size: 26px 26px; }
+    .hero-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: center; position: relative; z-index: 1; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--white); border: 1.5px solid var(--ink); color: var(--ink); padding: 7px 16px; border-radius: 0; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 26px; }
+    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(40px, 5.4vw, 68px); font-weight: 600; color: var(--ink); line-height: 1.06; margin-bottom: 24px; letter-spacing: -0.015em; }
+    .hero h1 em { color: var(--signal); font-style: italic; font-weight: 500; }
+    .hero p { font-size: 18px; color: var(--gray-dark); max-width: 480px; margin: 0 0 38px; line-height: 1.75; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 2px solid var(--ink); background: var(--white); box-shadow: var(--shadow-lg); }
+    .hero-stats > div { padding: 30px 26px; border-right: 1.5px solid var(--gray-light); border-bottom: 1.5px solid var(--gray-light); }
+    .hero-stats > div:nth-child(2n) { border-right: none; }
+    .hero-stats > div:nth-child(n+3) { border-bottom: none; }
+    .hs-num { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 600; color: var(--signal); line-height: 1; }
+    .hs-lbl { font-size: 13px; color: var(--gray-dark); margin-top: 8px; }
 
     /* TRUST */
-    .trust { background: var(--white); border-bottom: 1px solid var(--gray-light); padding: 20px 48px; display: flex; align-items: center; justify-content: center; gap: 44px; flex-wrap: wrap; }
-    .ti { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--gray-dark); }
-    .tdot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); flex-shrink: 0; }
+    .trust { background: var(--ink); padding: 18px 48px; display: flex; align-items: center; justify-content: center; gap: 44px; flex-wrap: wrap; }
+    .ti { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(247,241,229,0.85); }
+    .tdot { width: 8px; height: 8px; border-radius: 0; background: var(--signal-light); flex-shrink: 0; transform: rotate(45deg); }
 
     /* CARDS */
-    .cards3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
-    .card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 6px; padding: 32px 26px; transition: all 0.25s; cursor: pointer; }
-    .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--signal); }
-    .card-icon { width: 50px; height: 50px; border-radius: 4px; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 20px; }
-    .card h3 { font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+    .cards3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 48px; }
+    .card { background: var(--white); border: 1.5px solid var(--ink); border-radius: 0; padding: 34px 28px; transition: all 0.15s; cursor: pointer; position: relative; }
+    .card:hover { transform: translate(-4px,-4px); box-shadow: 7px 7px 0 var(--signal); }
+    .card-icon { width: 52px; height: 52px; border-radius: 0; background: var(--signal-pale); border: 1.5px solid var(--signal); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 22px; }
+    .card h3 { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
     .card p { font-size: 14px; color: var(--gray-dark); line-height: 1.7; }
-    .card-link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 700; color: var(--signal); }
+    .card-link { display: inline-block; margin-top: 18px; font-size: 13px; font-weight: 600; color: var(--signal); border-bottom: 1.5px solid var(--signal); padding-bottom: 1px; }
 
     /* GRID 2COL */
     .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 
     /* ABOUT */
-    .about-vis { background: linear-gradient(135deg,var(--ink),var(--ink-light)); border-radius: 8px; height: 420px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-    .about-vis::before { content:''; position: absolute; inset:0; opacity:0.08; background-image: radial-gradient(circle,#fff 1px,transparent 1px); background-size:22px 22px; }
+    .about-vis { background: var(--ink); border: 2px solid var(--ink); border-radius: 0; height: 420px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
+    .about-vis::before { content:''; position: absolute; inset:0; opacity:0.12; background-image: radial-gradient(var(--signal-light) 1px, transparent 1px); background-size:24px 24px; }
     .av-inner { text-align: center; position: relative; z-index: 1; }
-    .av-year { font-family: 'Space Grotesk', sans-serif; font-size: 88px; font-weight: 800; color: var(--signal); line-height: 1; display: block; }
-    .av-sub { font-size: 15px; color: rgba(255,255,255,0.55); letter-spacing: 0.04em; }
-    .av-badge { position: absolute; bottom: -18px; right: -18px; background: var(--signal); border-radius: 4px; padding: 18px 22px; box-shadow: var(--shadow-lg); }
-    .av-badge strong { display: block; font-size: 26px; font-weight: 800; color: var(--ink); }
-    .av-badge span { font-size: 12px; color: var(--ink); font-weight: 600; opacity: 0.7; }
+    .av-year { font-family: 'Fraunces', serif; font-size: 92px; font-weight: 600; color: var(--signal-light); line-height: 1; display: block; font-style: italic; }
+    .av-sub { font-size: 14px; color: rgba(247,241,229,0.6); letter-spacing: 0.1em; text-transform: uppercase; }
+    .av-badge { position: absolute; bottom: -18px; right: -18px; background: var(--signal); border: 2px solid var(--ink); border-radius: 0; padding: 18px 24px; box-shadow: 5px 5px 0 rgba(38,28,17,0.25); }
+    .av-badge strong { display: block; font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--white); }
+    .av-badge span { font-size: 12px; color: var(--white); font-weight: 500; opacity: 0.85; }
     .vals { display: flex; flex-direction: column; gap: 16px; margin-top: 28px; }
     .val { display: flex; gap: 13px; align-items: flex-start; }
-    .val-check { width: 22px; height: 22px; border-radius: 50%; background: var(--success-bg); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 2px; color: var(--success); }
-    .val strong { font-size: 14px; font-weight: 700; color: var(--ink); display: block; margin-bottom: 2px; }
+    .val-check { width: 22px; height: 22px; border-radius: 0; background: var(--success-bg); border: 1.5px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 2px; color: var(--success); }
+    .val strong { font-size: 14px; font-weight: 600; color: var(--ink); display: block; margin-bottom: 2px; }
     .val span { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
 
     /* TEAM */
-    .team-card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 6px; overflow: hidden; transition: all 0.2s; }
-    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-    .team-av { height: 160px; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 52px; font-weight: 700; }
+    .team-card { background: var(--white); border: 1.5px solid var(--ink); border-radius: 0; overflow: hidden; transition: all 0.15s; }
+    .team-card:hover { transform: translate(-4px,-4px); box-shadow: 7px 7px 0 var(--signal); }
+    .team-av { height: 160px; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-size: 52px; font-weight: 600; font-style: italic; }
     .team-info { padding: 20px 22px; }
-    .team-info h4 { font-size: 16px; font-weight: 700; color: var(--ink); }
-    .team-info .role { font-size: 13px; color: var(--signal); font-weight: 600; margin: 4px 0 8px; }
-    .team-info p { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
+    .team-info h4 { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--ink); }
+    .team-info .role { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); font-weight: 600; margin: 5px 0 10px; }
+    .team-info p { font-size: 13px; color: var(--gray-dark); line-height: 1.7; }
 
     /* POLICE CHECK */
-    .pc-hero { background: var(--ink); padding: 72px 48px; }
+    .pc-hero { background: var(--ink); padding: 76px 48px; border-bottom: 4px solid var(--signal); }
     .pc-hi { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-    .pc-hi h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px,4vw,44px); color: var(--white); margin-bottom: 14px; }
-    .pc-hi > div > p { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 26px; }
+    .pc-hi h2 { font-family: 'Fraunces', serif; font-size: clamp(30px,4vw,46px); font-weight: 600; color: var(--off-white); margin-bottom: 14px; }
+    .pc-hi > div > p { font-size: 15px; color: rgba(247,241,229,0.6); line-height: 1.7; margin-bottom: 26px; }
     .pc-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-    .pc-pill { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500; }
-    .pc-card { background: var(--white); border-radius: 6px; padding: 32px; box-shadow: var(--shadow-lg); }
-    .pc-card h3 { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+    .pc-pill { background: transparent; border: 1.5px solid rgba(247,241,229,0.3); color: rgba(247,241,229,0.85); padding: 6px 14px; border-radius: 0; font-size: 12px; font-weight: 500; }
+    .pc-card { background: var(--white); border: 2px solid var(--ink); border-radius: 0; padding: 32px; box-shadow: 8px 8px 0 var(--signal); }
+    .pc-card h3 { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
     .pc-card > p { font-size: 14px; color: var(--gray-dark); margin-bottom: 22px; }
     .pc-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
     .pc-step { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--gray-dark); }
-    .pc-sn { width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--signal); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pc-sn { width: 26px; height: 26px; border-radius: 0; background: var(--signal-pale); border: 1.5px solid var(--signal); color: var(--signal); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
     /* TABS */
-    .tabs { background: var(--white); border-bottom: 1px solid var(--gray-light); padding: 0 48px; display: flex; }
-    .tab-btn { background: none; border: none; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; padding: 17px 22px; cursor: pointer; color: var(--gray-mid); border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tabs { background: var(--off-white); border-bottom: 2px solid var(--ink); padding: 0 48px; display: flex; }
+    .tab-btn { background: none; border: none; font-family: 'Work Sans', sans-serif; font-size: 15px; font-weight: 600; padding: 17px 22px; cursor: pointer; color: var(--gray-mid); border-bottom: 3px solid transparent; transition: all 0.15s; margin-bottom: -2px; }
     .tab-btn.active { color: var(--ink); border-bottom-color: var(--signal); }
     .tab-btn:hover:not(.active) { color: var(--gray-dark); }
 
     /* FORM */
-    .form-wrap { background: var(--white); border-radius: 6px; box-shadow: var(--shadow-lg); overflow: hidden; margin-top: 40px; }
+    .form-wrap { background: var(--white); border: 2px solid var(--ink); border-radius: 0; box-shadow: var(--shadow-lg); overflow: hidden; margin-top: 40px; }
     .form-hdr { background: var(--ink); padding: 26px 32px; display: flex; align-items: center; justify-content: space-between; }
-    .form-hdr h3 { color: var(--white); font-size: 18px; font-weight: 700; }
+    .form-hdr h3 { font-family: 'Fraunces', serif; color: var(--off-white); font-size: 19px; font-weight: 600; }
     .form-hdr p { color: var(--gray-mid); font-size: 13px; margin-top: 3px; }
     .prog { display: flex; gap: 6px; }
-    .prog-pip { height: 4px; width: 34px; border-radius: 2px; background: rgba(255,255,255,0.18); transition: background 0.3s; }
+    .prog-pip { height: 5px; width: 34px; border-radius: 0; background: rgba(247,241,229,0.18); transition: background 0.3s; }
     .prog-pip.done { background: var(--signal); }
     .prog-pip.active { background: var(--signal-light); }
     .form-body { padding: 32px; }
@@ -149,100 +157,102 @@
     .fgrp { display: flex; flex-direction: column; gap: 5px; }
     label { font-size: 13px; font-weight: 600; color: var(--ink); }
     label .req { color: var(--error); }
-    input, select, textarea { font-family: 'Inter', sans-serif; font-size: 14px; padding: 11px 14px; border: 1.5px solid var(--gray-light); border-radius: var(--radius-sm); background: var(--off-white); color: var(--text); transition: all 0.2s; outline: none; width: 100%; }
-    input:focus, select:focus, textarea:focus { border-color: var(--ink-light); background: var(--white); box-shadow: 0 0 0 3px rgba(42,79,122,0.1); }
+    input, select, textarea { font-family: 'Work Sans', sans-serif; font-size: 14px; padding: 11px 14px; border: 1.5px solid var(--gray-light); border-radius: 0; background: var(--off-white); color: var(--text); transition: all 0.15s; outline: none; width: 100%; }
+    input:focus, select:focus, textarea:focus { border-color: var(--ink); background: var(--white); box-shadow: 3px 3px 0 var(--signal-pale); }
     input.ferr-i { border-color: var(--error); }
     .ferr { font-size: 12px; color: var(--error); }
     textarea { resize: vertical; min-height: 80px; }
-    .info-b { background: var(--signal-pale); border: 1px solid #C7D1FF; border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: var(--signal); margin-bottom: 22px; }
-    .upload-z { border: 2px dashed var(--gray-light); border-radius: var(--radius); padding: 32px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--off-white); }
-    .upload-z:hover, .upload-z.drag { border-color: var(--ink-light); background: #EBF4FF; }
-    .upload-z h4 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 10px 0 5px; }
+    .info-b { background: var(--signal-pale); border: 1.5px solid var(--signal); border-radius: 0; padding: 12px 14px; font-size: 13px; color: var(--ink); margin-bottom: 22px; }
+    .upload-z { border: 2px dashed var(--gray-mid); border-radius: 0; padding: 32px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--off-white); }
+    .upload-z:hover, .upload-z.drag { border-color: var(--signal); background: var(--signal-pale); }
+    .upload-z h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin: 10px 0 5px; }
     .upload-z p { font-size: 13px; color: var(--gray-mid); }
     .upload-z input { display: none; }
-    .up-file { display: flex; align-items: center; justify-content: space-between; background: var(--success-bg); border: 1px solid #B2DFCC; border-radius: var(--radius-sm); padding: 11px 14px; margin-top: 10px; }
+    .up-file { display: flex; align-items: center; justify-content: space-between; background: var(--success-bg); border: 1.5px solid var(--success); border-radius: 0; padding: 11px 14px; margin-top: 10px; }
     .up-file span { font-size: 13px; color: var(--success); font-weight: 500; }
     .up-rem { background: none; border: none; color: var(--error); cursor: pointer; font-size: 17px; }
-    .consent-b { background: var(--signal-pale); border: 1px solid rgba(61,90,254,0.3); border-radius: var(--radius); padding: 22px; margin-top: 18px; }
-    .consent-b h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+    .consent-b { background: var(--signal-pale); border: 1.5px solid var(--signal); border-radius: 0; padding: 22px; margin-top: 18px; }
+    .consent-b h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
     .consent-b > p { font-size: 13px; color: var(--gray-dark); line-height: 1.7; margin-bottom: 14px; }
     .chk-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
-    .chk-row input[type=checkbox] { width: 16px; height: 16px; margin-top: 2px; accent-color: var(--ink); flex-shrink: 0; }
+    .chk-row input[type=checkbox] { width: 16px; height: 16px; margin-top: 2px; accent-color: var(--signal); flex-shrink: 0; }
     .chk-row label { font-size: 13px; font-weight: 400; color: var(--gray-dark); cursor: pointer; }
-    .form-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-top: 1px solid var(--gray-light); background: var(--off-white); }
+    .form-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-top: 2px solid var(--ink); background: var(--off-white); }
 
     /* STATUS */
-    .status-search { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 26px; display: flex; gap: 12px; align-items: flex-end; margin-top: 32px; }
-    .status-res { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 26px; margin-top: 18px; }
+    .status-search { background: var(--white); border: 1.5px solid var(--ink); border-radius: 0; padding: 26px; display: flex; gap: 12px; align-items: flex-end; margin-top: 32px; }
+    .status-res { background: var(--white); border: 1.5px solid var(--ink); border-radius: 0; padding: 26px; margin-top: 18px; }
     .tl-item { display: flex; gap: 14px; margin-bottom: 22px; }
-    .tl-dot { width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; position: relative; }
-    .tl-dot::after { content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); width: 2px; height: 26px; background: var(--gray-light); }
+    .tl-dot { width: 15px; height: 15px; border-radius: 0; transform: rotate(45deg); flex-shrink: 0; margin-top: 3px; position: relative; }
+    .tl-dot::after { content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%) rotate(-45deg); width: 2px; height: 26px; background: var(--gray-light); }
     .tl-item:last-child .tl-dot::after { display: none; }
     .tl-dot.done { background: var(--success); }
-    .tl-dot.active { background: var(--signal); box-shadow: 0 0 0 4px rgba(61,90,254,0.2); }
+    .tl-dot.active { background: var(--signal); box-shadow: 0 0 0 4px var(--signal-pale); }
     .tl-dot.pend { background: var(--gray-light); }
-    .tl-txt h4 { font-size: 14px; font-weight: 700; }
+    .tl-txt h4 { font-size: 14px; font-weight: 600; }
     .tl-txt p { font-size: 13px; color: var(--gray-mid); margin-top: 2px; }
-    .sbadge { display: inline-block; padding: 4px 11px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sbadge { display: inline-block; padding: 4px 11px; border-radius: 0; border: 1.5px solid currentColor; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
     .sbadge.complete { background: var(--success-bg); color: var(--success); }
-    .sbadge.processing { background: #FFF3CD; color: #856404; }
+    .sbadge.processing { background: #F7EBD0; color: #8A6210; }
     .sbadge.pending { background: var(--gray-light); color: var(--gray-dark); }
 
     /* ADMIN */
     .adm-bar { background: var(--ink); padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
-    .adm-bar h2 { color: var(--white); font-size: 18px; font-weight: 700; }
+    .adm-bar h2 { font-family: 'Fraunces', serif; color: var(--off-white); font-size: 19px; font-weight: 600; }
     .adm-bar span { color: var(--gray-mid); font-size: 13px; }
     .adm-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; padding: 24px 32px; }
-    .stat-c { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 20px; }
-    .stat-c .sn { font-size: 28px; font-weight: 700; color: var(--ink); }
+    .stat-c { background: var(--white); border: 1.5px solid var(--ink); border-radius: 0; padding: 20px; }
+    .stat-c .sn { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 600; color: var(--ink); }
     .stat-c .sl { font-size: 13px; color: var(--gray-mid); margin-top: 3px; }
     .stat-c .sd { font-size: 12px; font-weight: 600; margin-top: 5px; color: var(--success); }
     .tbl-wrap { padding: 0 32px 32px; }
     .tbl-ctrl { display: flex; gap: 10px; margin-bottom: 12px; }
-    .ts { flex: 1; max-width: 280px; padding: 9px 13px; border: 1.5px solid var(--gray-light); border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: 14px; outline: none; }
-    .tf { padding: 9px 13px; border: 1.5px solid var(--gray-light); border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: 14px; background: var(--white); cursor: pointer; outline: none; }
+    .ts { flex: 1; max-width: 280px; padding: 9px 13px; border: 1.5px solid var(--gray-light); border-radius: 0; font-family: 'Work Sans', sans-serif; font-size: 14px; outline: none; }
+    .tf { padding: 9px 13px; border: 1.5px solid var(--gray-light); border-radius: 0; font-family: 'Work Sans', sans-serif; font-size: 14px; background: var(--white); cursor: pointer; outline: none; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th { text-align: left; padding: 10px 13px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-mid); border-bottom: 2px solid var(--gray-light); background: var(--off-white); }
+    th { text-align: left; padding: 10px 13px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gray-dark); border-bottom: 2px solid var(--ink); background: var(--off-white); }
     td { padding: 12px 13px; border-bottom: 1px solid var(--gray-light); vertical-align: middle; }
-    tr:hover td { background: #F0F4FA; }
-    .abtn { background: none; border: 1px solid var(--gray-light); border-radius: 6px; padding: 5px 11px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink); transition: all 0.2s; }
-    .abtn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    tr:hover td { background: var(--signal-pale); }
+    .abtn { background: none; border: 1.5px solid var(--gray-light); border-radius: 0; padding: 5px 11px; font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink); transition: all 0.15s; }
+    .abtn:hover { background: var(--ink); color: var(--off-white); border-color: var(--ink); }
 
     /* CONTACT */
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 48px; }
     .ci { display: flex; gap: 14px; align-items: flex-start; }
-    .ci-icon { width: 42px; height: 42px; border-radius: 4px; background: var(--ink); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-    .ci strong { display: block; font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .ci-icon { width: 44px; height: 44px; border-radius: 0; background: var(--signal-pale); border: 1.5px solid var(--signal); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .ci strong { display: block; font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
     .ci p { font-size: 13px; color: var(--gray-dark); line-height: 1.6; }
-    .cf { background: var(--white); border: 1px solid var(--gray-light); border-radius: 6px; padding: 32px; }
-    .cf h3 { font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 22px; }
+    .cf { background: var(--white); border: 2px solid var(--ink); border-radius: 0; padding: 32px; box-shadow: var(--shadow); }
+    .cf h3 { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 600; color: var(--ink); margin-bottom: 22px; }
 
     /* SUCCESS */
     .success-sc { text-align: center; padding: 72px 40px; max-width: 500px; margin: 0 auto; }
-    .s-icon { width: 76px; height: 76px; border-radius: 50%; background: var(--success-bg); border: 3px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 22px; }
-    .success-sc h2 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; color: var(--ink); margin-bottom: 12px; }
+    .s-icon { width: 76px; height: 76px; border-radius: 0; background: var(--success-bg); border: 2px solid var(--success); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 22px; }
+    .success-sc h2 { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
     .success-sc p { color: var(--gray-dark); font-size: 15px; line-height: 1.7; margin-bottom: 8px; }
-    .ref-b { background: var(--signal-pale); border: 1px solid rgba(61,90,254,0.3); border-radius: var(--radius); padding: 18px; margin: 22px 0; }
-    .ref-b span { font-size: 11px; color: var(--gray-mid); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .ref-b { background: var(--signal-pale); border: 1.5px solid var(--signal); border-radius: 0; padding: 18px; margin: 22px 0; }
+    .ref-b span { font-size: 11px; color: var(--gray-dark); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
     .ref-b strong { font-size: 21px; color: var(--ink); font-family: monospace; letter-spacing: 0.1em; }
 
     /* FOOTER */
-    footer { background: var(--ink); padding: 60px 48px 26px; }
+    footer { background: var(--ink); padding: 60px 48px 26px; border-top: 4px solid var(--signal); }
     .ft-inner { max-width: 1100px; margin: 0 auto; }
     .ft-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 44px; margin-bottom: 44px; }
-    .ft-brand p { font-size: 13px; color: var(--gray-mid); line-height: 1.7; margin-top: 10px; max-width: 240px; }
-    .ft-col h4 { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 14px; }
-    .ft-col a { display: block; font-size: 13px; color: var(--gray-mid); text-decoration: none; margin-bottom: 9px; cursor: pointer; transition: color 0.2s; }
-    .ft-col a:hover { color: var(--signal-light); }
-    .ft-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .ft-brand p { font-size: 13px; color: var(--gray-mid); line-height: 1.7; margin-top: 12px; max-width: 240px; }
+    .ft-brand .logo-mark { background: var(--off-white); color: var(--ink); }
+    .ft-brand .logo-text strong { color: var(--off-white); }
+    .ft-col h4 { font-size: 11px; font-weight: 600; color: var(--signal-light); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px; }
+    .ft-col a { display: block; font-size: 13px; color: var(--gray-mid); text-decoration: none; margin-bottom: 9px; cursor: pointer; transition: color 0.15s; }
+    .ft-col a:hover { color: var(--off-white); }
+    .ft-bottom { border-top: 1px solid rgba(247,241,229,0.12); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     .ft-bottom p { font-size: 12px; color: var(--gray-mid); }
     .ft-badges { display: flex; gap: 8px; }
-    .ft-badge { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 4px; border: 1px solid rgba(61,90,254,0.4); color: var(--signal-light); }
+    .ft-badge { font-size: 11px; font-weight: 600; padding: 4px 9px; border-radius: 0; border: 1px solid rgba(224,138,84,0.5); color: var(--signal-light); }
 
     /* STATS MINI GRID */
     .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .mini-stat { background: var(--white); border: 1px solid var(--gray-light); border-radius: var(--radius); padding: 22px 18px; }
-    .mini-stat .mn { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--signal); margin-bottom: 6px; }
+    .mini-stat { background: var(--white); border: 1.5px solid var(--ink); border-radius: 0; padding: 22px 18px; }
+    .mini-stat .mn { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--signal); margin-bottom: 6px; }
     .mini-stat .ml { font-size: 13px; color: var(--gray-dark); line-height: 1.5; }
 
     /* RESPONSIVE */
@@ -250,6 +260,7 @@
       nav { padding: 0 20px; }
       .nav-links .nb:not(.cta) { display: none; }
       .hero, .sec { padding: 64px 24px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 44px; }
       .pc-hero { padding: 60px 24px; }
       .trust { padding: 16px 24px; gap: 20px; }
       .divider { margin: 0 24px; }
@@ -261,8 +272,10 @@
       .fg { grid-template-columns: 1fr; }
       .form-body { padding: 22px 18px; }
       .form-nav { padding: 14px 18px; }
+      .team-card { grid-template-columns: 1fr !important; }
     }
-  </style>
+  
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -282,7 +295,7 @@ const genRef = () => {
   crypto.getRandomValues(buf);
   let s = '';
   for (let i = 0; i < 8; i++) s += chars[buf[i] % chars.length];
-  return `LS-${new Date().getFullYear()}-${s}`;
+  return `SWC-${new Date().getFullYear()}-${s}`;
 };
 
 /* ── NAV ── */
@@ -291,8 +304,8 @@ function Nav({ page, setPage }) {
   return (
     <nav>
       <div className="logo" onClick={() => setPage('home')}>
-        <div className="logo-mark">LS</div>
-        <div className="logo-text"><strong>Loadstone Staffing</strong><span>Warehouse &amp; Logistics</span></div>
+        <div className="logo-mark">SWC</div>
+        <div className="logo-text"><strong>SWC Staffing Solutions</strong><span>Warehouse &amp; Logistics</span></div>
       </div>
       <div className="nav-links">
         {links.map(([id,lbl]) => <button key={id} className={`nb${page===id?' active':''}`} onClick={() => setPage(id)}>{lbl}</button>)}
@@ -306,14 +319,21 @@ function Nav({ page, setPage }) {
 function Home({ setPage }) {
   return (<>
     <div className="hero">
-      <div className="hero-badge">🇦🇺 Sydney Founded · Australia-Wide</div>
-      <h1>Your Workforce Partner for <em>Warehouse &amp; Logistics</em></h1>
-      <p>We connect reliable, background-checked workers with Australia's leading warehouse and distribution operations. Fast, trusted, compliant.</p>
-      
-      <div className="hero-stats">
-        {[['500+','Workers Placed'],['60+','Warehouse Partners'],['6','States Covered'],['1–2','Day Check Turnaround']].map(([n,l]) => (
-          <div key={l}><div className="hs-num">{n}</div><div className="hs-lbl">{l}</div></div>
-        ))}
+      <div className="hero-grid">
+        <div>
+          <div className="hero-badge">◆ Sydney Founded · Australia-Wide</div>
+          <h1>Your Workforce Partner for <em>Warehouse &amp; Logistics</em></h1>
+          <p>We connect reliable, background-checked workers with Australia's leading warehouse and distribution operations. Fast, trusted, compliant.</p>
+          <div className="hero-btns">
+            <button className="btn-p" onClick={() => setPage('jobs')}>Find Work →</button>
+            <button className="btn-o" onClick={() => setPage('contact')}>Hire Staff</button>
+          </div>
+        </div>
+        <div className="hero-stats">
+          {[['500+','Workers Placed'],['60+','Warehouse Partners'],['6','States Covered'],['1–2','Day Check Turnaround']].map(([n,l]) => (
+            <div key={l}><div className="hs-num">{n}</div><div className="hs-lbl">{l}</div></div>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -351,7 +371,7 @@ function Home({ setPage }) {
         <div>
           <div className="lbl">Why Choose Us</div>
           <div className="h1">We Only Do Warehouses. That's Our Edge.</div>
-          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:28}}>Founded in Sydney in 2024, Loadstone Staffing was built by people who've worked on warehouse floors. We know the difference between a picker-packer and a reach truck operator — and we staff accordingly.</p>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:28}}>Founded in Sydney by Seth William Curry, SWC Staffing Solutions was built by someone who's worked on warehouse floors. We know the difference between a picker-packer and a reach truck operator — and we staff accordingly.</p>
           <button className="btn-n" onClick={() => setPage('about')}>Our Story →</button>
         </div>
         <div className="mini-stats">
@@ -365,7 +385,7 @@ function Home({ setPage }) {
     <div className="sec" style={{background:'var(--ink)',textAlign:'center'}}>
       <div className="inner">
         <div className="lbl lbl-lt">Ready to Get Started?</div>
-        <h2 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:'clamp(26px,4vw,42px)',color:'var(--white)',marginBottom:14}}>Need Workers? Need a Police Check?</h2>
+        <h2 style={{fontFamily:"'Fraunces',serif",fontSize:'clamp(26px,4vw,42px)',color:'var(--white)',marginBottom:14}}>Need Workers? Need a Police Check?</h2>
         <p style={{fontSize:16,color:'rgba(255,255,255,0.6)',maxWidth:500,margin:'0 auto 32px',lineHeight:1.7}}>Whether you're an employer looking for staff or a worker starting a new role, we've got you covered.</p>
         <div style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
           <button className="btn-p" onClick={() => setPage('contact')}>Get in Touch</button>
@@ -383,7 +403,7 @@ function About({ setPage }) {
       <div className="inner">
         <div className="lbl lbl-lt">About Us</div>
         <div className="h1 h1-lt">Born in Sydney. Built for Warehouses.</div>
-        <p className="sub sub-lt">We started Loadstone Staffing because the warehouse industry deserved a staffing partner that actually understood it.</p>
+        <p className="sub sub-lt">We started SWC Staffing Solutions because the warehouse industry deserved a staffing partner that actually understood it.</p>
       </div>
     </div>
 
@@ -392,7 +412,7 @@ function About({ setPage }) {
         <div style={{position:'relative'}}>
           <div className="about-vis">
             <div className="av-inner">
-              <span className="av-year">2024</span>
+              <span className="av-year">2026</span>
               <span className="av-sub">Founded in Sydney</span>
             </div>
           </div>
@@ -403,7 +423,7 @@ function About({ setPage }) {
         <div>
           <div className="lbl">Our Story</div>
           <div className="h1" style={{fontSize:'clamp(24px,3vw,36px)'}}>We Started Because the Industry Needed Better</div>
-          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>Loadstone Staffing was founded in Sydney in early 2024 by a small team with decades of combined experience in warehouse operations, logistics management, and workforce compliance.</p>
+          <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>SWC Staffing Solutions was founded in Sydney in 2026 by Managing Director Seth William Curry, bringing years of experience in warehouse operations, logistics, and workforce compliance — with one goal: getting people into their dream jobs.</p>
           <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:14}}>We saw firsthand how generic recruitment agencies struggled to understand warehouse environments — sending under-qualified workers, skipping background checks, and leaving employers to deal with the fallout. So we built something different.</p>
           <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:24}}>From day one, we focused exclusively on warehouse and logistics staffing. That specialisation means we speak your language, understand your risks, and staff your floors with people who are ready to work.</p>
           <div className="vals">
@@ -426,17 +446,16 @@ function About({ setPage }) {
 
     <div className="sec">
       <div className="inner">
-        <div className="lbl">Our Team</div>
-        <div className="h1">The People Behind Loadstone Staffing</div>
-        <p className="sub" style={{marginBottom:44}}>A small, experienced team with real warehouse and logistics backgrounds — not just recruitment.</p>
-        <div className="cards3" style={{gridTemplateColumns:'repeat(2,1fr)',maxWidth:760,marginLeft:'auto',marginRight:'auto'}}>
+        <div className="lbl">Leadership</div>
+        <div className="h1">The Person Behind SWC Staffing Solutions</div>
+        <p className="sub" style={{marginBottom:44}}>Real warehouse and logistics experience — not just recruitment.</p>
+        <div style={{maxWidth:820,margin:'0 auto'}}>
           {[
-            {init:'HG',name:'Harrison Graham',role:'Founder & Owner',bg:'linear-gradient(135deg,#1C2128,#262D38)',tc:'#3D5AFE',bio:'Former warehouse operations manager with 15 years across Toll, DHL, and Linfox. Harrison founded Loadstone Staffing after seeing how poorly specialist warehouses were served by generalist agencies.'},
-            {init:'LH',name:'Leeson Hunt',role:'Operations Manager',bg:'linear-gradient(135deg,#3D5AFE,#7B93FF)',tc:'#1C2128',bio:'Logistics coordinator turned staffing specialist. Leeson manages relationships with our warehouse partners across NSW, VIC, QLD, WA, SA, and ACT.'},
+            {init:'SWC',name:'Seth William Curry',role:'Managing Director',bg:'linear-gradient(135deg,#241A14,#3A2A1E)',tc:'#D96C2C',bio:'Seth has spent years in the warehouse and logistics staffing industry, and founded SWC Staffing Solutions to expand horizons — connecting good people with their dream jobs, and giving employers a partner who genuinely understands the floor.'},
           ].map(t => (
-            <div className="team-card" key={t.name}>
-              <div className="team-av" style={{background:t.bg,color:t.tc}}>{t.init}</div>
-              <div className="team-info"><h4>{t.name}</h4><div className="role">{t.role}</div><p>{t.bio}</p></div>
+            <div className="team-card" key={t.name} style={{display:'grid',gridTemplateColumns:'220px 1fr'}}>
+              <div className="team-av" style={{background:t.bg,color:t.tc,height:'100%',minHeight:180,fontSize:44}}>{t.init}</div>
+              <div className="team-info" style={{padding:'28px 32px'}}><h4 style={{fontSize:20}}>{t.name}</h4><div className="role">{t.role}</div><p style={{fontSize:14.5}}>{t.bio}</p></div>
             </div>
           ))}
         </div>
@@ -484,9 +503,9 @@ function Services({ setPage }) {
               <div>
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
                   <div className="card-icon" style={{margin:0}}>{s.icon}</div>
-                  <span style={{background:'var(--signal-pale)',color:'var(--signal)',border:'1px solid rgba(61,90,254,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
+                  <span style={{background:'var(--signal-pale)',color:'var(--signal)',border:'1.5px solid var(--signal)',padding:'4px 12px',borderRadius:0,fontSize:12,fontWeight:700}}>{s.tag}</span>
                 </div>
-                <h3 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:28,color:'var(--ink)',marginBottom:12}}>{s.title}</h3>
+                <h3 style={{fontFamily:"'Fraunces',serif",fontSize:28,color:'var(--ink)',marginBottom:12}}>{s.title}</h3>
                 <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:22}}>{s.desc}</p>
                 <button className="btn-n" onClick={() => s.title.includes('Police')?setPage('police'):setPage('contact')}>{s.title.includes('Police')?'Apply for a Check →':'Get a Quote →'}</button>
               </div>
@@ -502,9 +521,9 @@ function Services({ setPage }) {
               <div>
                 <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
                   <div className="card-icon" style={{margin:0}}>{s.icon}</div>
-                  <span style={{background:'var(--signal-pale)',color:'var(--signal)',border:'1px solid rgba(61,90,254,0.3)',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>{s.tag}</span>
+                  <span style={{background:'var(--signal-pale)',color:'var(--signal)',border:'1.5px solid var(--signal)',padding:'4px 12px',borderRadius:0,fontSize:12,fontWeight:700}}>{s.tag}</span>
                 </div>
-                <h3 style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:28,color:'var(--ink)',marginBottom:12}}>{s.title}</h3>
+                <h3 style={{fontFamily:"'Fraunces',serif",fontSize:28,color:'var(--ink)',marginBottom:12}}>{s.title}</h3>
                 <p style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:22}}>{s.desc}</p>
                 <button className="btn-n" onClick={() => s.title.includes('Police')?setPage('police'):setPage('contact')}>{s.title.includes('Police')?'Apply for a Check →':'Get a Quote →'}</button>
               </div>
@@ -591,7 +610,7 @@ function Jobs({ setPage }) {
     <div className="success-sc" style={{paddingTop:80}}>
       <div className="s-icon">✓</div>
       <h2>Application Received!</h2>
-      <p>Thanks for your interest in working with Loadstone Staffing. We'll be in touch as soon as a suitable role becomes available.</p>
+      <p>Thanks for your interest in working with SWC Staffing Solutions. We'll be in touch as soon as a suitable role becomes available.</p>
       <p style={{marginTop:8}}>In the meantime, if you have any questions call us on <strong>0470 632 701</strong>.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',marginTop:28}}>
         <button className="btn-n" onClick={()=>{setDone(false);setForm({firstName:'',middleName:'',lastName:'',dob:'',gender:'',email:'',phone:'',address:'',suburb:'',state:'',postcode:'',preferredCity:'',workType:''});}}>Submit Another</button>
@@ -684,7 +703,7 @@ function Police({ setPage, policeTab, setPoliceTab }) {
         <div>
           <div className="lbl lbl-lt">ACIC Accredited</div>
           <h2>National Police Check Portal</h2>
-          <p>Apply online for your National Police Check. Required for all Loadstone Staffing placements. Fast, secure, and compliant with Australian privacy law.</p>
+          <p>Apply online for your National Police Check. Required for all SWC Staffing Solutions placements. Fast, secure, and compliant with Australian privacy law.</p>
           <div className="pc-pills">
             {['Results in 1–2 days','Privacy Act Compliant','100% Online','ACIC Accredited'].map(p=><span className="pc-pill" key={p}>{p}</span>)}
           </div>
@@ -900,7 +919,7 @@ function AppForm({ setPage }) {
       <div className="s-icon">✓</div>
       <h2>Application Submitted!</h2>
       <p>Your police check application has been received and is now being processed.</p>
-      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>jason@loadstonestaffing.com</strong>.</p>
+      <p style={{marginTop:4}}>Once complete, contact us to confirm at <strong>seth@swcstaffingsolutions.com.au</strong>.</p>
       <div className="ref-b"><span>Your Reference Number</span><strong>{submittedRef}</strong></div>
       <p style={{fontSize:13,color:'var(--gray-mid)',marginBottom:24}}>Save this number to track your application. Results within 1–2 business days.</p>
       <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
@@ -999,8 +1018,8 @@ function AppForm({ setPage }) {
           </div>
           <div className="consent-b">
             <h4>Consent &amp; Declaration</h4>
-            <p>By submitting, you consent to Loadstone Staffing conducting a National Police Check in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
-            {[['c1','I confirm all information provided is true and correct to the best of my knowledge.'],['c2','I consent to Loadstone Staffing collecting, using, and disclosing my personal information for the purpose of conducting a National Police Check as outlined in the Privacy Policy.'],['c3','I understand results may be shared with my prospective employer as authorised under the Privacy Act 1988.']].map(([k,t])=>(
+            <p>By submitting, you consent to SWC Staffing Solutions conducting a National Police Check in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
+            {[['c1','I confirm all information provided is true and correct to the best of my knowledge.'],['c2','I consent to SWC Staffing Solutions collecting, using, and disclosing my personal information for the purpose of conducting a National Police Check as outlined in the Privacy Policy.'],['c3','I understand results may be shared with my prospective employer as authorised under the Privacy Act 1988.']].map(([k,t])=>(
               <div className="chk-row" key={k}><input type="checkbox" id={k} checked={form[k]} onChange={e=>upd(k,e.target.checked)}/><label htmlFor={k}>{t}</label></div>
             ))}
             {errs.consent&&<span className="ferr" style={{display:'block',marginTop:8}}>{errs.consent}</span>}
@@ -1057,7 +1076,7 @@ function Tracker() {
       <h3 style={{fontSize:20,fontWeight:700,color:'var(--ink)',marginBottom:8}}>Track Your Application</h3>
       <p style={{color:'var(--gray-dark)',fontSize:14,marginBottom:22}}>Enter your reference number to check your live application status.</p>
       <div className="status-search">
-        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. LS-2026-K7PMQ2XA" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
+        <div className="fgrp" style={{flex:1}}><label>Reference Number</label><input value={q} onChange={e=>setQ(e.target.value)} placeholder="e.g. SWC-2026-K7PMQ2XA" onKeyDown={e=>e.key==='Enter'&&search()}/></div>
         <button className="btn-n" onClick={search} disabled={loading}>{loading?'Searching…':'Search'}</button>
       </div>
       {nf&&<div style={{background:'var(--error-bg)',border:'1px solid #F5C6CB',borderRadius:'var(--radius)',padding:18,marginTop:18,color:'var(--error)',fontSize:14}}>No application found with that reference number. Please check and try again.</div>}
@@ -1076,7 +1095,7 @@ function Tracker() {
               <div className="tl-txt"><h4 style={{color:t.s==='pend'?'var(--gray-mid)':'var(--ink)'}}>{t.l}</h4><p>{t.d}</p></div>
             </div>
           ))}
-          {res.status==='complete'&&<div style={{background:'var(--success-bg)',border:'1px solid #B2DFCC',borderRadius:'var(--radius)',padding:14,marginTop:10}}><strong style={{color:'var(--success)',fontSize:13}}>✓ Your National Police Certificate has been issued. Contact Kyle on 0470 632 701 to receive your copy.</strong></div>}
+          {res.status==='complete'&&<div style={{background:'var(--success-bg)',border:'1px solid #B2DFCC',borderRadius:'var(--radius)',padding:14,marginTop:10}}><strong style={{color:'var(--success)',fontSize:13}}>✓ Your National Police Certificate has been issued. Contact Seth on 0470 632 701 to receive your copy.</strong></div>}
         </div>
       )}
     </div>
@@ -1179,10 +1198,10 @@ function AdminDash() {
   if(!token) return (
     <div style={{maxWidth:360}}>
       <h3 style={{fontSize:19,fontWeight:700,color:'var(--ink)',marginBottom:6}}>Admin Login</h3>
-      <p style={{fontSize:14,color:'var(--gray-dark)',marginBottom:22}}>Staff access only. Sign in with your Loadstone Staffing staff account.</p>
+      <p style={{fontSize:14,color:'var(--gray-dark)',marginBottom:22}}>Staff access only. Sign in with your SWC Staffing Solutions staff account.</p>
       <div className="fgrp" style={{marginBottom:14}}>
         <label>Email</label>
-        <input type="email" value={email} onChange={e=>{setEmail(e.target.value);setAuthErr('');}} placeholder="you@loadstonestaffing.com" autoComplete="username"/>
+        <input type="email" value={email} onChange={e=>{setEmail(e.target.value);setAuthErr('');}} placeholder="you@swcstaffingsolutions.com.au" autoComplete="username"/>
       </div>
       <div className="fgrp" style={{marginBottom:14}}>
         <label>Password</label>
@@ -1231,7 +1250,7 @@ function AdminDash() {
               <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
                 {['pending','processing','complete'].map(s=>(
                   <button key={s} onClick={()=>updateStatus(selected.id,s)} disabled={updating||selected.status===s}
-                    style={{padding:'9px 18px',borderRadius:8,border:'none',fontFamily:"'Inter',sans-serif",fontSize:14,fontWeight:700,cursor:'pointer',
+                    style={{padding:'9px 18px',borderRadius:8,border:'none',fontFamily:"'Work Sans',sans-serif",fontSize:14,fontWeight:700,cursor:'pointer',
                       background:selected.status===s?'var(--ink)':'var(--off-white)',
                       color:selected.status===s?'var(--white)':'var(--gray-dark)',
                       opacity:updating?0.6:1}}>
@@ -1316,13 +1335,13 @@ function Contact() {
             {[
               {icon:'📍',t:'Headquarters',d:'100 Harris Street\nPyrmont NSW 2009'},
               {icon:'📞',t:'Phone',d:'0470 632 701\nMon–Fri, 8am–5pm AEST'},
-              {icon:'✉️',t:'Email',d:'jason@loadstonestaffing.com'},
+              {icon:'✉️',t:'Email',d:'seth@swcstaffingsolutions.com.au'},
             ].map(c=>(
               <div className="ci" key={c.t}><div className="ci-icon">{c.icon}</div><div><strong>{c.t}</strong><p style={{whiteSpace:'pre-line'}}>{c.d}</p></div></div>
             ))}
-            <div style={{background:'var(--signal-pale)',border:'1px solid rgba(61,90,254,0.3)',borderRadius:'var(--radius)',padding:20}}>
+            <div style={{background:'var(--signal-pale)',border:'1px solid rgba(192,86,33,0.5)',borderRadius:'var(--radius)',padding:20}}>
               <strong style={{color:'var(--ink)',display:'block',marginBottom:7,fontSize:14}}>Employers — Request Workers</strong>
-              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0470 632 701 or email jason@loadstonestaffing.com for same-day response.</p>
+              <p style={{fontSize:13,color:'var(--gray-dark)',lineHeight:1.7}}>Need warehouse staff fast? Call us directly on 0470 632 701 or email seth@swcstaffingsolutions.com.au for same-day response.</p>
             </div>
           </div>
           <div className="cf">
@@ -1350,17 +1369,17 @@ function Footer({ setPage }) {
         <div className="ft-grid">
           <div className="ft-brand">
             <div className="logo" style={{marginBottom:10}}>
-              <div className="logo-mark" style={{width:36,height:36,fontSize:13}}>LS</div>
-              <div className="logo-text"><strong>Loadstone Staffing</strong></div>
+              <div className="logo-mark" style={{width:36,height:36,fontSize:13}}>SWC</div>
+              <div className="logo-text"><strong>SWC Staffing Solutions</strong></div>
             </div>
-            <p>Australia's specialist warehouse and logistics staffing partner. Founded in Sydney in 2024. Serving businesses across all major Australian cities.</p>
+            <p>Australia's specialist warehouse and logistics staffing partner. Founded in Sydney in 2026. Serving businesses across all major Australian cities.</p>
           </div>
           <div className="ft-col"><h4>Company</h4><a onClick={()=>setPage('about')}>About Us</a><a onClick={()=>setPage('services')}>Our Services</a><a onClick={()=>setPage('jobs')}>Work With Us</a><a onClick={()=>setPage('contact')}>Contact</a></div>
           <div className="ft-col"><h4>Police Checks</h4><a onClick={()=>setPage('police')}>Apply Online</a><a onClick={()=>setPage('police')}>Track Application</a><a>Privacy Policy</a><a>Terms of Service</a></div>
-          <div className="ft-col"><h4>Contact</h4><a>jason@loadstonestaffing.com</a><a>0470 632 701</a><a>100 Harris Street, Pyrmont NSW 2009</a><a>Mon–Fri 8am–5pm AEST</a></div>
+          <div className="ft-col"><h4>Contact</h4><a>seth@swcstaffingsolutions.com.au</a><a>0470 632 701</a><a>100 Harris Street, Pyrmont NSW 2009</a><a>Mon–Fri 8am–5pm AEST</a></div>
         </div>
         <div className="ft-bottom">
-          <p>© 2025 Loadstone Staffing Pty Ltd · ABN 64 680 481 949 · Founded Sydney 2024</p>
+          <p>© 2026 SWC Staffing Solutions · ABN 95 576 836 195 · Registered in Sydney</p>
           <div className="ft-badges">
             <span className="ft-badge">ACIC Accredited</span>
             <span className="ft-badge">Privacy Act Compliant</span>
@@ -1468,8 +1487,8 @@ function Interview({ setPage }) {
         {/* Question Card */}
         <div style={{background:'var(--white)',border:'1px solid var(--gray-light)',borderRadius:8,overflow:'hidden',boxShadow:'var(--shadow-lg)'}}>
           <div style={{background:'var(--ink)',padding:'28px 36px',display:'flex',alignItems:'flex-start',gap:20}}>
-            <div style={{width:48,height:48,borderRadius:12,background:'rgba(61,90,254,0.15)',border:'1px solid rgba(61,90,254,0.3)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-              <span style={{fontFamily:"'Space Grotesk',sans-serif",fontSize:18,fontWeight:700,color:'var(--signal-light)'}}>{QUESTIONS[current].num}</span>
+            <div style={{width:48,height:48,borderRadius:0,background:'rgba(192,86,33,0.15)',border:'1px solid rgba(192,86,33,0.5)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+              <span style={{fontFamily:"'Fraunces',serif",fontSize:18,fontWeight:700,color:'var(--signal-light)'}}>{QUESTIONS[current].num}</span>
             </div>
             <div>
               <h3 style={{color:'var(--white)',fontSize:18,fontWeight:700,lineHeight:1.4,marginBottom:8}}>{QUESTIONS[current].question}</h3>
