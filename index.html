@@ -1362,6 +1362,78 @@ function Contact() {
 }
 
 /* ── FOOTER ── */
+/* ── LEGAL PAGE LAYOUT ── */
+function LegalPage({ label, title, intro, sections, setPage }) {
+  return (<>
+    <div className="sec" style={{background:'var(--ink)',paddingBottom:56}}>
+      <div className="inner">
+        <div className="lbl lbl-lt">{label}</div>
+        <div className="h1 h1-lt">{title}</div>
+        <p className="sub sub-lt">{intro}</p>
+      </div>
+    </div>
+    <div className="sec" style={{background:'var(--white)'}}>
+      <div className="inner" style={{maxWidth:820}}>
+        {sections.map((s,i) => (
+          <div key={i} style={{marginBottom:36}}>
+            <h3 style={{fontFamily:"'Fraunces',serif",fontSize:22,fontWeight:600,color:'var(--ink)',marginBottom:12}}>{s.h}</h3>
+            {s.p.map((para,j) => (
+              <p key={j} style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.8,marginBottom:12}}>{para}</p>
+            ))}
+            {s.list && (
+              <ul style={{margin:'6px 0 12px',paddingLeft:0,listStyle:'none'}}>
+                {s.list.map((li,k) => (
+                  <li key={k} style={{fontSize:15,color:'var(--gray-dark)',lineHeight:1.7,marginBottom:8,paddingLeft:24,position:'relative'}}>
+                    <span style={{position:'absolute',left:0,top:8,width:8,height:8,background:'var(--signal)',transform:'rotate(45deg)'}}/>{li}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+        <div style={{borderTop:'2px solid var(--ink)',paddingTop:24,marginTop:8}}>
+          <p style={{fontSize:14,color:'var(--gray-dark)',lineHeight:1.7,marginBottom:6}}>Questions about this policy? Contact us at <strong style={{color:'var(--ink)'}}>seth@swcstaffingsolutions.com.au</strong> or call <strong style={{color:'var(--ink)'}}>0470 632 701</strong>.</p>
+          <p style={{fontSize:13,color:'var(--gray-mid)'}}>SWC Staffing Solutions · ABN 95 576 836 195 · 100 Harris Street, Pyrmont NSW 2009 · Last updated {new Date().toLocaleDateString('en-AU',{month:'long',year:'numeric'})}.</p>
+          <button className="btn-bk" style={{marginTop:20}} onClick={()=>setPage('home')}>Return Home</button>
+        </div>
+      </div>
+    </div>
+  </>);
+}
+
+function Privacy({ setPage }) {
+  return <LegalPage setPage={setPage}
+    label="Legal"
+    title="Privacy Policy"
+    intro="SWC Staffing Solutions is committed to protecting your personal information and complying fully with Australian privacy law."
+    sections={[
+      {h:'Our commitment', p:['SWC Staffing Solutions ("we", "us", "our") is committed to protecting the privacy of every applicant, worker, and client we deal with. We comply with the Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs), as well as all other applicable Australian privacy and data-protection laws.','This policy explains what personal information we collect, why we collect it, how we use and protect it, and the rights you have in relation to it.']},
+      {h:'Information we collect', p:['We only collect personal information that is reasonably necessary for our functions as a staffing and recruitment provider. Depending on your dealings with us, this may include:'], list:['Contact details such as your name, address, email, and phone number','Work history, qualifications, licences, and right-to-work information','Information required to arrange a National Police Check, where you have consented','Availability, preferences, and other details relevant to placing you in work']},
+      {h:'How we use your information', p:['We use your personal information solely for legitimate business purposes connected with staffing and recruitment, including matching you to suitable roles, verifying your eligibility to work, arranging background checks you have consented to, and communicating with you about opportunities.','We do not sell your personal information, and we do not use it for unrelated purposes.']},
+      {h:'Disclosure to third parties', p:['We only disclose your personal information where necessary and permitted by law — for example, to prospective host employers with your knowledge, or to an accredited provider for the purpose of conducting a National Police Check that you have authorised.','Any National Police Check is conducted only through channels authorised under Australian law. We require third parties who handle your information to protect it to the same standard we do.']},
+      {h:'Storage and security', p:['We take reasonable steps to protect your personal information from misuse, loss, and unauthorised access, modification, or disclosure, using appropriate technical and organisational safeguards. We retain personal information only for as long as it is needed for the purpose it was collected or as required by law, and securely dispose of it when it is no longer required.']},
+      {h:'Access and correction', p:['You have the right to request access to the personal information we hold about you, and to ask us to correct it if it is inaccurate, out of date, or incomplete. We will respond to any such request in accordance with the Privacy Act 1988 (Cth).']},
+      {h:'Complaints', p:['If you believe we have not handled your personal information in line with this policy or the Australian Privacy Principles, please contact us and we will investigate. If you are not satisfied with our response, you may contact the Office of the Australian Information Commissioner (OAIC) at oaic.gov.au.']},
+    ]}
+  />;
+}
+
+function FairWork({ setPage }) {
+  return <LegalPage setPage={setPage}
+    label="Legal"
+    title="Fair Work Policy"
+    intro="SWC Staffing Solutions complies fully with the Fair Work Act and all applicable Australian workplace laws."
+    sections={[
+      {h:'Our commitment', p:['SWC Staffing Solutions is committed to fair, lawful, and ethical employment practices. We comply with the Fair Work Act 2009 (Cth), the National Employment Standards (NES), all relevant Modern Awards, and every other applicable Australian workplace and industrial relations law.','This applies to every worker we place and every client we work with, without exception.']},
+      {h:'Pay and conditions', p:['Every worker we engage is paid at or above the applicable minimum rate set by the relevant Modern Award or the national minimum wage, whichever applies. We ensure entitlements such as penalty rates, overtime, superannuation, and leave are provided in accordance with the law.']},
+      {h:'National Employment Standards', p:['We uphold the National Employment Standards for all eligible employees, including maximum weekly hours, leave entitlements, public holiday provisions, and the right to fair notice and consultation.']},
+      {h:'A safe and fair workplace', p:['We are committed to providing work environments free from discrimination, harassment, bullying, and unlawful treatment. We comply with all applicable Work Health and Safety (WHS) laws and expect the same of the host employers we place workers with.'], list:['Fair treatment regardless of background, gender, age, or other protected attribute','A workplace free from harassment, bullying, and discrimination','Proper WHS induction and safe working conditions on every placement','Clear, honest communication about roles, pay, and expectations']},
+      {h:'Right to work and lawful engagement', p:['We verify that every worker has the legal right to work in Australia before placement, and we engage workers lawfully under the correct classification and arrangement. We do not engage in sham contracting or any practice that undermines workers\u2019 lawful entitlements.']},
+      {h:'Raising a concern', p:['If any worker or client believes we have fallen short of these commitments, we encourage them to raise it with us directly so we can address it promptly. Workers are also free to seek information or assistance from the Fair Work Ombudsman at fairwork.gov.au.']},
+    ]}
+  />;
+}
+
 function Footer({ setPage }) {
   return (
     <footer>
@@ -1375,7 +1447,7 @@ function Footer({ setPage }) {
             <p>Australia's specialist warehouse and logistics staffing partner. Founded in Sydney in 2026. Serving businesses across all major Australian cities.</p>
           </div>
           <div className="ft-col"><h4>Company</h4><a onClick={()=>setPage('about')}>About Us</a><a onClick={()=>setPage('services')}>Our Services</a><a onClick={()=>setPage('jobs')}>Work With Us</a><a onClick={()=>setPage('contact')}>Contact</a></div>
-          <div className="ft-col"><h4>Police Checks</h4><a onClick={()=>setPage('police')}>Apply Online</a><a onClick={()=>setPage('police')}>Track Application</a><a>Privacy Policy</a><a>Terms of Service</a></div>
+          <div className="ft-col"><h4>Police Checks</h4><a onClick={()=>setPage('police')}>Apply Online</a><a onClick={()=>setPage('police')}>Track Application</a><a onClick={()=>setPage('privacy')}>Privacy Policy</a><a onClick={()=>setPage('fairwork')}>Fair Work Policy</a></div>
           <div className="ft-col"><h4>Contact</h4><a>seth@swcstaffingsolutions.com.au</a><a>0470 632 701</a><a>100 Harris Street, Pyrmont NSW 2009</a><a>Mon–Fri 8am–5pm AEST</a></div>
         </div>
         <div className="ft-bottom">
@@ -1717,6 +1789,8 @@ const ROUTES = {
   '/track': 'police',
   '/admin': 'police',
   '/contact': 'contact',
+  '/privacy': 'privacy',
+  '/fair-work': 'fairwork',
 };
 
 const TAB_ROUTES = {
@@ -1735,7 +1809,7 @@ function App() {
   const [policeTab, setPoliceTab] = React.useState(TAB_ROUTES[getPath()] || 'apply');
 
   const navigate = (p) => {
-    const pathMap = { home:'/', about:'/about', services:'/services', jobs:'/jobs', applynow:'/apply-now', interview:'/interview', police:'/apply', contact:'/contact' };
+    const pathMap = { home:'/', about:'/about', services:'/services', jobs:'/jobs', applynow:'/apply-now', interview:'/interview', police:'/apply', contact:'/contact', privacy:'/privacy', fairwork:'/fair-work' };
     const path = pathMap[p] || '/';
     window.history.pushState({}, '', path);
     setPage(p);
@@ -1760,7 +1834,7 @@ function App() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  const pages = { home:Home, about:About, services:Services, jobs:Jobs, applynow:ApplyNow, interview:Interview, police:Police, contact:Contact };
+  const pages = { home:Home, about:About, services:Services, jobs:Jobs, applynow:ApplyNow, interview:Interview, police:Police, contact:Contact, privacy:Privacy, fairwork:FairWork };
   const Page = pages[page] || Home;
 
   return (
