@@ -1117,6 +1117,7 @@ function AdminDash() {
   const [authing,setAuthing]=useState(false);
   const [sq,setSq]=useState('');
   const [sf,setSf]=useState('all');
+  const [genderSort,setGenderSort]=useState(null); // null | 'asc' | 'desc'
   const [apps,setApps]=useState([]);
   const [loading,setLoading]=useState(false);
   const [selected,setSelected]=useState(null);
@@ -1214,11 +1215,22 @@ function AdminDash() {
     </div>
   );
 
-  const filtered=apps.filter(a=>{
+  let filtered=apps.filter(a=>{
     const mq=(a.first_name+' '+a.last_name).toLowerCase().includes(sq.toLowerCase())||a.reference?.toLowerCase().includes(sq.toLowerCase());
     const mf=sf==='all'||a.status===sf;
     return mq&&mf;
   });
+  if(genderSort){
+    filtered=[...filtered].sort((a,b)=>{
+      const ga=(a.gender||'').toLowerCase(), gb=(b.gender||'').toLowerCase();
+      if(!ga&&!gb) return 0;
+      if(!ga) return 1;   // blanks/"prefer not to say" sink to the bottom
+      if(!gb) return -1;
+      if(ga<gb) return genderSort==='asc'?-1:1;
+      if(ga>gb) return genderSort==='asc'?1:-1;
+      return 0;
+    });
+  }
   const cnt={total:apps.length,complete:apps.filter(a=>a.status==='complete').length,processing:apps.filter(a=>a.status==='processing').length,pending:apps.filter(a=>a.status==='pending').length};
 
   return (
@@ -1280,24 +1292,28 @@ function AdminDash() {
         <div className="tbl-ctrl">
           <input className="ts" placeholder="Search name or reference..." value={sq} onChange={e=>setSq(e.target.value)}/>
           <select className="tf" value={sf} onChange={e=>setSf(e.target.value)}><option value="all">All Statuses</option><option value="complete">Complete</option><option value="processing">In Progress</option><option value="pending">Pending</option></select>
+          <button className="tf" onClick={()=>setGenderSort(p=>p===null?'asc':p==='asc'?'desc':null)}>
+            Sort by Gender{genderSort==='asc'?' ↑':genderSort==='desc'?' ↓':''}
+          </button>
         </div>
         {loading
           ? <div style={{textAlign:'center',padding:40,color:'var(--gray-mid)'}}>Loading applications…</div>
           : <div style={{border:'1px solid var(--gray-light)',borderRadius:'var(--radius)',overflow:'auto'}}>
               <table>
-                <thead><tr><th>Applicant</th><th>Reference</th><th>Site</th><th>Submitted</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Applicant</th><th>Reference</th><th>Gender</th><th>Site</th><th>Submitted</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                   {filtered.map(a=>(
                     <tr key={a.id}>
                       <td><div style={{fontWeight:700,color:'var(--ink)'}}>{a.first_name} {a.last_name}</div><div style={{fontSize:12,color:'var(--gray-mid)'}}>{a.email}</div></td>
                       <td><span style={{fontFamily:'monospace',fontSize:12,color:'var(--gray-mid)'}}>{a.reference}</span></td>
+                      <td style={{fontSize:13}}>{a.gender||'—'}</td>
                       <td style={{fontSize:13}}>{a.site||'—'}</td>
                       <td style={{fontSize:13}}>{fmtDate(a.created_at)}</td>
                       <td><span className={`sbadge ${a.status}`}>{a.status==='complete'?'Complete':a.status==='processing'?'In Progress':'Pending'}</span></td>
                       <td><button className="abtn" onClick={()=>openDetails(a)}>View</button></td>
                     </tr>
                   ))}
-                  {filtered.length===0&&<tr><td colSpan={6} style={{textAlign:'center',padding:28,color:'var(--gray-mid)'}}>No results found.</td></tr>}
+                  {filtered.length===0&&<tr><td colSpan={7} style={{textAlign:'center',padding:28,color:'var(--gray-mid)'}}>No results found.</td></tr>}
                 </tbody>
               </table>
             </div>
