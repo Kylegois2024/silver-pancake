@@ -766,13 +766,53 @@ const sb = {
     });
     if(!r.ok) throw await sbError(r);
   },
-  // Staff-only read: pass the Supabase Auth access token.
+  // Staff-only read: pass the Supabase Auth access token. Returns a single
+  // page as-is — PostgREST caps this at its configured max rows (1000 by
+  // default on Supabase) regardless of how many rows match. Use selectAll()
+  // below when you actually need every matching row.
   async select(table, query='', token) {
     const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
       headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${token||SUPA_KEY}`}
     });
     if(!r.ok) throw await sbError(r);
     return r.json();
+  },
+  // Staff-only read of EVERY matching row, paged past PostgREST's default
+  // 1000-row-per-request cap using Range headers. Uses the Content-Range
+  // response header (via Prefer: count=exact) to know the true total, so
+  // it keeps paging correctly even if Supabase's own server-side max-rows
+  // setting is different from pageSize — falls back to a page-length check
+  // only if that header is ever missing. Capped at 500 pages as a sanity
+  // guard against an infinite loop, not a real business limit.
+  async selectAll(table, query='', token, pageSize=1000) {
+    let out = [];
+    let from = 0;
+    let total = null;
+    for(let page=0; page<500; page++) {
+      const to = from + pageSize - 1;
+      const r = await fetch(`${SUPA_URL}/rest/v1/${table}?${query}&order=created_at.desc`, {
+        headers:{
+          'apikey':SUPA_KEY,
+          'Authorization':`Bearer ${token||SUPA_KEY}`,
+          'Range-Unit':'items',
+          'Range':`${from}-${to}`,
+          'Prefer':'count=exact',
+        }
+      });
+      if(!r.ok) throw await sbError(r);
+      const rows = await r.json();
+      out = out.concat(rows);
+
+      const cr = r.headers.get('content-range'); // e.g. "0-999/2453" or "*/0"
+      const m = cr && cr.match(/\/(\d+)$/);
+      if(m) total = parseInt(m[1], 10);
+
+      from += rows.length;
+      if(rows.length === 0) break;                        // nothing left
+      if(total !== null && from >= total) break;           // reached the real total
+      if(total === null && rows.length < pageSize) break;  // no count header — best-effort fallback
+    }
+    return out;
   },
   // Staff-only update: pass the Supabase Auth access token.
   async update(table, match, data, token) {
@@ -1153,7 +1193,7 @@ function AdminDash() {
   const loadApps = async (t) => {
     setLoading(true);
     try {
-      const data = await sb.select('applications','select=*', t||token);
+      const data = await sb.selectAll('applications','select=*', t||token);
       setApps(data||[]);
     } catch(e) {
       console.error(e);
