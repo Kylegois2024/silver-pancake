@@ -338,7 +338,7 @@ function Home({ setPage }) {
     </div>
 
     <div className="trust">
-      {['ACIC Accredited Provider','Australian Privacy Act Compliant','WorkSafe Certified','Fair Work Compliant'].map(t => (
+      {['Checks via ACIC-Accredited Partner','Australian Privacy Act Compliant','WorkSafe Certified','Fair Work Compliant'].map(t => (
         <div className="ti" key={t}><div className="tdot"/>{t}</div>
       ))}
     </div>
@@ -351,7 +351,7 @@ function Home({ setPage }) {
         <div className="cards3" style={{marginTop:44}}>
           {[
             {icon:'👷',title:'Labour Hire',desc:'Casual, temp, and permanent warehouse workers. Pre-screened, trained, and ready to start. Available across all major metro areas.', page:'services'},
-            {icon:'🔒',title:'Police Checks',desc:'ACIC-accredited National Police Checks processed entirely online. Results in 1–2 business days, delivered to you and your employer.', page:'police'},
+            {icon:'🔒',title:'Police Checks',desc:'National Police Checks processed through our ACIC-accredited partner, fit2work.com.au — fully online. Results in 1–2 business days, delivered to you and your employer.', page:'police'},
             {icon:'📋',title:'Compliance',desc:"We handle right-to-work verification, onboarding documentation, WHS inductions, and ongoing compliance monitoring so you don't have to.", page:'services'},
           ].map(s => (
             <div className="card" key={s.title} onClick={() => setPage(s.page)}>
@@ -484,7 +484,7 @@ function About({ setPage }) {
 function Services({ setPage }) {
   const services = [
     {icon:'👷',title:'Labour Hire',tag:'Most Popular',desc:"Flexible, on-demand warehouse workers for casual, temp-to-perm, and permanent roles. All workers are pre-screened, police-checked, and WHS inducted before placement.",points:['Pick & pack operators','Forklift operators (LF, LO, LC licenced)','Reach truck drivers','RF scanning & order selection','Dispatchers & storepersons','Inventory & cycle count staff']},
-    {icon:'🔒',title:'Police Check Processing',tag:'ACIC Accredited',desc:"Fast, fully online National Police Checks for all your new starters. We're an accredited body with the ACIC and comply fully with the Privacy Act 1988.",points:['Results in 1–2 business days','Secure online application portal','Certificate issued directly to employer','Privacy Act 1988 compliant','Covers all Australian states & territories','Suitable for warehouse, transport & logistics roles']},
+    {icon:'🔒',title:'Police Check Processing',tag:'Accredited Partner',desc:"Fast, fully online National Police Checks for all your new starters. We process every check through fit2work.com.au, an ACIC-accredited provider, and comply fully with the Privacy Act 1988.",points:['Results in 1–2 business days','Secure online application portal','Certificate issued directly to employer','Privacy Act 1988 compliant','Covers all Australian states & territories','Suitable for warehouse, transport & logistics roles']},
     {icon:'📋',title:'Workforce Compliance',tag:'End-to-End',desc:"Let us handle the paperwork. We manage all onboarding compliance so you can focus on running your warehouse, not chasing documentation.",points:['Right-to-work verification (visa checks)','Fair Work Act compliance','WHS site inductions','TFN and super fund documentation','Ongoing licence verification (forklift, etc.)','Incident reporting support']},
   ];
   return (<>
@@ -701,11 +701,11 @@ function Police({ setPage, policeTab, setPoliceTab }) {
     <div className="pc-hero">
       <div className="pc-hi">
         <div>
-          <div className="lbl lbl-lt">ACIC Accredited</div>
+          <div className="lbl lbl-lt">Accredited Partner Checks</div>
           <h2>National Police Check Portal</h2>
-          <p>Apply online for your National Police Check. Required for all SWC Staffing Solutions placements. Fast, secure, and compliant with Australian privacy law.</p>
+          <p>Apply online for your National Police Check, processed through our ACIC-accredited provider, fit2work.com.au. Required for all SWC Staffing Solutions placements. Fast, secure, and compliant with Australian privacy law.</p>
           <div className="pc-pills">
-            {['Results in 1–2 days','Privacy Act Compliant','100% Online','ACIC Accredited'].map(p=><span className="pc-pill" key={p}>{p}</span>)}
+            {['Results in 1–2 days','Privacy Act Compliant','100% Online','Via ACIC-Accredited Provider'].map(p=><span className="pc-pill" key={p}>{p}</span>)}
           </div>
         </div>
         <div className="pc-card">
@@ -1058,7 +1058,7 @@ function AppForm({ setPage }) {
           </div>
           <div className="consent-b">
             <h4>Consent &amp; Declaration</h4>
-            <p>By submitting, you consent to SWC Staffing Solutions conducting a National Police Check in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
+            <p>By submitting, you consent to SWC Staffing Solutions arranging a National Police Check through our ACIC-accredited provider, fit2work.com.au, in accordance with ACIC requirements and the Privacy Act 1988 (Cth).</p>
             {[['c1','I confirm all information provided is true and correct to the best of my knowledge.'],['c2','I consent to SWC Staffing Solutions collecting, using, and disclosing my personal information for the purpose of conducting a National Police Check as outlined in the Privacy Policy.'],['c3','I understand results may be shared with my prospective employer as authorised under the Privacy Act 1988.']].map(([k,t])=>(
               <div className="chk-row" key={k}><input type="checkbox" id={k} checked={form[k]} onChange={e=>upd(k,e.target.checked)}/><label htmlFor={k}>{t}</label></div>
             ))}
@@ -1105,7 +1105,7 @@ function Tracker() {
   const tl=(status)=>[
     {l:'Application Received',d:'Your application and ID documents have been received.',s:'done'},
     {l:'Identity Verified',d:'Your ID documents are being checked.',s:status==='pending'?'pend':'done'},
-    {l:'Check in Progress',d:'Your check is being processed with the ACIC database.',s:status==='complete'?'done':status==='processing'?'active':'pend'},
+    {l:'Check in Progress',d:'Your check is being processed through our ACIC-accredited provider.',s:status==='complete'?'done':status==='processing'?'active':'pend'},
     {l:'Results Ready',d:'Your National Police Certificate has been issued.',s:status==='complete'?'done':'pend'},
   ];
 
@@ -1466,7 +1466,7 @@ function Privacy({ setPage }) {
       {h:'Our commitment', p:['SWC Staffing Solutions ("we", "us", "our") is committed to protecting the privacy of every applicant, worker, and client we deal with. We comply with the Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs), as well as all other applicable Australian privacy and data-protection laws.','This policy explains what personal information we collect, why we collect it, how we use and protect it, and the rights you have in relation to it.']},
       {h:'Information we collect', p:['We only collect personal information that is reasonably necessary for our functions as a staffing and recruitment provider. Depending on your dealings with us, this may include:'], list:['Contact details such as your name, address, email, and phone number','Work history, qualifications, licences, and right-to-work information','Information required to arrange a National Police Check, where you have consented','Availability, preferences, and other details relevant to placing you in work']},
       {h:'How we use your information', p:['We use your personal information solely for legitimate business purposes connected with staffing and recruitment, including matching you to suitable roles, verifying your eligibility to work, arranging background checks you have consented to, and communicating with you about opportunities.','We do not sell your personal information, and we do not use it for unrelated purposes.']},
-      {h:'Disclosure to third parties', p:['We only disclose your personal information where necessary and permitted by law — for example, to prospective host employers with your knowledge, or to an accredited provider for the purpose of conducting a National Police Check that you have authorised.','Any National Police Check is conducted only through channels authorised under Australian law. We require third parties who handle your information to protect it to the same standard we do.']},
+      {h:'Disclosure to third parties', p:['We only disclose your personal information where necessary and permitted by law — for example, to prospective host employers with your knowledge, or to an ACIC-accredited provider (such as fit2work.com.au) for the purpose of conducting a National Police Check that you have authorised.','Any National Police Check is conducted only through channels authorised under Australian law. We require third parties who handle your information to protect it to the same standard we do.']},
       {h:'Storage and security', p:['We take reasonable steps to protect your personal information from misuse, loss, and unauthorised access, modification, or disclosure, using appropriate technical and organisational safeguards. We retain personal information only for as long as it is needed for the purpose it was collected or as required by law, and securely dispose of it when it is no longer required.']},
       {h:'Access and correction', p:['You have the right to request access to the personal information we hold about you, and to ask us to correct it if it is inaccurate, out of date, or incomplete. We will respond to any such request in accordance with the Privacy Act 1988 (Cth).']},
       {h:'Complaints', p:['If you believe we have not handled your personal information in line with this policy or the Australian Privacy Principles, please contact us and we will investigate. If you are not satisfied with our response, you may contact the Office of the Australian Information Commissioner (OAIC) at oaic.gov.au.']},
@@ -1509,7 +1509,7 @@ function Footer({ setPage }) {
         <div className="ft-bottom">
           <p>© 2026 SWC Staffing Solutions · ABN 95 576 836 195 · Registered in Sydney</p>
           <div className="ft-badges">
-            <span className="ft-badge">ACIC Accredited</span>
+            <span className="ft-badge">Accredited Partner Checks</span>
             <span className="ft-badge">Privacy Act Compliant</span>
             <span className="ft-badge">Fair Work Compliant</span>
           </div>
